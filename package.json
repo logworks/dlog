@@ -1,6 +1,6 @@
 {
   "name": "@genisense/dlog",
-  "version": "0.0.7",
+  "version": "0.0.71",
   "description": "Development time logging with dynmaic type checking.",
   "main": "src/app/index.js",
   "repository": "git@github.com:logworks/dlog.git",
@@ -23,15 +23,16 @@
     "jest": "^25.1.0",
     "prettier": "^1.19.1"
   },
-  "jest": {
-    "verbose": false,
-    "rootDir": "src"
-  },
   "dependencies": {
     "async": "^3.1.1",
     "deep-diff": "^1.0.2",
     "gift": "^0.10.2",
-    "glob": "^7.1.6"
+    "glob": "^7.1.6",
+    "lodash": "^4.17.15"
+  },
+  "jest": {
+    "verbose": false,
+    "rootDir": "src"
   },
   "config": {
     "commitizen": {
