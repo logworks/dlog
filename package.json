@@ -12,12 +12,14 @@
     "test:app": "jest src/app",
     "test:cli": "jest src/cli",
     "test": "npm run test:app && npm run test:cli",
-    "tdd": "jest --watch --coverage"
+    "tdd": "jest --watch --coverage",
+    "commit": "git-cz"
   },
   "keywords": [],
   "author": "Henry Kemp",
   "license": "ISC",
   "devDependencies": {
+    "cz-conventional-changelog": "^3.1.0",
     "jest": "^25.1.0",
     "prettier": "^1.19.1"
   },
@@ -27,9 +29,13 @@
   },
   "dependencies": {
     "async": "^3.1.1",
-    "crypto": "^1.0.1",
     "deep-diff": "^1.0.2",
     "gift": "^0.10.2",
     "glob": "^7.1.6"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
