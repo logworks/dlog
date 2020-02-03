@@ -1,16 +1,9 @@
 {
-<<<<<<< HEAD
   "name": "@logworks/dlog",
   "version": "0.0.7",
   "description": "Development time logging with dynmaic type checking.",
   "main": "src/app/index.js",
   "repository": "https://github.com/logworks/dlog.git",
-=======
-  "name": "dlog",
-  "version": "0.0.7",
-  "description": "Development time logging with dynmaic type checking.",
-  "main": "src/app/index.js",
->>>>>>> 55e0b6f59a5eab45533a28b9e82a159ce959829b
   "bin": {
     "dlog": "src/cli/dlog.js"
   },
@@ -26,12 +19,7 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^25.1.0",
-<<<<<<< HEAD
     "prettier": "^1.19.1"
-=======
-    "prettier": "^1.19.1",
-    "dlog": "./src/app/index"
->>>>>>> 55e0b6f59a5eab45533a28b9e82a159ce959829b
   },
   "jest": {
     "verbose": false,
