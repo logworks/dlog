@@ -1,5 +1,5 @@
 {
-  "name": "@logworks/dlog",
+  "name": "@genisense/dlog",
   "version": "0.0.7",
   "description": "Development time logging with dynmaic type checking.",
   "main": "src/app/index.js",
