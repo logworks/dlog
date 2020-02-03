@@ -1,23 +1,14 @@
 # @genisense/dlog
 
-Logging designed for development time.
+Logging designed for development time. A novel workflow approach.
 tired of typing console.log?
-Love the dynamic nature of javascript?
 Would like an automated alternative/supplement to Typescript/Elm etc?
-dlog might just help.
 
 ## quick start
 
-    # in root of project you want to log (must have a package.json and be git initialised)
     npm i -D @genisense/dlog
     npm i -g @genisense/dlog
     dlog i
-
-(All the global package really does is allow you to type less at command line:)
-
-    > dlog +/-/?/v/h
-    # instead of
-    > npm run dlog +/-/?/v/h
 
 More on how to use it only locally later.
 
@@ -69,16 +60,28 @@ they change as a type anomoly. for example:
 
 Soon come:
 
-- basic use
+- basic automatic function logging.
+- type anomalies.
 - integration with other loggers e.g. Winston.
-- middleware
+- middleware.
 
 ## workflow
 
 - requires source is under git control. (dlog can potential change a lot of files, so this is a safety feature).
 - warns if git is not clean (i.e. un-staged files)
 - dlog blats your codebase with logging. Just like console.logs it should not be pushed. To that end we recommend using at least a pre-commit hook (easily done with husky). > dlog ? will halt the commit if an logs are in source folder.
+- must run dlog at command line in dir that has package.json and be git initialised.
 
 ## release notes
 
 This is version 0.0.7. Dlog is ready to try but admittedly rough. Looking for feedback if you find positive uses and see the potential in the library. Thanks && enjoy.
+
+##local only npm installation
+
+All global packages really do is allow you to type less at command line!:
+
+    # with globally installed:
+    > dlog +/-/?/v/h
+
+    # instead of
+    > npm run dlog +/-/?/v/h
