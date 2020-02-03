@@ -3,7 +3,7 @@
   "version": "0.0.7",
   "description": "Development time logging with dynmaic type checking.",
   "main": "src/app/index.js",
-  "repository": "https://github.com/logworks/dlog.git",
+  "repository": "git@github.com:logworks/dlog.git",
   "bin": {
     "dlog": "src/cli/dlog.js"
   },
