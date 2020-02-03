@@ -1,0 +1,35 @@
+{
+  "name": "@logworks/dlog",
+  "version": "0.0.7",
+  "description": "Development time logging with dynmaic type checking.",
+  "main": "src/app/index.js",
+  "repository": "https://github.com/logworks/dlog.git",
+  "bin": {
+    "dlog": "src/cli/dlog.js"
+  },
+  "preferGlobal": false,
+  "scripts": {
+    "test:app": "jest src/app",
+    "test:cli": "jest src/cli",
+    "test": "npm run test:app && npm run test:cli",
+    "tdd": "jest --watch --coverage"
+  },
+  "keywords": [],
+  "author": "Henry Kemp",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1"
+  },
+  "jest": {
+    "verbose": false,
+    "rootDir": "src"
+  },
+  "dependencies": {
+    "async": "^3.1.1",
+    "crypto": "^1.0.1",
+    "deep-diff": "^1.0.2",
+    "gift": "^0.10.2",
+    "glob": "^7.1.6"
+  }
+}
