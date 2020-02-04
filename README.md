@@ -6,6 +6,8 @@ Logging designed for development time. A novel workflow approach.
 tired of typing console.log?
 Would like an automated alternative/supplement to Typescript/Elm etc?
 
+Note Pre-release. 0.0.7x Not Usable just yet.
+
 ## quick start
 
     npm i -D @genisense/dlog
