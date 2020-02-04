@@ -1,5 +1,7 @@
 # @genisense/dlog
 
+![Build Status](https://api.travis-ci.com/logworks/dlog.svg?branch=master)
+
 Logging designed for development time. A novel workflow approach.
 tired of typing console.log?
 Would like an automated alternative/supplement to Typescript/Elm etc?
