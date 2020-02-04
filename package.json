@@ -11,6 +11,7 @@
   "scripts": {
     "test:app": "jest src/app",
     "test:cli": "jest src/cli",
+    "coverage": "./node_modules/.bin/nyc report",
     "test": "npm run test:app && npm run test:cli",
     "tdd": "jest --watch --coverage",
     "commit": "git-cz"
