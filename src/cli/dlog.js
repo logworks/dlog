@@ -57,8 +57,7 @@ const boot = async function() {
       console.log("dlog version: ", pjson.version);
       break;
     case "i":
-      installComplete = await install();
-      console.log("installation " + (installComplete ? "done." : "halted."));
+      install();
       break;
 
     default:

@@ -27,10 +27,11 @@ const dlog = {
         const line = chop[1];
         const parentLine = chop[2];
 
-        console.log(
-          "data: ",
-          JSON.stringify(params.length == 1 ? params[0] : params)
-        );
+        // TODO depth is an issue. console logs [object] [array] etc if too deep (like 2 depth!)
+        // console.log(
+        //   JSON.stringify(params.length == 1 ? params[0] : params) );
+
+        console.log(params.length == 1 ? params[0] : params);
 
         //** typechecking switched off. **//
         // const diff = callDiff(file, parentLine, logObj);
