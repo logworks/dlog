@@ -143,3 +143,13 @@ vs-code plugin.
 - travis clean log continuous integration
 - upstreaming winston
 - code hiding - maybe
+
+switched to webpack - with imports instead of requires for source.
+webpack converts to umd. -? why cant keep as requires ?
+
+breaks test - looking at bable magickary to fix tests.
+seem route of work for no gain - damn tooling!
+parking it, get some advice, sleep on it.
+
+Cannot read property 'bindings' of null
+../node_modules/@babel/core/node_modules/@babel/traverse/lib/scope/index.js

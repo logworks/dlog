@@ -3,10 +3,7 @@
     park call stack, remove callee approach completely.
 */
 
-const callDiff = require("./callDiff.js");
-/*
-
-*/
+// const callDiff = require("./callDiff.js");
 
 const dlog = {
   logger: {
@@ -34,12 +31,13 @@ const dlog = {
           "data: ",
           JSON.stringify(params.length == 1 ? params[0] : params)
         );
-        // console.log(params.length == 1 ? params[0] : params)
-        const diff = callDiff(file, parentLine, logObj);
-        if (diff) {
-          // && config.typeDiffing on
-          // console.log('type diff:', JSON.stringify(diff))
-        }
+
+        //** typechecking switched off. **//
+        // const diff = callDiff(file, parentLine, logObj);
+        // if (diff) {
+        // //  /x/ && config.typeDiffing on
+        // //  /x/ console.log('type diff:', JSON.stringify(diff))
+        // }
       }
     }
   },
