@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 const parser = require("./parser");
 const path = require("path");
-const utils = require("./utils");
 
-const cwd = path.resolve(process.cwd(), ".");
-
+const install = require("./install");
 const gitCheck = require("./gitCheck");
 const readConfig = require("./readConfig");
 
@@ -12,8 +10,8 @@ const cmd = process.argv[process.argv.length - 1];
 const helpMessage = `help:
 dlog
      v      version.  
-     i      installs ./dlog.config.json and ./dlog.js configurable standard logger.
-     +      add logging to source files based on confg.json.
+     i      installs ./.dlogrc and ./dlogger.js. 
+     +      add logging to source files according to .dlogrc settngs
      -      remove logging .
      ?      checks for dlog statements in code. (useful for CI).
          `;
@@ -59,36 +57,8 @@ const boot = async function() {
       console.log("dlog version: ", pjson.version);
       break;
     case "i":
-      utils
-        .readFile(cwd + "/dlog.js")
-        .then(function(targetjs) {
-          console.log("You already have ./dlog.js");
-        })
-        .catch(function(e) {
-          utils
-            .readFile(path.resolve(__dirname) + "/setup/dlog.js")
-            .then(function(srcjs) {
-              utils.writeFile(cwd + "/dlog.js", srcjs.data);
-              console.log(`./dlog.js created.`);
-
-              //dlog.js done, now json
-              utils
-                .readFile(cwd + "/dlog.config.json")
-                .then(function(targetjson) {
-                  console.log(targetjson, "You already have ./dlog.config.js");
-                })
-                .catch(function(e) {
-                  utils
-                    .readFile(
-                      path.resolve(__dirname) + "/setup/dlog.config.json"
-                    )
-                    .then(function(srcjson) {
-                      utils.writeFile(cwd + "/dlog.config.json", srcjson.data);
-                      console.log(`./dlog.configs.js created.`);
-                    });
-                });
-            });
-        });
+      installComplete = await install();
+      console.log("installation " + (installComplete ? "done." : "halted."));
       break;
 
     default:

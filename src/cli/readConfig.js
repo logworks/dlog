@@ -1,34 +1,36 @@
-const utils = require('./utils')
-const path = require('path')
-const cwd = path.resolve(process.cwd(), '.')
+const utils = require("./utils");
+const path = require("path");
+const cwd = path.resolve(process.cwd(), ".");
+
+const CONFIG_FILE = ".dlogrc";
 
 const readConfig = async function() {
-    return new Promise(function(resolve, reject) {
-        utils
-            .readFile(cwd + '/dlog.config.json')
-            .then(function(configJson) {
-                //console.log(configJson, 'got config')
-                const json = JSON.parse(configJson.data)
-                if (!json['globPattern']) {
-                    console.error(`
-                ./dlog.config.json requires globPattern property.
+  return new Promise(function(resolve, reject) {
+    utils
+      .readFile(cwd + "/" + CONFIG_FILE)
+      .then(function(configJson) {
+        //console.log(configJson, 'got config')
+        const json = JSON.parse(configJson.data);
+        if (!json["globPattern"]) {
+          console.error(`
+                ./${CONFIG_FILE} requires globPattern property.
                 e.g.:
                 {
                     "globPattern" : "src/**/*.js"
                 }
-        `)
-                    process.exit()
-                }
-                resolve(json)
-            })
-            .catch(function(e) {
-                console.error(
-                    `Missing dlog.config.js. to create config run:\ndlog i`,
-                    e
-                )
-                process.exit()
-            })
-    })
-}
+        `);
+          process.exit();
+        }
+        resolve(json);
+      })
+      .catch(function(e) {
+        console.error(
+          `Missing ${CONFIG_FILE}. to create config run:\ndlog i`,
+          e
+        );
+        process.exit();
+      });
+  });
+};
 
-module.exports = readConfig
+module.exports = readConfig;

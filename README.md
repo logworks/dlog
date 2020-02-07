@@ -1,12 +1,12 @@
 # @genisense/dlog
 
-![Build Status](https://api.travis-ci.com/logworks/dlog.svg?branch=master)
+[![Build Status](https://travis-ci.com/logworks/dlog.svg?branch=master)](https://travis-ci.com/logworks/dlog)
 
 Logging designed for development time. A novel workflow approach.
 tired of typing console.log?
 Would like an automated alternative/supplement to Typescript/Elm etc?
 
-Note Pre-release. 0.0.7x Not Usable just yet.
+Note Pre-release. [v 0.1.0](#v0.1.0) Not very usable just yet.
 
 ## quick start
 
@@ -78,9 +78,20 @@ Soon come:
 
 ## release notes
 
-This is version 0.0.7. Dlog is ready to try but admittedly rough. Looking for feedback if you find positive uses and see the potential in the library. Thanks && enjoy.
+### v0.1.0
 
-##local only npm installation
+- logging packaged as UMD so works for web as well as node.
+- \$ dlog i asks if for web/node and adds logger config accordingly.
+- dlog.config.json changed to .dlogrc file.
+- optional global logger as standard in dlogger.js.
+- examples - web and node with global and imported/required logging.
+
+### v0.0.7
+
+- Dlog is ready to try but admittedly rough.
+- Looking for feedback if you find positive uses and see the potential in the library. - Thanks && enjoy.
+
+## local only npm installation
 
 All global packages really do is allow you to type less at command line!:
 
