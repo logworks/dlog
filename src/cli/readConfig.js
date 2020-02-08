@@ -9,7 +9,6 @@ const readConfig = async function() {
     utils
       .readFile(cwd + "/" + CONFIG_FILE)
       .then(function(configJson) {
-        //console.log(configJson, 'got config')
         const json = JSON.parse(configJson.data);
         if (!json["globPattern"]) {
           console.error(`

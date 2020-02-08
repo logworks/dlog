@@ -78,18 +78,11 @@ async function gitCheck() {
               console.log(`${answer} invalid. please respond with l/n/y`);
               rl.question(addMessage, qadd);
           }
-          // rl.close()
-          // resolve()
         };
 
         rl.question(addMessage, qadd);
       }
     });
-
-    // .catch(e => {
-    //     console.log(e, wrongDirMessage)
-    //     reject(e)
-    // })
   });
 }
 

@@ -31,7 +31,7 @@ const dlog = {
         // console.log(
         //   JSON.stringify(params.length == 1 ? params[0] : params) );
 
-        console.log(params.length == 1 ? params[0] : params);
+        console.dir(params.length == 1 ? params[0] : params);
 
         //** typechecking switched off. **//
         // const diff = callDiff(file, parentLine, logObj);

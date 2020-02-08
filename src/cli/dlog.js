@@ -36,8 +36,6 @@ const boot = async function() {
     case "+f":
       console.log("+f force add logging");
       config = await readConfig();
-      // console.log('config', config)
-      // console.log('+ adding logs')
       parser.execute(config, true);
       break;
     case "+":

@@ -36,7 +36,7 @@ function getFunctionName(lineCode) {
   }
   functionName = functionName.split(":")[0];
   const validFunctionName = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
-  if (validFunctionName.test(functionName)) {
+  if (validFunctionName.test(functionName) && functionName !== "if") {
     return functionName;
   } else {
     return "";
@@ -46,19 +46,18 @@ function getFunctionName(lineCode) {
     given a function signature, extract the (parameters, ...)
 */
 const paramaterise = function(signature) {
-  // console.log('paramaterise fn signature: ', signature) -note errors if dlog.log present (clear not run / failed)
   const params = signature.match(/\((.*?)\)/)[1];
   const paramArr = params.split(/[,]/);
   const res = [];
-  for (p of paramArr) {
-    let ptrimed = p.trim();
-    res.push(`${ptrimed} : ${ptrimed}`);
+
+  for (param of paramArr) {
+    let ptrimmed = param.trim();
+    if (ptrimmed !== "") res.push(`${ptrimmed} : ${ptrimmed}`);
   }
   return "{" + res.join(", ") + "}";
 };
 
 const addLogging = function(content, filePath) {
-  // todo: indentation detection. for now fixed two spaces
   const buildLogLine = function(match) {
     const params = paramaterise(match);
     const functionName = getFunctionName(match);
