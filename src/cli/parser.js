@@ -111,12 +111,17 @@ function clearLogging(content) {
 /*
     insert require dlog at start of source files on dlog --add
 */
-function prependRequire(content, filePath) {
+function prependRequire(content, filePath, moduleSystem) {
   const splitter = filePath.split("/");
-  // -2 why?- note globbing result always starts ./ and /sourcefile.js at end.
   const pathToDlog =
     "./" + "../".repeat(splitter.length - 2) + LOCAL_DLOGGER_JS;
-  return `const dlog = require('${pathToDlog}');\n${content}`;
+
+  if (moduleSystem === "es2015") {
+    return `import dlog from'${pathToDlog}';\n${content}`;
+  }
+  if (moduleSystem === "commonjs") {
+    return `const dlog = require('${pathToDlog}');\n${content}`;
+  }
 }
 
 /*
@@ -143,7 +148,7 @@ function hasDlogging(files) {
 /*
     read, transform, write for dlog --add and dlog --remove.
 */
-function parseFiles(files, add, clear) {
+function parseFiles(files, moduleSystem, add, clear) {
   ac.eachLimit(files, fileConcurrency, function(filePath, limitCallBack) {
     utils
       .readFile(filePath)
@@ -152,7 +157,7 @@ function parseFiles(files, add, clear) {
         if (add) {
           content = clearLogging(res.data);
           content = addLogging(content);
-          content = prependRequire(content, filePath);
+          content = prependRequire(content, filePath, moduleSystem);
         } else if (clear) {
           content = clearLogging(res.data, filePath);
         }
@@ -186,6 +191,12 @@ function execute(config, add, clear, checkClean) {
     "excludes:",
     excludes
   );
+
+  /*
+    change globOptions to config - read from .dlogrc
+    apply import / require depending on module option.
+
+  */
   const globOptions = {}; //{ ignore: excludes }
   glob(globPattern, globOptions, function(error, files) {
     if (error) {
@@ -206,7 +217,7 @@ function execute(config, add, clear, checkClean) {
           }
 
           if (add || clear) {
-            parseFiles(reducedFilesList, add, clear);
+            parseFiles(reducedFilesList, config.module, add, clear);
           }
           if (checkClean) {
             hasDlogging(reducedFilesList);

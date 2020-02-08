@@ -13,6 +13,7 @@ dlog
      i      installs ./.dlogrc and ./dlogger.js. 
      +      add logging to source files according to .dlogrc settngs
      -      remove logging .
+     ++     force add logging (skip's git status check)
      ?      checks for dlog statements in code. (useful for CI).
          `;
 //  'dlog must be run from app root directory (has package.json and git initialised.)'
@@ -33,8 +34,8 @@ const boot = async function() {
       parser.execute(config, false, false, true);
       break;
 
-    case "+f":
-      console.log("+f force add logging");
+    case "++":
+      console.log("+f force add logging, skip git status check.");
       config = await readConfig();
       parser.execute(config, true);
       break;

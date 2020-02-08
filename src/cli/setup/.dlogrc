@@ -1,4 +1,6 @@
 {
     "globPattern": "./src/**/*.?(js|jsx|ts|tsx)",
-    "excludes": "node_modules|\\.test"
+    "excludes": "node_modules|\\.test",
+    "module" : "e.g: es2015/commonjs.      - Added by parser on $ dlog i.",
+    "entry-point" : "TODO e.g. src/dlogger.js.  - Added by parser on $ dlog i."
 }
