@@ -1,0 +1,8 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-restricted-globals": [0, "elogger"]
+  }
+}

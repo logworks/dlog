@@ -35,32 +35,58 @@ function getFunctionName(lineCode) {
     }
   }
   functionName = functionName.split(":")[0];
-  const validFunctionName = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
-  if (validFunctionName.test(functionName) && functionName !== "if") {
-    return functionName;
+  const validFunctionNameX = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
+  if (validFunctionNameX.test(functionName)) {
+    const exceptionTrap = /(if|.then)/.test(functionName);
+    if (exceptionTrap === false) {
+      return functionName;
+    }
   } else {
-    return "";
+    return;
   }
 }
 /*
     given a function signature, extract the (parameters, ...)
 */
 const paramaterise = function(signature) {
-  const params = signature.match(/\((.*?)\)/)[1];
-  const paramArr = params.split(/[,]/);
-  const res = [];
+  const paramMatch = signature.match(/\((.*?)\)/);
 
-  for (param of paramArr) {
-    let ptrimmed = param.trim();
-    if (ptrimmed !== "") res.push(`${ptrimmed} : ${ptrimmed}`);
+  if (paramMatch) {
+    const params = paramMatch[1];
+
+    const paramArr = params.split(/[,]/);
+    const res = [];
+
+    for (param of paramArr) {
+      let ptrimmed = param.trim();
+      console.log({
+        ptrimmed,
+        oneormore: ptrimmed.length >= 1,
+        W: /\W/.test(ptrimmed)
+      });
+      if (ptrimmed.length === 0 || /\W/.test(ptrimmed)) return null;
+      res.push(`${ptrimmed} : ${ptrimmed}`);
+    }
+    return "{" + res.join(", ") + "}";
+  } else {
+    //single param, no brackets
+    const param = signature.match(/=\s+(\w*)\s+=>/);
+    if (param && param.length >= 1) {
+      console.log({ param });
+      if (/\W/.test(param[1])) return null;
+      return "{" + param[1] + "}";
+    } else {
+      return null;
+    }
   }
-  return "{" + res.join(", ") + "}";
 };
 
 const addLogging = function(content, filePath) {
   const buildLogLine = function(match) {
-    const params = paramaterise(match);
     const functionName = getFunctionName(match);
+    if (!functionName) return match;
+    const params = paramaterise(match);
+    if (!params) return match;
     if (/\w/.test(functionName)) {
       return (
         match + `\n  dlog.log({'${functionName}': ${params}})\n`

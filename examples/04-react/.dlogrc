@@ -1,0 +1,4 @@
+{
+    "globPattern": "./src/**/*.?(js|jsx|ts|tsx)",
+    "excludes": "node_modules|\\.test"
+}

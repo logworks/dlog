@@ -1,6 +1,6 @@
 {
   "name": "@genisense/dlog",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "Development time logging with dynmaic type checking.",
   "main": "dist/dlog.js",
   "repository": "git@github.com:logworks/dlog.git",
@@ -15,7 +15,8 @@
     "coverage": "./node_modules/.bin/nyc report",
     "test": "npm run test:cli && npm run test:app",
     "tdd": "jest --watch --coverage",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "devlog": "node ./src/cli/dlog.js"
   },
   "keywords": [],
   "author": "Henry Kemp",
@@ -26,8 +27,6 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-env": "^1.6.1",
     "cz-conventional-changelog": "^3.1.0",
-    "eslint": "^3.9.1",
-    "eslint-loader": "^1.6.1",
     "jest": "^25.1.0",
     "lodash": "^4.17.15",
     "nyc": "^15.0.0",
