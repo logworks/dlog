@@ -54,10 +54,10 @@ const callDiff = function(file, parentLine, params) {
       console.log(
         "Type Anomolies detected:\n",
         "\n prior :",
-        JSON.stringify(a),
+        //JSON.stringify(a),
         "\nlatest :",
-        JSON.stringify(b),
-        "\nDiff\n",
+        //JSON.stringify(b),
+        //"\nDiff\n",
 
         diffs
       );

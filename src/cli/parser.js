@@ -156,8 +156,13 @@ function parseFiles(files, moduleSystem, add, clear) {
         let content;
         if (add) {
           content = clearLogging(res.data);
-          content = addLogging(content);
-          content = prependRequire(content, filePath, moduleSystem);
+          const contentWithLogging = addLogging(content);
+          if (contentWithLogging !== content)
+            content = prependRequire(
+              contentWithLogging,
+              filePath,
+              moduleSystem
+            );
         } else if (clear) {
           content = clearLogging(res.data, filePath);
         }

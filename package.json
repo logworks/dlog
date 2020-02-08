@@ -1,6 +1,6 @@
 {
   "name": "@genisense/dlog",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "Development time logging with dynmaic type checking.",
   "main": "dist/dlog.js",
   "repository": "git@github.com:logworks/dlog.git",
@@ -9,7 +9,7 @@
   },
   "preferGlobal": false,
   "scripts": {
-    "build": "webpack  && cp dist/dlog.js examples/web/",
+    "build": "webpack  -p --devtool source-map && cp dist/dlog.js examples/web/ ",
     "test:app": "jest src/app",
     "test:cli": "jest src/cli",
     "coverage": "./node_modules/.bin/nyc report",
