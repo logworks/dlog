@@ -27,7 +27,7 @@ const boot = async function() {
       config = await readConfig();
       parser.execute(config, false, true);
       break;
-
+    //case "--": "remove global convenience logging tlog TODO"
     case "?":
       console.log("dlog ? checking for dlog statements in source code...");
       config = await readConfig();
@@ -35,7 +35,7 @@ const boot = async function() {
       break;
 
     case "++":
-      console.log("+f force add logging, skip git status check.");
+      console.log("++  Add logging, skip git status check.");
       config = await readConfig();
       parser.execute(config, true);
       break;
@@ -44,11 +44,10 @@ const boot = async function() {
       console.log("proceed", proceed);
       if (proceed) {
         config = await readConfig();
-        console.log("config", config);
+          console.log("config", config);
         console.log("+ adding logs");
         parser.execute(config, true);
       }
-
       break;
     case "v":
       const packagePath = path.resolve(__dirname) + "/../../package.json";

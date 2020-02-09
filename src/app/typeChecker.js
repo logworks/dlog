@@ -1,4 +1,4 @@
-const _ = require("lodash");
+const _ = require('lodash');
 
 const getType = elem => {
   return Object.prototype.toString.call(elem).slice(8, -1);
@@ -21,11 +21,11 @@ function deepMapTypes(srcObject) {
     cursor = _.get(src, prop);
     if (cursor) {
       let cursorType = Object.prototype.toString.call(cursor).slice(8, -1);
-      if (cursorType === "Object") {
+      if (cursorType === 'Object') {
         var keys = Object.keys(cursor);
         if (keys.length) {
           keys.forEach(k => {
-            queue.push(prop + "." + k);
+            queue.push(prop + '.' + k);
             let keyType = Object.prototype.toString
               .call(cursor[k])
               .slice(8, -1);
@@ -33,14 +33,10 @@ function deepMapTypes(srcObject) {
           });
         }
       } else {
-        if (cursorType === "Array") {
-          // iter contents getting unique types
+        if (cursorType === 'Array') {
           let arrayTypes = {};
-          for (el of cursor) {
-            let elType = getType(el) + "s";
-            // if (arrayTypes[elType]) {
-            //     arrayTypes[elType] += 1
-            // } else {
+          for (let el of cursor) {
+            let elType = getType(el) + 's';
             arrayTypes[elType] = null;
           }
           _.set(target, prop, Object.keys(arrayTypes));

@@ -180,13 +180,10 @@ function parseFiles(files, moduleSystem, add, clear) {
 
 /*
     public entry-point to parser. 
-*/
-// example:
-// globPattern = "./testdir/**/*.js"
-// add / clear / checkClean all bool - choose only one.
-// refactor - command pattern?
-/*
- wy wierd comments - cant show glob *double* in /* multi-line comments!
+
+example:
+globPattern = "./testdir/** /*.js"
+add / clear / checkClean all bool - choose only one.
 */
 function execute(config, add, clear, checkClean) {
   const { globPattern, excludes } = config;
