@@ -10,10 +10,8 @@
   "preferGlobal": false,
   "scripts": {
     "build": "webpack  -p --devtool source-map && cp dist/dlog.js examples/web/ ",
-    "test:app": "jest src/app",
-    "test:cli": "jest src/cli",
-    "coverage": "./node_modules/.bin/nyc report",
-    "test": "npm run test:cli && npm run test:app",
+    "test:nyc": "./node_modules/.bin/nyc report",
+    "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "tdd": "jest --watch",
     "commit": "git-cz",
     "dlog": "node ./src/cli/dlog.js"
