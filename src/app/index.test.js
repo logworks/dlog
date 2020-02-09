@@ -2,7 +2,18 @@ const dlog = require('./index');
 
 console.log('go');
 
-const config = { include: ['*'], exclude: ['x'], globalLogger: 'tlog' };
+const config = {
+  include: ['*'],
+  exclude: ['x'],
+  globalLogger: 'tlog',
+  typeCheck: false,
+  meta: {
+    level: true,
+    timeStamp: true,
+    file: true,
+    stack: true
+  }
+};
 const logger = dlog.createLogger(config);
 
 if (config.globalLogger) {
