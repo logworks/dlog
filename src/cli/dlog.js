@@ -43,7 +43,7 @@ const boot = async function() {
     }
     case '+': {
       const proceed = await gitCheck();
-      console.log('proceed', proceed);
+      console.log('proceed_____', proceed);
       if (proceed) {
         config = await readConfig();
         console.log('config', config);

@@ -5,31 +5,27 @@ const cwd = path.resolve(process.cwd(), '.');
 const CONFIG_FILE = '.dlogrc';
 
 const readConfig = async function() {
-  return new Promise(function(resolve) {
-    utils
-      .readFile(cwd + '/' + CONFIG_FILE)
-      .then(function(configJson) {
-        const json = JSON.parse(configJson.data);
-        if (!json['globPattern']) {
-          console.error(`
+  try {
+    const configJson = await utils.readFile(cwd + '/' + CONFIG_FILE);
+
+    const config = JSON.parse(configJson.data);
+    if (!config['globPattern']) {
+      console.error(`
                 ./${CONFIG_FILE} requires globPattern property.
                 e.g.:
                 {
                     "globPattern" : "src/**/*.js"
                 }
         `);
-          process.exit();
-        }
-        resolve(json);
-      })
-      .catch(function(e) {
-        console.error(
-          `Missing ${CONFIG_FILE}. to create config run:\ndlog i`,
-          e
-        );
-        process.exit();
-      });
-  });
+      process.exit();
+    }
+    return config;
+  } catch (e) {
+    console.error(`
+    Error, missing ./${CONFIG_FILE} file. 
+    To create config run:\n dlog i`);
+    process.exit();
+  }
 };
 
 module.exports = readConfig;
