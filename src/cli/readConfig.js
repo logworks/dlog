@@ -1,16 +1,16 @@
-const utils = require("./utils");
-const path = require("path");
-const cwd = path.resolve(process.cwd(), ".");
+const utils = require('./utils');
+const path = require('path');
+const cwd = path.resolve(process.cwd(), '.');
 
-const CONFIG_FILE = ".dlogrc";
+const CONFIG_FILE = '.dlogrc';
 
 const readConfig = async function() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     utils
-      .readFile(cwd + "/" + CONFIG_FILE)
+      .readFile(cwd + '/' + CONFIG_FILE)
       .then(function(configJson) {
         const json = JSON.parse(configJson.data);
-        if (!json["globPattern"]) {
+        if (!json['globPattern']) {
           console.error(`
                 ./${CONFIG_FILE} requires globPattern property.
                 e.g.:

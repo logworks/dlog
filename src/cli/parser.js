@@ -1,4 +1,3 @@
-const fs = require('fs');
 const glob = require('glob');
 const ac = require('async');
 const utils = require('./utils');
@@ -58,7 +57,7 @@ const paramaterise = function(signature) {
     const paramArr = params.split(/[,]/);
     const res = [];
 
-    for (param of paramArr) {
+    for (let param of paramArr) {
       let ptrimmed = param.trim();
       if (ptrimmed.length === 0 || /\W/.test(ptrimmed)) return null;
       res.push(`${ptrimmed} : ${ptrimmed}`);
@@ -152,10 +151,8 @@ function parseFiles(files, config, add, clear) {
         if (add) {
           content = clearLogging(res.data, config);
           const contentWithLogging = addLogging(content, config);
-          // console.log({ contentWithLogging });
           if (contentWithLogging !== content)
             content = prependRequire(contentWithLogging, filePath, config);
-          console.log('prepend', content);
         } else if (clear) {
           content = clearLogging(res.data, config);
         }
@@ -207,7 +204,7 @@ function execute(config, add, clear, checkClean) {
           //apply exclusion:
           const excludeX = new RegExp(excludes);
           const reducedFilesList = [];
-          for (file of allFiles) {
+          for (let file of allFiles) {
             if (!excludeX.test(file)) reducedFilesList.push(file);
           }
 

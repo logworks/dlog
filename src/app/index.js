@@ -53,7 +53,7 @@ const dlog = {
           .split('at ')[1]
           .split(':');
         const srcFile = chop[0];
-        const srcLine = chop[1];
+        // const srcLine = chop[1];
         const parentLine = chop[2];
 
         if (file) {
@@ -61,7 +61,6 @@ const dlog = {
         }
 
         if (typeCheck) {
-          //** typechecking switched off. **//
           const diff = callDiff(file, parentLine, logObj);
           if (diff) {
             //  /x/ && config.typeDiffing on
