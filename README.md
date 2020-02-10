@@ -9,7 +9,7 @@ Runtime dynamic type checking for hard to find bugs.
 Logs as code, not strings.
 Useful for large code base investigation. See the execution flows and details fast.
 
-Note Pre-release. [v 0.1.1](#v0.1.1) Usable, still early POC, do let us know if you find useful!
+Note Pre-release. [v 0.1.2](#v0.1.2) Usable, still early POC, do let us know if you find useful!
 
 ## quick start
 
@@ -139,7 +139,7 @@ Soon come:
 
 ## release notes
 
-### v0.1.1
+### v0.1.2
 
 - stability and code quality refactoring.
 
