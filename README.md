@@ -2,11 +2,13 @@
 
 [![Build Status](https://travis-ci.com/logworks/dlog.svg?branch=master)](https://travis-ci.com/logworks/dlog)
 
-Logging designed for development time. A novel workflow approach.
-tired of typing console.log?
-Would like an automated alternative/supplement to Typescript/Elm etc?
+Logging designed for development time.
+Tired of typing console.log? - '\$ dlog +' logs all named functions. 'dlog -' removes.
+Runtime dynamic type checking for hard to find bugs.
+Logs as code, not strings.
+Useful for large code base investigation. See the execution flows and details fast.
 
-Note Pre-release. [v 0.1.0](#v0.1.0) Not very usable just yet.
+Note Pre-release. [v 0.1.0](#v0.1.0) Usable, likely breaking changes to API coming.
 
 ## quick start
 
@@ -14,14 +16,12 @@ Note Pre-release. [v 0.1.0](#v0.1.0) Not very usable just yet.
     npm i -g @genisense/dlog
     dlog i
 
-More on how to use it only locally later.
-
 dlog i creates two files:
 
-    dlog.config.json
+    .dlogrc
     dlog.js
 
-Edit dlog.config.json and set the globPattern and excludes to match your project. (globPattern matches the files/directories given, and excludes sets files you dont want logging added to.)
+Edit .dlogrc. Set the globPattern and excludes to match your project. (globPattern matches the files/directories given, and exclude sets files you dont want logging added to.)
 
 You are now ready to Log & Roll:
 
@@ -50,7 +50,7 @@ they change as a type anomoly. for example:
     type anomoly detected:
     foo.anarray was [numbers] got [numbers, strings]
 
-    # works to any object depth:
+    # deep object comparison:
 
     bar ({ a: { b: { c: {astring: '', anumber: 42, anarray: [10,20,30]}}}})
     # later called with:
@@ -58,16 +58,16 @@ they change as a type anomoly. for example:
 
     # logs:
     type anomoly detected:
-    bar.a.b.c.anarray was [numbers] got [Numbers, Regexs]
+    bar.a.b.c.anarray was [Numbers] got [Numbers, Regexs]
 
 ## examples
 
 Soon come:
 
-- basic automatic function logging.
-- type anomalies.
-- integration with other loggers e.g. Winston.
+- example integration with other loggers e.g. Winston.
 - middleware.
+- type checking depth/execution control
+- Log server
 
 ## workflow
 
@@ -81,10 +81,11 @@ Soon come:
 ### v0.1.0
 
 - logging packaged as UMD so works for web as well as node.
-- \$ dlog i asks if for web/node and adds logger config accordingly.
-- dlog.config.json changed to .dlogrc file.
-- optional global logger as standard in dlogger.js.
+- \$ dlog i - asks if for web/node and adds logger config accordingly.
+- dlog.config.json name changed to .dlogrc.
+- optional global logger as standard example in dlogger.js.
 - examples - web and node with global and imported/required logging.
+- coveralls
 
 ### v0.0.7
 

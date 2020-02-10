@@ -12,7 +12,7 @@
     "build": "webpack  -p --devtool source-map && cp dist/dlog.js examples/web/ ",
     "test:nyc": "./node_modules/.bin/nyc report",
     "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
-    "tdd": "jest --watch",
+    "tdd": "jest --watch --coverage",
     "commit": "git-cz",
     "dlog": "node ./src/cli/dlog.js"
   },
@@ -24,15 +24,14 @@
     "babel-loader": "^7.1.4",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-env": "^1.6.1",
+    "coveralls": "^3.0.9",
     "cz-conventional-changelog": "^3.1.0",
     "jest": "^25.1.0",
     "lodash": "^4.17.15",
-    "nyc": "^15.0.0",
     "prettier": "^1.19.1",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
-    "webpack-node-externals": "^1.7.2",
-    "coveralls": "^3.0.9"
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "async": "^3.1.1",

@@ -1,1 +1,0 @@
-browserify main.js -o elog.js -d
