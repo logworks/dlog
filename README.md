@@ -62,10 +62,67 @@ they change as a type anomoly. for example:
 
 ## cli configuration
 
+    .dlogrc
+
     "globPattern": "./src/**/*.?(js|jsx|ts|tsx)", //glob for files to include.
     "excludes": "node_modules|\\.test",  // regExp applied to exclude from files found by globbing.
     "module" : "e.g: es2015/commonjs.    - Added on $ dlog i depending on choice of module system",
     "nameAs" : "dlog/whateverLog    - auto added log identifier can be changed to avoid name clashes."
+
+## runtime configuration
+
+    dlogger.js. Customisation of logging.
+
+    config = {
+        include: ['*'],         // '*' - every named log call. or 'foo', 'bar' -exact matches.
+        exclude: [],            // array of exact matches to exclude.
+        globalLogger: 'tlog',   // name a global convenience logger.
+        typeCheck: false,       // deep compare paramater data types.
+        meta: {
+            timeStamp: true,    // if true, timestamp added to every log
+            file: true         // if true, shows the origin file of the log.
+        }
+    };
+
+    globalLogger: set the name of the logger (default here tlog), require once early in
+    application boot sequence e.g:
+
+        require('../dlogger.js') //no assignment necessary.
+        // now in any file can use:
+        tlog.log({myTag: {p1, p2}})
+
+    If prefered you can avoid global and require in exlicitly:
+
+        const tlog = require('../dlogger.js')
+
+    Globals are an anti-pattern, but dlog is intended to be fast in, fast out at development time, so acceptable as should never be pushed.
+
+## .log API
+
+console.log is a very flexible api. And is often used thus:
+
+    console.log ( "some indentifier : ", "p1: ", p1, " p2: ", p2 );
+
+dlog.log enforces:
+
+    dlog.log ( { someIdentifier : {p1, p2 } } )
+
+| .log( ... ) rule                    |                     psudocode |
+| ----------------------------------- | ----------------------------: |
+| Takes a single object.              |                       ( { } ) |
+| With one first level Key.           |           ( { identifer : } ) |
+| The identifier's value is an object |       ( { identifer : { } } ) |
+| Containing the paramaters           | ( { identifer : {p1, p2 } } ) |
+
+With ES6 destructuring you can do this already with console.log, but dlog enforces the structure.
+Logs should be structured code, not any arbitrary mix of types. By using such a standard the quality and usefulness of all your logging can be much improved.
+
+## workflow
+
+- requires source is under git control. (dlog can potential change a lot of files, so this is a safety feature).
+- warns if git is not clean (i.e. un-staged files)
+- dlog blats your codebase with logging. Just like console.logs it should not be pushed. To that end we recommend using at least a pre-commit hook (easily done with husky). > dlog ? will halt the commit if an logs are in source folder.
+- must run dlog at command line in dir that has package.json and be git initialised.
 
 ## examples
 
@@ -75,13 +132,6 @@ Soon come:
 - middleware.
 - type checking depth/execution control
 - Log server
-
-## workflow
-
-- requires source is under git control. (dlog can potential change a lot of files, so this is a safety feature).
-- warns if git is not clean (i.e. un-staged files)
-- dlog blats your codebase with logging. Just like console.logs it should not be pushed. To that end we recommend using at least a pre-commit hook (easily done with husky). > dlog ? will halt the commit if an logs are in source folder.
-- must run dlog at command line in dir that has package.json and be git initialised.
 
 ## release notes
 

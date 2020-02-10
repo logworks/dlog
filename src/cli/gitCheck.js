@@ -3,85 +3,87 @@ const git = require('gift');
 const path = require('path');
 const cwd = path.resolve(process.cwd(), '.');
 
-// const util = require('util');
-// const exec = util.promisify(require('child_process').exec);
-
-const exitMessage = `Exiting. git commands, then dlog + again.
- for example:
-  git add . && git commit --amend
+const exitMessage = `
+Quitting...
+ 
+Suggest you run git commands for clean status, then dlog + again.
+for example:
   git add . && git commit --m 'your commit message here'
   dlog +
 `;
-const addMessage = `Warning there are changed files.
+const addMessage = `
+
+Warning there are changed files.
 
 [L] List unstaged files.
-[N] Exit, commit/stage files, re-run dlog +
-[Y] Proceed.
- > `;
-// const wrongDirMessage = `dlog must be run from root level of project and be under git source control.
-// This is because dlog can change a lot of files. Just a safety feature.
-// It will also warn you if the git status is not clean i.e. unchecked in files.
-// `;
+[Q] Quit to manually commit/stage files. Then can re-run dlog +
+[Y] Yes, Proceed.
+> `;
 
-// function os_func() {
-//   this.execCommand = function(cmd) {
-//     return new Promise((resolve, reject) => {
-//       exec(cmd, (error, stdout) => {
-//         if (error) {
-//           reject(error);
-//           return;
-//         }
-//         resolve(stdout);
-//       });
-//     });
-//   };
-// }
+const shortAddMessage = `[L]ist [Q]uit [Y]es-proceed >`;
 
-// var os = new os_func();
+const gitErrorMessage = `
 
-async function gitCheck() {
-  return new Promise(function(resolve) {
-    // todo - check git coverage of present dir.
-    // os.execCommand('git status').then(res => {
-    //     console.log(res)
-    // })
+It Looks like the directory you are in (${cwd}), is not under git source control.
+For safety this is required to run dlog +  as it can change a lot of files!
+`;
 
-    const repo = git(cwd);
-
-    repo.status({}, function(err, status) {
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-      });
-
-      if (status.clean) {
-        rl.close();
-        resolve(true);
+function getRepoStatus(repo) {
+  return new Promise(function(resolve, reject) {
+    repo.status({}, function(error, status) {
+      if (error) {
+        reject(error);
       } else {
-        const qadd = function(answer) {
-          switch (answer.toUpperCase()) {
-            case 'L':
-              console.log(status.files);
-              rl.question(addMessage, qadd);
-              break;
-            case 'N':
-              console.log(exitMessage);
-              process.exit();
-              break;
-            case 'Y':
-              rl.close();
-              resolve(true);
-              break;
-            default:
-              console.log(`${answer} invalid. please respond with l/n/y`);
-              rl.question(addMessage, qadd);
-          }
-        };
-
-        rl.question(addMessage, qadd);
+        resolve(status);
       }
     });
   });
+}
+
+async function gitCheck() {
+  const repo = git(cwd);
+  try {
+    const status = await getRepoStatus(repo);
+
+    if (status.clean) {
+      console.log('git status: clean.  dlogging starting...');
+      return true;
+    }
+
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    process.stdout.write(addMessage);
+
+    for await (const line of rl) {
+      let answer = line.toUpperCase();
+      switch (answer) {
+        case 'L': {
+          console.log('git status:', status.files);
+          process.stdout.write(shortAddMessage);
+          break;
+        }
+        case 'Y': {
+          rl.close();
+          return true;
+        }
+        case 'Q': {
+          console.log(exitMessage);
+          return false;
+        }
+
+        default: {
+          console.log(`${answer} invalid Choice.`);
+          console.log(shortAddMessage);
+        }
+      }
+    }
+  } catch (repoStatusError) {
+    console.log(gitErrorMessage);
+    return false;
+  }
 }
 
 module.exports = gitCheck;
