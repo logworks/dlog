@@ -18,8 +18,8 @@ Note Pre-release. [v 0.1.0](#v0.1.0) Usable, likely breaking changes to API comi
 
 dlog i creates two files:
 
-    .dlogrc
-    dlog.js
+    .dlogrc  // cli configuration.
+    dlogger.js  // runtime configuration, customisation.
 
 Edit .dlogrc. Set the globPattern and excludes to match your project. (globPattern matches the files/directories given, and exclude sets files you dont want logging added to.)
 
@@ -59,6 +59,13 @@ they change as a type anomoly. for example:
     # logs:
     type anomoly detected:
     bar.a.b.c.anarray was [Numbers] got [Numbers, Regexs]
+
+## cli configuration
+
+    "globPattern": "./src/**/*.?(js|jsx|ts|tsx)", //glob for files to include.
+    "excludes": "node_modules|\\.test",  // regExp applied to exclude from files found by globbing.
+    "module" : "e.g: es2015/commonjs.    - Added on $ dlog i depending on choice of module system",
+    "nameAs" : "dlog/whateverLog    - auto added log identifier can be changed to avoid name clashes."
 
 ## examples
 

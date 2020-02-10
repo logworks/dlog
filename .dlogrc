@@ -2,5 +2,5 @@
   "globPattern": "./src/**/*.?(js|jsx|ts|tsx)",
   "excludes": "node_modules|\\.test|XXX|dlogger",
   "module": "commonjs",
-  "entry-point": "TODO e.g. src/dlogger.js.  - Added by parser on $ dlog i."
+  "nameAs" : "autoLog"
 }

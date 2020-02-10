@@ -5,6 +5,7 @@ const utils = require('./utils');
 const fileConcurrency = 10; //limited so as not to overload disk i/0 r/w ops /cpu. todo: make configurable.
 
 const LOCAL_DLOGGER_JS = 'dlogger.js';
+
 /*
 given linCode: String (prior identifed as a function), extract the fuction name.
 */
@@ -59,11 +60,6 @@ const paramaterise = function(signature) {
 
     for (param of paramArr) {
       let ptrimmed = param.trim();
-      console.log({
-        ptrimmed,
-        oneormore: ptrimmed.length >= 1,
-        W: /\W/.test(ptrimmed)
-      });
       if (ptrimmed.length === 0 || /\W/.test(ptrimmed)) return null;
       res.push(`${ptrimmed} : ${ptrimmed}`);
     }
@@ -72,7 +68,6 @@ const paramaterise = function(signature) {
     //single param, no brackets
     const param = signature.match(/=\s+(\w*)\s+=>/);
     if (param && param.length >= 1) {
-      console.log({ param });
       if (/\W/.test(param[1])) return null;
       return '{' + param[1] + '}';
     } else {
@@ -81,7 +76,7 @@ const paramaterise = function(signature) {
   }
 };
 
-const addLogging = function(content, filePath) {
+const addLogging = function(content, config) {
   const buildLogLine = function(match) {
     const functionName = getFunctionName(match);
     if (!functionName) return match;
@@ -89,7 +84,7 @@ const addLogging = function(content, filePath) {
     if (!params) return match;
     if (/\w/.test(functionName)) {
       return (
-        match + `\n  dlog.log({'${functionName}': ${params}})\n`
+        match + `\n  ${config.nameAs}.log({'${functionName}': ${params}})\n`
         //explict verbose:  `\n  dlog.log({name: '${functionName}', params: ${params}})\n`
       );
     } else {
@@ -102,8 +97,8 @@ const addLogging = function(content, filePath) {
 /*
     remove all dlog code from source:logging and require's
 */
-function clearLogging(content) {
-  const logSignatureX = /\n.*dlog\.log.*\n/g; //deletes line
+function clearLogging(content, config) {
+  const logSignatureX = new RegExp(`\n.*${config.nameAs}.log.*\n`, 'g'); // /\n.*dlog\.log.*\n/g; //deletes line
   const logSignatureImportX = /.*dlogger.*\n/g; //first line in file.
   return content.replace(logSignatureX, '').replace(logSignatureImportX, '');
 }
@@ -111,16 +106,16 @@ function clearLogging(content) {
 /*
     insert require dlog at start of source files on dlog --add
 */
-function prependRequire(content, filePath, moduleSystem) {
+function prependRequire(content, filePath, config) {
   const splitter = filePath.split('/');
   const pathToDlog =
     './' + '../'.repeat(splitter.length - 2) + LOCAL_DLOGGER_JS;
 
-  if (moduleSystem === 'es2015') {
-    return `import dlog from'${pathToDlog}';\n${content}`;
+  if (config.module === 'es2015') {
+    return `import ${config.nameAs} from'${pathToDlog}';\n${content}`;
   }
-  if (moduleSystem === 'commonjs') {
-    return `const dlog = require('${pathToDlog}');\n${content}`;
+  if (config.module === 'commonjs') {
+    return `const ${config.nameAs} = require('${pathToDlog}');\n${content}`;
   }
 }
 
@@ -129,10 +124,10 @@ function prependRequire(content, filePath, moduleSystem) {
     if so, fails with process.exit(1). Primary use: pre-commit/push hooks & CI:
     reason: development logging should never be commited, let alone allowed into production - yikes!
 */
-function hasDlogging(files) {
+function hasDlogging(files, config) {
   ac.eachLimit(files, fileConcurrency, function(filePath, limitCallBack) {
     utils.readFile(filePath).then(function(res) {
-      const checkHasDlogX = /.*dlog.*/g;
+      const checkHasDlogX = new RegExp(`.*${config.nameAs}.*`, 'g'); // /.*dlog.*/g;
       if (checkHasDlogX.test(res.data)) {
         console.log(
           `dlog found in code.
@@ -148,23 +143,21 @@ function hasDlogging(files) {
 /*
     read, transform, write for dlog --add and dlog --remove.
 */
-function parseFiles(files, moduleSystem, add, clear) {
+function parseFiles(files, config, add, clear) {
   ac.eachLimit(files, fileConcurrency, function(filePath, limitCallBack) {
     utils
       .readFile(filePath)
       .then(function(res) {
         let content;
         if (add) {
-          content = clearLogging(res.data);
-          const contentWithLogging = addLogging(content);
+          content = clearLogging(res.data, config);
+          const contentWithLogging = addLogging(content, config);
+          // console.log({ contentWithLogging });
           if (contentWithLogging !== content)
-            content = prependRequire(
-              contentWithLogging,
-              filePath,
-              moduleSystem
-            );
+            content = prependRequire(contentWithLogging, filePath, config);
+          console.log('prepend', content);
         } else if (clear) {
-          content = clearLogging(res.data, filePath);
+          content = clearLogging(res.data, config);
         }
         return utils.writeFile(res.sourcePath, content);
       })
@@ -219,10 +212,10 @@ function execute(config, add, clear, checkClean) {
           }
 
           if (add || clear) {
-            parseFiles(reducedFilesList, config.module, add, clear);
+            parseFiles(reducedFilesList, config, add, clear);
           }
           if (checkClean) {
-            hasDlogging(reducedFilesList);
+            hasDlogging(reducedFilesList, config);
           }
         }
       });
