@@ -1,40 +1,40 @@
-const fs = require("fs");
-const glob = require("glob");
-const ac = require("async");
-const utils = require("./utils");
+const fs = require('fs');
+const glob = require('glob');
+const ac = require('async');
+const utils = require('./utils');
 const fileConcurrency = 10; //limited so as not to overload disk i/0 r/w ops /cpu. todo: make configurable.
 
-const LOCAL_DLOGGER_JS = "dlogger.js";
+const LOCAL_DLOGGER_JS = 'dlogger.js';
 /*
 given linCode: String (prior identifed as a function), extract the fuction name.
 */
 function getFunctionName(lineCode) {
-  let functionName = "";
+  let functionName = '';
   if (/function(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
-    if (lineCode.split("function ").length > 1) {
+    if (lineCode.split('function ').length > 1) {
       functionName = lineCode
-        .split("function ")[1]
-        .split("(")[0]
-        .replace(/(\s*)/g, "");
+        .split('function ')[1]
+        .split('(')[0]
+        .replace(/(\s*)/g, '');
     }
   } else {
     if (lineCode.split(/\(.*\)/).length > 0) {
       const textInTheLeftOfTheParams = lineCode.split(/\(.*\)/)[0];
       if (/=/.test(textInTheLeftOfTheParams)) {
-        if (textInTheLeftOfTheParams.split("=").length > 0) {
+        if (textInTheLeftOfTheParams.split('=').length > 0) {
           functionName = textInTheLeftOfTheParams
-            .split("=")[0]
-            .replace(/export |module.exports |const |var |let |=|(\s*)/g, "");
+            .split('=')[0]
+            .replace(/export |module.exports |const |var |let |=|(\s*)/g, '');
         }
       } else {
         functionName = textInTheLeftOfTheParams.replace(
           /async|public|private|protected|static|export |(\s*)/g,
-          ""
+          ''
         );
       }
     }
   }
-  functionName = functionName.split(":")[0];
+  functionName = functionName.split(':')[0];
   const validFunctionNameX = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
   if (validFunctionNameX.test(functionName)) {
     const exceptionTrap = /(if|.then)/.test(functionName);
@@ -67,14 +67,14 @@ const paramaterise = function(signature) {
       if (ptrimmed.length === 0 || /\W/.test(ptrimmed)) return null;
       res.push(`${ptrimmed} : ${ptrimmed}`);
     }
-    return "{" + res.join(", ") + "}";
+    return '{' + res.join(', ') + '}';
   } else {
     //single param, no brackets
     const param = signature.match(/=\s+(\w*)\s+=>/);
     if (param && param.length >= 1) {
       console.log({ param });
       if (/\W/.test(param[1])) return null;
-      return "{" + param[1] + "}";
+      return '{' + param[1] + '}';
     } else {
       return null;
     }
@@ -103,23 +103,23 @@ const addLogging = function(content, filePath) {
     remove all dlog code from source:logging and require's
 */
 function clearLogging(content) {
-  const logSignatureX = /\n.*dlog.*\n/g; //deletes line
-  const logSignatureImportX = /.*dlog.*\n/g; //first line in file.
-  return content.replace(logSignatureX, "").replace(logSignatureImportX, "");
+  const logSignatureX = /\n.*dlog\.log.*\n/g; //deletes line
+  const logSignatureImportX = /.*dlogger.*\n/g; //first line in file.
+  return content.replace(logSignatureX, '').replace(logSignatureImportX, '');
 }
 
 /*
     insert require dlog at start of source files on dlog --add
 */
 function prependRequire(content, filePath, moduleSystem) {
-  const splitter = filePath.split("/");
+  const splitter = filePath.split('/');
   const pathToDlog =
-    "./" + "../".repeat(splitter.length - 2) + LOCAL_DLOGGER_JS;
+    './' + '../'.repeat(splitter.length - 2) + LOCAL_DLOGGER_JS;
 
-  if (moduleSystem === "es2015") {
+  if (moduleSystem === 'es2015') {
     return `import dlog from'${pathToDlog}';\n${content}`;
   }
-  if (moduleSystem === "commonjs") {
+  if (moduleSystem === 'commonjs') {
     return `const dlog = require('${pathToDlog}');\n${content}`;
   }
 }
@@ -173,7 +173,7 @@ function parseFiles(files, moduleSystem, add, clear) {
       });
   });
   console.log(
-    add ? "Adding" : "Clearing",
+    add ? 'Adding' : 'Clearing',
     ` logs done. ${files.length - 1} files updated.`
   );
 }
@@ -188,9 +188,9 @@ add / clear / checkClean all bool - choose only one.
 function execute(config, add, clear, checkClean) {
   const { globPattern, excludes } = config;
   console.log(
-    "Using configuration: globPattern, ",
+    'Using configuration: globPattern, ',
     globPattern,
-    "excludes:",
+    'excludes:',
     excludes
   );
 
@@ -205,7 +205,7 @@ function execute(config, add, clear, checkClean) {
       console.log(`glob error executing globPattern: ${globPattern} `, error);
     } else {
       //munge ** to include ** dir files.
-      const rootGlob = globPattern.replace(/\*\*\//, "");
+      const rootGlob = globPattern.replace(/\*\*\//, '');
       glob(rootGlob, globOptions, function(error, rootFiles) {
         if (error) {
           console.log(`glob error executing rootGlob: ${rootGlob} `, error);
