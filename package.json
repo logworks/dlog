@@ -10,7 +10,7 @@
   "preferGlobal": false,
   "scripts": {
     "build": "webpack  -p --devtool source-map && cp dist/dlog.js examples/web/ ",
-    "test:nyc": "./node_modules/.bin/nyc report",
+    "lint": "./node_modules/.bin/eslint src",
     "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "tdd": "jest --watch --coverage",
     "commit": "git-cz",
@@ -27,6 +27,7 @@
     "babel-preset-env": "^1.6.1",
     "coveralls": "^3.0.9",
     "cz-conventional-changelog": "^3.1.0",
+    "eslint": "^6.8.0",
     "jest": "^25.1.0",
     "lodash": "^4.17.15",
     "prettier": "^1.19.1",

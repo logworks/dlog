@@ -1,11 +1,11 @@
-const path = require("path");
-const cwd = path.resolve(process.cwd(), ".");
-const readline = require("readline");
-const utils = require("./utils");
+const path = require('path');
+const cwd = path.resolve(process.cwd(), '.');
+const readline = require('readline');
+const utils = require('./utils');
 
 const MODULE_SPECIFICATIONS = {
-  W: "es2015",
-  N: "commonjs"
+  W: 'es2015',
+  N: 'commonjs'
 };
 /*
   choose module specification, 
@@ -35,10 +35,10 @@ async function chooseModuleSpecification() {
     Read file (w/n), write to target.
 */
 async function installFactoryFile(moduleSpecification) {
-  const LOG_FACTORY_FILE = "dlogger.js";
+  const LOG_FACTORY_FILE = 'dlogger.js';
 
   try {
-    const targetjs = await utils.readFile(cwd + "/" + LOG_FACTORY_FILE);
+    await utils.readFile(cwd + '/' + LOG_FACTORY_FILE);
   } catch (e) {
     //target does not exist -proceed. :( coding to negative
 
@@ -46,11 +46,7 @@ async function installFactoryFile(moduleSpecification) {
       path.resolve(__dirname) + `/setup/dlogger.${moduleSpecification}.js`
     );
 
-    //todo catch, return.
-    const targetWritten = await utils.writeFile(
-      cwd + "/" + LOG_FACTORY_FILE,
-      srcjs.data
-    );
+    await utils.writeFile(cwd + '/' + LOG_FACTORY_FILE, srcjs.data);
 
     console.log(`./${LOG_FACTORY_FILE} created.`);
     return true;
@@ -58,21 +54,21 @@ async function installFactoryFile(moduleSpecification) {
 }
 
 async function installConfigFile(moduleSpecification) {
-  const LOG_CONFIG_FILE = ".dlogrc";
+  const LOG_CONFIG_FILE = '.dlogrc';
   try {
-    const targetjson = await utils.readFile(cwd + "/" + LOG_CONFIG_FILE);
-    console.log(targetjson, "You already have ./" + LOG_CONFIG_FILE);
+    const targetjson = await utils.readFile(cwd + '/' + LOG_CONFIG_FILE);
+    console.log(targetjson, 'You already have ./' + LOG_CONFIG_FILE);
     return false;
   } catch (e) {
     //target does not exist - proceed
     utils
-      .readFile(path.resolve(__dirname) + "/setup/" + LOG_CONFIG_FILE)
+      .readFile(path.resolve(__dirname) + '/setup/' + LOG_CONFIG_FILE)
       .then(function(srcjson) {
         //
         let config = JSON.parse(srcjson.data);
         config.module = moduleSpecification;
         utils.writeFile(
-          cwd + "/" + LOG_CONFIG_FILE,
+          cwd + '/' + LOG_CONFIG_FILE,
           JSON.stringify(config, undefined, 2)
         );
         console.log(`./${LOG_CONFIG_FILE} created.`);

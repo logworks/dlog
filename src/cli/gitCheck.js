@@ -1,12 +1,10 @@
-const fs = require("fs");
-const readline = require("readline");
-const git = require("gift");
-const utils = require("./utils");
-const path = require("path");
-const cwd = path.resolve(process.cwd(), ".");
+const readline = require('readline');
+const git = require('gift');
+const path = require('path');
+const cwd = path.resolve(process.cwd(), '.');
 
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
+// const util = require('util');
+// const exec = util.promisify(require('child_process').exec);
 
 const exitMessage = `Exiting. git commands, then dlog + again.
  for example:
@@ -20,29 +18,29 @@ const addMessage = `Warning there are changed files.
 [N] Exit, commit/stage files, re-run dlog +
 [Y] Proceed.
  > `;
-const wrongDirMessage = `dlog must be run from root level of project and be under git source control. 
-This is because dlog can change a lot of files. Just a safety feature. 
-It will also warn you if the git status is not clean i.e. unchecked in files.
-`;
+// const wrongDirMessage = `dlog must be run from root level of project and be under git source control.
+// This is because dlog can change a lot of files. Just a safety feature.
+// It will also warn you if the git status is not clean i.e. unchecked in files.
+// `;
 
-function os_func() {
-  this.execCommand = function(cmd) {
-    return new Promise((resolve, reject) => {
-      exec(cmd, (error, stdout, stderr) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(stdout);
-      });
-    });
-  };
-}
+// function os_func() {
+//   this.execCommand = function(cmd) {
+//     return new Promise((resolve, reject) => {
+//       exec(cmd, (error, stdout) => {
+//         if (error) {
+//           reject(error);
+//           return;
+//         }
+//         resolve(stdout);
+//       });
+//     });
+//   };
+// }
 
-var os = new os_func();
+// var os = new os_func();
 
 async function gitCheck() {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     // todo - check git coverage of present dir.
     // os.execCommand('git status').then(res => {
     //     console.log(res)
@@ -62,15 +60,15 @@ async function gitCheck() {
       } else {
         const qadd = function(answer) {
           switch (answer.toUpperCase()) {
-            case "L":
+            case 'L':
               console.log(status.files);
               rl.question(addMessage, qadd);
               break;
-            case "N":
+            case 'N':
               console.log(exitMessage);
               process.exit();
               break;
-            case "Y":
+            case 'Y':
               rl.close();
               resolve(true);
               break;
