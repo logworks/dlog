@@ -28,6 +28,9 @@ const logger = dlog.createLogger(config);
 if (config.globalLogger) {
   global[config.globalLogger] = logger;
   console.log('global ' + config.globalLogger + ' set.');
+  // to use, need to require this (dlogger) early in application boot sequence e.g:
+  // require('../dlogger.js')
+  // tlog.log({ hello: {p1, p2} }); -anywhere in app, no more requires/imports needed.
 }
 
 module.exports = logger;
