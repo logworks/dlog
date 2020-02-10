@@ -1,13 +1,36 @@
-const dlog = require("@genisense/dlog");
+/*
+  use dlog at development time to test dlog.
+  -eat our own dog food!
+*/
 
-// todo read config from .dlogrc.runtime
-const config = { filtrate: ["*"], globalLogger: "tlog" };
+const dlog = require('@genisense/dlog');
+
+/*
+  
+  configure/ customise your runtime dlog.log here.
+
+*/
+const config = {
+  include: ['*'],
+  exclude: [],
+  globalLogger: 'tlog',
+  typeCheck: false,
+  meta: {
+    level: true,
+    timeStamp: true,
+    file: true,
+    stack: true
+  }
+};
+
 const logger = dlog.createLogger(config);
-console.log("instantiated once on first require/import.");
-console.log("can dlog.config ={} on fly to adjust");
-logger.log({ dlogger: { a: "a" } });
+
 if (config.globalLogger) {
   global[config.globalLogger] = logger;
+  console.log('global ' + config.globalLogger + ' set.');
+  // to use, need to require this (dlogger) early in application boot sequence e.g:
+  // require('../dlogger.js')
+  // tlog.log({ hello: {p1, p2} }); -anywhere in app, no more requires/imports needed.
 }
 
 module.exports = logger;
