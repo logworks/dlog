@@ -35,10 +35,13 @@ You are now ready to Log & Roll:
 You can also filter on the fly without reloading, for example if running a browser app, at the console:
 
     # To only log functions named foo or bar
-    dlog.filtrate = ['foo','bar']
+    dlog.include = ['foo','bar']
 
     # Log every function (that was added according to globPattern config)
-    dlog.filtrate = ['*']
+    dlog.include = ['*']
+
+    #exclude specific functioins - useful for chatty ones:
+    dlog.exclude = ['onMouseMove']
 
 logging keeps track of function call paramater types and alerts you when
 they change as a type anomoly. for example:
