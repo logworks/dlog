@@ -1,13 +1,10 @@
 const glob = require('glob');
 const ac = require('async');
 const utils = require('./utils');
-const fileConcurrency = 10; //limited so as not to overload disk i/0 r/w ops /cpu. todo: make configurable.
+const fileConcurrency = 10;
 
 const LOCAL_DLOGGER_JS = 'dlogger.js';
 
-/*
-given linCode: String (prior identifed as a function), extract the fuction name.
-*/
 function getFunctionName(lineCode) {
   let functionName = '';
   if (/function(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
@@ -45,9 +42,7 @@ function getFunctionName(lineCode) {
     return;
   }
 }
-/*
-    given a function signature, extract the (parameters, ...)
-*/
+
 const paramaterise = function(signature) {
   const paramMatch = signature.match(/\((.*?)\)/);
 
@@ -64,7 +59,6 @@ const paramaterise = function(signature) {
     }
     return '{' + res.join(', ') + '}';
   } else {
-    //single param, no brackets
     const param = signature.match(/=\s+(\w*)\s+=>/);
     if (param && param.length >= 1) {
       if (/\W/.test(param[1])) return null;
@@ -84,7 +78,6 @@ const addLogging = function(content, config) {
     if (/\w/.test(functionName)) {
       return (
         match + `\n  ${config.nameAs}.log({'${functionName}': ${params}})\n`
-        //explict verbose:  `\n  dlog.log({name: '${functionName}', params: ${params}})\n`
       );
     } else {
       return match;
@@ -93,18 +86,13 @@ const addLogging = function(content, config) {
   const functionSignatureX = /(.*function.*\{|.*=>.*\{)/g;
   return content.replace(functionSignatureX, buildLogLine);
 };
-/*
-    remove all dlog code from source:logging and require's
-*/
+
 function clearLogging(content, config) {
-  const logSignatureX = new RegExp(`\n.*${config.nameAs}.log.*\n`, 'g'); // /\n.*dlog\.log.*\n/g; //deletes line
-  const logSignatureImportX = /.*dlogger.*\n/g; //first line in file.
+  const logSignatureX = new RegExp(`\n.*${config.nameAs}.log.*\n`, 'g');
+  const logSignatureImportX = /.*dlogger.*\n/g;
   return content.replace(logSignatureX, '').replace(logSignatureImportX, '');
 }
 
-/*
-    insert require dlog at start of source files on dlog --add
-*/
 function prependRequire(content, filePath, config) {
   const splitter = filePath.split('/');
   const pathToDlog =
@@ -118,11 +106,6 @@ function prependRequire(content, filePath, config) {
   }
 }
 
-/*
-    dlog --test : check if 'dlog' anywhere in configured codebase to affect.
-    if so, fails with process.exit(1). Primary use: pre-commit/push hooks & CI:
-    reason: development logging should never be commited, let alone allowed into production - yikes!
-*/
 function hasDlogging(files, config) {
   ac.eachLimit(files, fileConcurrency, function(filePath, limitCallBack) {
     utils.readFile(filePath).then(function(res) {
@@ -139,9 +122,7 @@ function hasDlogging(files, config) {
     });
   });
 }
-/*
-    read, transform, write for dlog --add and dlog --remove.
-*/
+
 function parseFiles(files, config, add, clear) {
   ac.eachLimit(files, fileConcurrency, function(filePath, limitCallBack) {
     utils
@@ -168,13 +149,6 @@ function parseFiles(files, config, add, clear) {
   );
 }
 
-/*
-    public entry-point to parser. 
-
-example:
-globPattern = "./testdir/** /*.js"
-add / clear / checkClean all bool - choose only one.
-*/
 function execute(config, add, clear, checkClean) {
   const { globPattern, excludes } = config;
   console.log(
@@ -184,30 +158,23 @@ function execute(config, add, clear, checkClean) {
     excludes
   );
 
-  /*
-    change globOptions to config - read from .dlogrc
-    apply import / require depending on module option.
-
-  */
-  const globOptions = {}; //{ ignore: excludes }
+  const globOptions = {};
   glob(globPattern, globOptions, function(error, files) {
     if (error) {
       console.log(`glob error executing globPattern: ${globPattern} `, error);
     } else {
-      //munge ** to include ** dir files.
+      // munge- ** to include first dir files.
       const rootGlob = globPattern.replace(/\*\*\//, '');
       glob(rootGlob, globOptions, function(error, rootFiles) {
         if (error) {
           console.log(`glob error executing rootGlob: ${rootGlob} `, error);
         } else {
           const allFiles = [...rootFiles, ...files];
-          //apply exclusion:
           const excludeX = new RegExp(excludes);
           const reducedFilesList = [];
           for (let file of allFiles) {
             if (!excludeX.test(file)) reducedFilesList.push(file);
           }
-
           if (add || clear) {
             parseFiles(reducedFilesList, config, add, clear);
           }

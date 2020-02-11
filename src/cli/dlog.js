@@ -16,7 +16,6 @@ dlog
      ++     force add logging (skip's git status check)
      ?      checks for dlog statements in code. (useful for CI).
          `;
-//  'dlog must be run from app root directory (has package.json and git initialised.)'
 
 const boot = async function() {
   let config;

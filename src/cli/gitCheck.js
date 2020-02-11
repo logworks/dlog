@@ -3,14 +3,6 @@ const git = require('gift');
 const path = require('path');
 const cwd = path.resolve(process.cwd(), '.');
 
-const exitMessage = `
-Quitting...
- 
-Suggest you run git commands for clean status, then dlog + again.
-for example:
-  git add . && git commit --m 'your commit message here'
-  dlog +
-`;
 const addMessage = `
 
 Warning there are changed files.
@@ -26,6 +18,15 @@ const gitErrorMessage = `
 
 It Looks like the directory you are in (${cwd}), is not under git source control.
 For safety this is required to run dlog +  as it can change a lot of files!
+`;
+
+const exitMessage = `
+Quitting...
+ 
+Suggest you run git commands for clean status, then dlog + again.
+for example:
+  git add . && git commit --m 'your commit message here'
+  dlog +
 `;
 
 function getRepoStatus(repo) {
