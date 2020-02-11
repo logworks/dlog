@@ -153,3 +153,36 @@ parking it, get some advice, sleep on it.
 
 Cannot read property 'bindings' of null
 ../node_modules/@babel/core/node_modules/@babel/traverse/lib/scope/index.js
+
+====== // /\* comment notes removed:
+
+// app/index todo:
+// enforce structure
+// configurable log.
+// default log all if filtrate empty
+
+/\*
+callDiff
+stack tracks hash of function calls (filename, line)
+The param values are converted to type identifiers.
+When subsequently called if the types vary,
+the logger provides the diff.
+
+Note:
+
+to move to logging server when build one.
+
+stack in memory, unmanaged - another reason to move to server,
+remove from app perf, caching options like redis on server.
+
+look for colorised diff for console:
+jasmine / https://github.com/flitbit/diff ?
+
+\*/
+
+TypeChecker
+
+/_
+returns object of same structure as srcObject
+with values replaced by types.
+_/

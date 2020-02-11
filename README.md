@@ -9,6 +9,8 @@ Runtime dynamic type checking for hard to find bugs.
 Logs as code, not strings.
 Useful for large code base investigation. See the execution flows and details fast.
 
+Useful tool for debugging. Debuggers run code in a synthetic environment, which can lead to non real behaviours (especially for asynchronous, and time affected operations). Try dlog powered up logging instead.
+
 Note Pre-release. [v 0.1.2](#v0.1.2) Usable, still early POC, do let us know if you find useful!
 
 ## quick start
@@ -27,24 +29,23 @@ Edit .dlogrc. Set the globPattern and excludes to match your project. (globPatte
 You are now ready to Log & Roll:
 
     # Add logging to all files specified in config:
-    dlog +
+    $ dlog +
 
     # Remove logging from all files (again specified in config:
-    dlog -
+    $ dlog -
 
 You can also filter on the fly without reloading, for example if running a browser app, at the console:
 
     # To only log functions named foo or bar
-    dlog.include = ['foo','bar']
+    dlog.config.include = ['foo','bar']
 
     # Log every function (that was added according to globPattern config)
-    dlog.include = ['*']
+    dlog.config.include = ['*']
 
     #exclude specific functioins - useful for chatty ones:
-    dlog.exclude = ['onMouseMove']
+    dlog.config.exclude = ['onMouseMove']
 
-logging keeps track of function call paramater types and alerts you when
-they change as a type anomoly. for example:
+With typeCheck=true, logging keeps track of function call paramater types and alerts you when they change as a type anomoly. for example:
 
     foo(astring: '', anumber: 42, anarray: [10,20,30])
 
@@ -130,18 +131,17 @@ Logs should be structured code, not any arbitrary mix of types. By using such a 
 
 ## examples
 
-Soon come:
-
-- example integration with other loggers e.g. Winston.
-- middleware.
-- type checking depth/execution control
-- Log server
+- Browser and Node examples √
+- example integration with other loggers e.g. Winston. -coming
+- middleware. - coming
+- type checking depth/execution control - coming
+- Log server - maybe coming
 
 ## release notes
 
-### v0.1.2
+### v0.1.3
 
-- stability and code quality refactoring.
+- Stability and code quality refactoring.
 
 ### v0.1.0
 
@@ -159,10 +159,17 @@ Soon come:
 
 ## local only npm installation
 
-All global packages really do is allow you to type less at command line!:
+All global packages really do is allow you to type less at command line:
 
     # with globally installed:
     > dlog +/-/?/v/h
 
     # instead of
-    > npm run dlog +/-/?/v/h
+    $ node node_moudules/@genisense/dlog/src/cli/dlog +/-/?/v/h
+
+    # or add to package.json:
+    scripts : {
+        "dlog" : "node_moudules/@genisense/dlog/src/cli/dlog"
+    }
+    # then can use slightly shorter
+    $ npm run dlog +/-/?/v/h

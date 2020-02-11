@@ -1,17 +1,14 @@
+'use strict';
 const _ = require('lodash');
 
 const getType = elem => {
   return Object.prototype.toString.call(elem).slice(8, -1);
 };
 
-/*
-    returns object of same structure as srcObject
-    with values replaced by types.
-  */
 function deepMapTypes(srcObject) {
   const target = {};
   const queue = [];
-  const src = srcObject; // assume (todo-check) srcObj is obj,with one top level key. { wrapper: { types: srcObject } } //todo -fix
+  const src = srcObject;
   let cursor = src;
 
   queue.push([...Object.keys(src)]);
@@ -20,15 +17,13 @@ function deepMapTypes(srcObject) {
     let prop = queue.shift();
     cursor = _.get(src, prop);
     if (cursor) {
-      let cursorType = Object.prototype.toString.call(cursor).slice(8, -1);
+      let cursorType = getType(cursor);
       if (cursorType === 'Object') {
         var keys = Object.keys(cursor);
         if (keys.length) {
           keys.forEach(k => {
             queue.push(prop + '.' + k);
-            let keyType = Object.prototype.toString
-              .call(cursor[k])
-              .slice(8, -1);
+            let keyType = getType(cursor[k]);
             _.set(target, queue[queue.length - 1], keyType);
           });
         }
