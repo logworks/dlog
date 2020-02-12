@@ -1,13 +1,29 @@
-const dlog = require("../../dist/dlog.js");
+//const dlog = require('../../dist/dlog.js');
+const dlog = require('../../src/app/index.js');
+const winstonLogger = require('./winstonLogger');
 
-// todo read config from .dlogrc.runtime
-const config = { filtrate: ["*"], globalLogger: "tlog" };
+const winstonLoggerTransform = (data, meta) => {
+  const winstonLog = {};
+  winstonLog.message = JSON.stringify(data);
+  if (meta && meta.level) winstonLog.level = meta.level;
+  winstonLogger.log(winstonLog);
+};
+
+/*
+  configure/ customise your runtime dlog.log here.
+*/
+const config = {
+  include: ['*'],
+  exclude: [],
+  globalLogger: 'tlog',
+  outputLogger: console.log, // winstonLoggerTransform,
+  typeCheck: false,
+  meta: {
+    timeStamp: false,
+    file: false
+  }
+};
+
 const logger = dlog.createLogger(config);
-// console.log("instantiated once on first require/import.");
-// console.log("can dlog.config ={} on fly to adjust");
-logger.log({ dlogger: { a: "a" } });
-if (config.globalLogger) {
-  global[config.globalLogger] = logger;
-}
 
 module.exports = logger;

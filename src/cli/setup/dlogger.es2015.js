@@ -8,6 +8,7 @@ const config = {
   include: ['*'],
   exclude: [],
   globalLogger: 'tlog',
+  outputLogger: console.log,
   typeCheck: false,
   meta: {
     level: true,

@@ -6,11 +6,12 @@ const dlog = {
   logger: {
     config: {},
 
-    log: function(logObj) {
+    log: function(logObj, meta) {
       const { include, exclude, typeCheck, outputLogger } = this.config;
       const { timeStamp, file } = this.config.meta;
       const { isObject, hasKeys } = utils;
-      const meta = {};
+
+      if (!meta) meta = {};
 
       if (timeStamp) {
         meta.ts = new Date();
@@ -59,12 +60,9 @@ const dlog = {
           callDiff(file, parentLine, logObj);
         }
 
-        if (hasKeys(meta)) {
-          logObj.meta = meta;
-        }
         outputLogger
-          ? outputLogger('[dlog]', logObj)
-          : defaultOutputLogger('[dlog]', logObj);
+          ? outputLogger(logObj, meta)
+          : defaultOutputLogger(logObj, meta);
 
         return logObj;
       }
