@@ -7,7 +7,6 @@
 const fs = require('fs');
 
 function readFile(sourcePath) {
-  console.log('_______', fs.readFile);
   return new Promise(function(resolve, reject) {
     fs.readFile(sourcePath, 'utf8', function(err, data) {
       if (err) {
