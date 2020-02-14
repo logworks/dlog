@@ -1,6 +1,5 @@
 'use strict';
 const readFile = (path, format, cb) => {
-  console.log('mockery!!!!!');
   if (path === 'validFile') {
     cb(null, 'data');
   } else {
@@ -9,7 +8,7 @@ const readFile = (path, format, cb) => {
 };
 
 const writeFile = (savePath, data, cb) => {
-  if (path === 'validFile') {
+  if (savePath === 'validFile') {
     cb(null, { savePath, data });
   } else {
     cb(new Error('Invalid'), null);

@@ -9,7 +9,7 @@ const dlog = {
     log: function(logObj, meta) {
       const { include, exclude, typeCheck, outputLogger } = this.config;
       const { timeStamp, file } = this.config.meta;
-      const { isObject, hasKeys } = utils;
+      const { isObject } = utils;
 
       if (!meta) meta = {};
 

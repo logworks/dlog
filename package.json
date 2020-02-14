@@ -29,6 +29,7 @@
     "coveralls": "^3.0.9",
     "cz-conventional-changelog": "^3.1.0",
     "eslint": "^6.8.0",
+    "husky": "^4.2.3",
     "jest": "^25.1.0",
     "lodash": "^4.17.15",
     "prettier": "^1.19.1",
@@ -46,6 +47,11 @@
     "verbose": false,
     "rootDir": "src",
     "transform": {}
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && npm run lint"
+    }
   },
   "config": {
     "commitizen": {
