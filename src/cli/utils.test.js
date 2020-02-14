@@ -10,7 +10,7 @@ describe('util promisified  fs.readFile and fs.writeFile', () => {
     });
   });
 
-  it.only(' readFile should return a promise, which rejects for an invalidFile', done => {
+  it(' readFile should return a promise, which rejects for an invalidFile', done => {
     utils.readFile('inValidFile').catch(error => {
       expect(error).toBeTruthy();
       done();

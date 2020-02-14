@@ -23,7 +23,7 @@ const namedFunctions = [
 const namedFunctionExceptions = ['if (typeof require === "function") {'];
 
 describe('addLogging', () => {
-  it.only(`Gets function name from a line of code representing a function declaration'`, function() {
+  it(`Gets function name from a line of code representing a function declaration'`, function() {
     namedFunctions.forEach(namedFunction => {
       expect(parser.getFunctionName(namedFunction)).toBe('functionName');
     });
