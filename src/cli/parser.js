@@ -89,7 +89,12 @@ const addLogging = function(content, config) {
 
 function clearLogging(content, config) {
   const logSignatureX = new RegExp(`\n.*${config.nameAs}.log.*\n`, 'g');
-  const logSignatureImportX = /.*dlogger.*\n/g;
+  const es2015Module = 'import';
+  const commonjsModule = 'require';
+  const logSignatureImportX = new RegExp(
+    `.*(${es2015Module}|${commonjsModule}).*dlogger.*\n`,
+    'g'
+  );
   return content.replace(logSignatureX, '').replace(logSignatureImportX, '');
 }
 
@@ -193,6 +198,6 @@ module.exports = {
   hasDlogging, // exported for testing only. checks if dlog in codebase. (CI no no -exit(1))
   clearLogging, // exported for testing only. Removes logging from given content string
   addLogging, //exported for testing only. Adds logging to given content string,
-  prependRequire, // exported for testing only. Adds require dlogger to top of file.
+  prependRequire, // exported for testing only. Adds req/impor dlogger to top of file.
   parseFiles // exported for testing only. file reader & writer. calls adds or clearLogging for all files given
 };
