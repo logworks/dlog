@@ -132,12 +132,18 @@ Logs should be structured code, not any arbitrary mix of types. By using such a 
 ## examples
 
 - Browser and Node examples √
-- example integration with other loggers e.g. Winston. -coming
-- middleware. - coming
+- example integration with other loggers e.g. Winston. √
 - type checking depth/execution control - coming
+- middleware.
 - Log server - maybe coming
 
 ## release notes
+
+### v0.1.4
+
+- config.outputLogger - configure dlog to use other logging libraries.
+- examples/cutsom-logger-winston provided.
+- Stability and code quality refactoring.
 
 ### v0.1.3
 
