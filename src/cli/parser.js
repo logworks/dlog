@@ -7,6 +7,9 @@ const LOCAL_DLOGGER_JS = 'dlogger.js';
 
 function getFunctionName(lineCode) {
   let functionName = '';
+  //ignore if in single line comment
+  if (/^\s*\/\/.*$/.test(lineCode)) return;
+
   if (/function(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
     if (lineCode.split('function ').length > 1) {
       functionName = lineCode
@@ -47,8 +50,11 @@ const paramaterise = function(signature) {
   const paramMatch = signature.match(/\((.*?)\)/);
 
   if (paramMatch) {
-    const params = paramMatch[1];
+    let params = paramMatch[1];
+    params = params.replace(/[{}]/g, '');
+    console.log('params', params);
 
+    params.match(/\((.*?)\)/);
     const paramArr = params.split(/[,]/);
     const res = [];
 
@@ -76,8 +82,13 @@ const addLogging = function(content, config) {
     const params = paramaterise(match);
     if (!params) return match;
     if (/\w/.test(functionName)) {
+      let meta = '';
+      if (config.argCheck) {
+        meta = ', { arguments }';
+      }
       return (
-        match + `\n  ${config.nameAs}.log({'${functionName}': ${params}})\n`
+        match +
+        `\n  ${config.nameAs}.log({'${functionName}': ${params} }  ${meta})\n`
       );
     } else {
       return match;
@@ -199,5 +210,6 @@ module.exports = {
   clearLogging, // exported for testing only. Removes logging from given content string
   addLogging, //exported for testing only. Adds logging to given content string,
   prependRequire, // exported for testing only. Adds req/impor dlogger to top of file.
+  paramaterise, // extract named params.
   parseFiles // exported for testing only. file reader & writer. calls adds or clearLogging for all files given
 };

@@ -139,6 +139,28 @@ Logs should be structured code, not any arbitrary mix of types. By using such a 
 
 ## release notes
 
+### v0.1.5
+
+- dlog +
+  - works for object deconstruction function params.
+  - ignores single line // commented out functions.
+  - argCheck option. warns when named paramater count differs to actual paramaters recieved. TODO 3
+  - works for spread params: function (...args) TODO 2
+- dlogger Runtime
+  - outputLogger config. enables upstreaming to any logger. Example with Winston.
+  - browser example with logRocket. TODO
+  - TypeChecker
+    - better formated output. TODO 3
+    - timeout if object too complex to be checked at runtime. TODO 3
+    - perf tests. TODO 3
+- Non functionals:
+  - refactored cli Q&A, tests.TODO
+  - husky pre-commit hook, lint, test.
+  - husky pre-push dlog ? check (eating own dog food) TODO 1
+  - tests & refactoring of cli stdin, stdout. TODO 2
+  - remove gist dependency TODO
+  - improve perf for typechecking TODO
+
 ### v0.1.4
 
 - config.outputLogger - configure dlog to use other logging libraries.

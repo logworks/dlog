@@ -74,7 +74,6 @@ describe('typeCheker objects ', () => {
     const expectO = inO;
     const outO = typeChecker(inO);
     const diff = deepDiff(inO, outO);
-    console.log(diff);
     expect(diff).toBe(undefined);
     //who blew stack????? - toEqual did. prob uses recursion lol'
   });

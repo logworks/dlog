@@ -22,31 +22,32 @@ const boot = async function() {
 
   switch (cmd) {
     case '-': {
-      console.log('- removing logs');
+      process.stdout.write('- removing logs');
       config = await readConfig();
       parser.execute(config, false, true);
       break;
     }
     //case "--": "remove global convenience logging tlog TODO"
     case '?': {
-      console.log('dlog ? checking for dlog statements in source code...');
+      process.stdout.write(
+        'dlog ? checking for dlog statements in source code...'
+      );
       config = await readConfig();
       parser.execute(config, false, false, true);
       break;
     }
     case '++': {
-      console.log('++  Add logging, skip git status check.');
+      process.stdout.write('++  Add logging, skip git status check.');
       config = await readConfig();
       parser.execute(config, true);
       break;
     }
     case '+': {
       const proceed = await gitCheck();
-      console.log('proceed_____', proceed);
       if (proceed) {
         config = await readConfig();
-        console.log('config', config);
-        console.log('+ adding logs');
+        process.stdout.write('config', config);
+        process.stdout.write('+ adding logs');
         parser.execute(config, true);
       }
       break;
@@ -54,7 +55,7 @@ const boot = async function() {
     case 'v': {
       const packagePath = path.resolve(__dirname) + '/../../package.json';
       const pjson = require(packagePath);
-      console.log('dlog version: ', pjson.version);
+      process.stdout.write('dlog version: ', pjson.version);
       break;
     }
     case 'i':
@@ -62,7 +63,7 @@ const boot = async function() {
       break;
 
     default:
-      console.log(helpMessage);
+      process.stdout.write(helpMessage);
   }
 };
 

@@ -47,7 +47,7 @@ async function gitCheck() {
     const status = await getRepoStatus(repo);
 
     if (status.clean) {
-      console.log('git status: clean.  dlogging starting...');
+      process.stdout.write('git status: clean.  dlogging starting...');
       return true;
     }
 
@@ -62,7 +62,7 @@ async function gitCheck() {
       let answer = line.toUpperCase();
       switch (answer) {
         case 'L': {
-          console.log('git status:', status.files);
+          process.stdout.write('git status:', status.files);
           process.stdout.write(shortAddMessage);
           break;
         }
@@ -71,18 +71,18 @@ async function gitCheck() {
           return true;
         }
         case 'Q': {
-          console.log(exitMessage);
+          process.stdout.write(exitMessage);
           return false;
         }
 
         default: {
-          console.log(`${answer} invalid Choice.`);
-          console.log(shortAddMessage);
+          process.stdout.write(`${answer} invalid Choice.`);
+          process.stdout.write(shortAddMessage);
         }
       }
     }
   } catch (repoStatusError) {
-    console.log(gitErrorMessage);
+    process.stdout.write(gitErrorMessage);
     return false;
   }
 }
