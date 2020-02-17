@@ -11,10 +11,8 @@ const config = {
   outputLogger: console.log,
   argCheck: true,
   typeCheck: false,
-  meta: {
-    timeStamp: false,
-    file: false
-  }
+  timing: false,
+  file: false
 };
 
 const logger = dlog.createLogger(config);

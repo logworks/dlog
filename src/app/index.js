@@ -2,6 +2,9 @@
 const callDiff = require('./callDiff.js');
 const utils = require('./utils');
 const argChecker = require('./argChecker');
+const ms = require('ms');
+
+let mostRecentTimeStamp;
 
 const dlog = {
   logger: {
@@ -13,15 +16,21 @@ const dlog = {
         exclude,
         typeCheck,
         outputLogger,
-        argCheck
+        argCheck,
+        timing,
+        file
       } = this.config;
-      const { timeStamp, file } = this.config.meta;
+
       const { isObject } = utils;
 
       const metaOut = {};
 
-      if (timeStamp) {
-        metaOut.ts = new Date();
+      if (timing) {
+        const current = new Date();
+        if (mostRecentTimeStamp) {
+          metaOut.timing = ms(Math.abs(current - mostRecentTimeStamp));
+        }
+        mostRecentTimeStamp = current;
       }
       let defaultOutputLogger;
       if (outputLogger === undefined || typeof outputLogger !== 'function') {
@@ -71,7 +80,7 @@ const dlog = {
           ? outputLogger(logObj, metaOut)
           : defaultOutputLogger(logObj, metaOut);
 
-        if (argCheck && meta.arguments) {
+        if (argCheck && meta && meta.arguments) {
           const argCheckMsg = argChecker(logObj, meta.arguments);
           if (argCheckMsg) {
             outputLogger

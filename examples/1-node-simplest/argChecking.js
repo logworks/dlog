@@ -3,7 +3,7 @@ const dlog = require('./dlogger.js');
     example of config.argCheck = true.
     notifies if parameters recieved differs to named parameters.
 */
-const componentArgCheck = function() {
+const argChecking = function() {
   function fnWithOptions(p1, options) {
     dlog.log({ fnWithOptions: { p1, options } }, { arguments });
   }
@@ -19,4 +19,4 @@ const componentArgCheck = function() {
   fnWithMoreArgumentsThanNamedParams('more-args-than-named-params', 2, 3, 4, 5);
 };
 
-module.exports = componentArgCheck;
+module.exports = argChecking;

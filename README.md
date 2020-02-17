@@ -140,9 +140,15 @@ Logs should be structured code, not any arbitrary mix of types. By using such a 
 
 ## release notes
 
-### v0.1.6
+### v0.2.0
 
-    argCheck:   see examples/1-node-simple. to enable dlogger config.argCheck : true.
+- Api breaking:
+
+  - config.meta: Removed. meta wrapper not helpful to api. meta.file, meta.timeStamp moved up to just config.
+
+- new features:
+  - argCheck: see examples/1-node-simple. to enable dlogger config.argCheck : true.
+  - timing: timeStamp renamed timing. gives millisecond timing between logs.
 
 ### v0.1.5
 

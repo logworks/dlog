@@ -1,0 +1,15 @@
+{
+  "name": "2-web-simplest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "componentA.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@genisense/dlog": "^0.1.5"
+  }
+}

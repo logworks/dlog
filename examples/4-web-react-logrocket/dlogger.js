@@ -5,13 +5,11 @@ LogRocket.init('YOUR_PRIVATE_LOGROCKET_URI');
 const config = {
   include: ['*'],
   exclude: [],
-  globalLogger: 'tlog',
-  outputLogger: LogRocket.error,
+  // globalLogger: 'tlog',
+  outputLogger: LogRocket.log,
   typeCheck: false,
-  meta: {
-    timeStamp: true,
-    file: false
-  }
+  timing: true,
+  file: true
 };
 
 const logger = dlog.createLogger(config);

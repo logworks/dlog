@@ -1,4 +1,3 @@
-//const dlog = require('../../dist/dlog.js');
 const dlog = require('../../src/app/index.js');
 const winstonLogger = require('./winstonLogger');
 
@@ -15,13 +14,7 @@ const winstonLoggerTransform = (data, meta) => {
 const config = {
   include: ['*'],
   exclude: [],
-  globalLogger: 'tlog',
-  outputLogger: console.log, // winstonLoggerTransform,
-  typeCheck: false,
-  meta: {
-    timeStamp: false,
-    file: false
-  }
+  outputLogger: winstonLoggerTransform
 };
 
 const logger = dlog.createLogger(config);

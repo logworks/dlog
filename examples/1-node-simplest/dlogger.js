@@ -1,5 +1,5 @@
-// const dlog = require('../../dist/dlog.js');
-const dlog = require('../../src/app');
+const dlog = require('@genisense/dlog'); //real world
+// const dlog = require('../../src/app'); //using dlog src.
 
 const config = {
   include: ['*'],
@@ -7,11 +7,9 @@ const config = {
   globalLogger: 'tlog',
   outputLogger: console.log,
   argCheck: true,
-  typeCheck: false,
-  meta: {
-    timeStamp: false,
-    file: false
-  }
+  timing: true,
+  file: false,
+  typeCheck: false
 };
 
 const logger = dlog.createLogger(config);
