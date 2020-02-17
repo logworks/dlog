@@ -1,25 +1,9 @@
+'use strict';
 const crypto = require('crypto');
 const deepDiff = require('deep-diff');
 const _ = require('lodash');
 const typeChecker = require('./typeChecker');
 
-/*
-stack tracks hash of function calls (filename, line)
-The param values are converted to type identifiers.
-When subsequently called if the types vary, 
-the logger provides the diff.
-
-Note: 
-
-to move to logging server when build one.
-
-stack in memory, unmanaged - another reason to move to server,
-remove from app perf, caching options like redis on server.
-
-look for colorised diff for console:
-jasmine / https://github.com/flitbit/diff ?
-
-*/
 const stack = {};
 
 const callDiff = function(file, parentLine, params) {

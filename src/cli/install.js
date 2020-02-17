@@ -7,10 +7,7 @@ const MODULE_SPECIFICATIONS = {
   W: 'es2015',
   N: 'commonjs'
 };
-/*
-  choose module specification, 
-  which is used to customise configuration files.
-*/
+
 async function chooseModuleSpecification() {
   let answer;
   const targetQuestion = `Logging for Web (imports, es2015)  or node (requires, commonJs) app (w/n) ? >`;
@@ -20,7 +17,7 @@ async function chooseModuleSpecification() {
     output: process.stdout
   });
 
-  console.log(targetQuestion);
+  process.stdout.write(targetQuestion);
 
   for await (const line of rl) {
     answer = line.toUpperCase();
@@ -29,26 +26,19 @@ async function chooseModuleSpecification() {
   return MODULE_SPECIFICATIONS[answer];
 }
 
-/*
-    target exits? yes: stop, 
-    Web or Node (w/n) ? Answer - neither: stop
-    Read file (w/n), write to target.
-*/
 async function installFactoryFile(moduleSpecification) {
   const LOG_FACTORY_FILE = 'dlogger.js';
 
   try {
     await utils.readFile(cwd + '/' + LOG_FACTORY_FILE);
   } catch (e) {
-    //target does not exist -proceed. :( coding to negative
-
     const srcjs = await utils.readFile(
       path.resolve(__dirname) + `/setup/dlogger.${moduleSpecification}.js`
     );
 
     await utils.writeFile(cwd + '/' + LOG_FACTORY_FILE, srcjs.data);
 
-    console.log(`./${LOG_FACTORY_FILE} created.`);
+    process.stdout.write(`./${LOG_FACTORY_FILE} created.`);
     return true;
   }
 }
@@ -57,10 +47,9 @@ async function installConfigFile(moduleSpecification) {
   const LOG_CONFIG_FILE = '.dlogrc';
   try {
     const targetjson = await utils.readFile(cwd + '/' + LOG_CONFIG_FILE);
-    console.log(targetjson, 'You already have ./' + LOG_CONFIG_FILE);
+    process.stdout.write(targetjson, 'You already have ./' + LOG_CONFIG_FILE);
     return false;
   } catch (e) {
-    //target does not exist - proceed
     utils
       .readFile(path.resolve(__dirname) + '/setup/' + LOG_CONFIG_FILE)
       .then(function(srcjson) {
@@ -71,7 +60,7 @@ async function installConfigFile(moduleSpecification) {
           cwd + '/' + LOG_CONFIG_FILE,
           JSON.stringify(config, undefined, 2)
         );
-        console.log(`./${LOG_CONFIG_FILE} created.`);
+        process.stdout.write(`./${LOG_CONFIG_FILE} created.`);
         return true;
       });
   }

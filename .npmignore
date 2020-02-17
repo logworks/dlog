@@ -1,0 +1,14 @@
+node_modules
+examples
+test
+*.test.js
+.travis.yml
+.prettierrc
+.eslint.json
+webpack.config.babel.js
+/src/app
+/scripts
+/dlogger.js
+__mocks__
+.env*
+README-DRAFT.md 
