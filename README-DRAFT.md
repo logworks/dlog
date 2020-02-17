@@ -1,3 +1,24 @@
+## roadmap
+
+- cli: dlog +
+  - argCheck option. warns when named paramater count differs to actual paramaters recieved. TODO 3
+  - works for spread params: function (...args) TODO 2
+  -
+- Non functionals:
+
+  - refactored cli Q&A, tests.TODO
+  - husky pre-push dlog ? check (eating own dog food) TODO 1
+  - tests & refactoring of cli stdin, stdout. TODO 2
+  - remove gist dependency TODO
+  - improve perf for typechecking TODO
+  - readme - link to coverage instead of badge. TODO (We are not 100% coverage slaves. Behaviours are the way).
+
+- TypeChecker
+
+  - better formated output. TODO 3
+  - timeout if object too complex to be checked at runtime. TODO 3
+  - perf tests. TODO 3
+
 # dlog - logging designed for @development time.
 
 Auto log entire code bases, with filtering, and dynamic type checking.

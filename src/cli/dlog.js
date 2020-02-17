@@ -19,51 +19,54 @@ dlog
 
 const boot = async function() {
   let config;
-
-  switch (cmd) {
-    case '-': {
-      process.stdout.write('- removing logs');
-      config = await readConfig();
-      parser.execute(config, false, true);
-      break;
-    }
-    //case "--": "remove global convenience logging tlog TODO"
-    case '?': {
-      process.stdout.write(
-        'dlog ? checking for dlog statements in source code...'
-      );
-      config = await readConfig();
-      parser.execute(config, false, false, true);
-      break;
-    }
-    case '++': {
-      process.stdout.write('++  Add logging, skip git status check.');
-      config = await readConfig();
-      parser.execute(config, true);
-      break;
-    }
-    case '+': {
-      const proceed = await gitCheck();
-      if (proceed) {
+  try {
+    switch (cmd) {
+      case '-': {
+        process.stdout.write('- removing logs');
         config = await readConfig();
-        process.stdout.write('config', config);
-        process.stdout.write('+ adding logs');
-        parser.execute(config, true);
+        parser.execute(config, false, true);
+        break;
       }
-      break;
-    }
-    case 'v': {
-      const packagePath = path.resolve(__dirname) + '/../../package.json';
-      const pjson = require(packagePath);
-      process.stdout.write('dlog version: ', pjson.version);
-      break;
-    }
-    case 'i':
-      install();
-      break;
+      //case "--": "remove global convenience logging tlog TODO"
+      case '?': {
+        process.stdout.write(
+          'dlog ? checking for dlog statements in source code...'
+        );
+        config = await readConfig();
+        parser.execute(config, false, false, true);
+        break;
+      }
+      case '++': {
+        process.stdout.write('++  Add logging, skip git status check.');
+        config = await readConfig();
+        parser.execute(config, true);
+        break;
+      }
+      case '+': {
+        const proceed = await gitCheck();
+        if (proceed) {
+          config = await readConfig();
+          process.stdout.write('config', config);
+          process.stdout.write('+ adding logs');
+          parser.execute(config, true);
+        }
+        break;
+      }
+      case 'v': {
+        const packagePath = path.resolve(__dirname) + '/../../package.json';
+        const pjson = require(packagePath);
+        process.stdout.write('dlog version: ', pjson.version);
+        break;
+      }
+      case 'i':
+        install();
+        break;
 
-    default:
-      process.stdout.write(helpMessage);
+      default:
+        process.stdout.write(helpMessage);
+    }
+  } catch (error) {
+    process.stdout.write(`Dlog cli unexpected error. \n ${error}`);
   }
 };
 

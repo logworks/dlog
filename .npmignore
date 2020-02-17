@@ -10,4 +10,5 @@ webpack.config.babel.js
 /scripts
 /dlogger.js
 __mocks__
+.env*
 README-DRAFT.md 
