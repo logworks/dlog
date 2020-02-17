@@ -1,13 +1,29 @@
-const dlog = require("../../dist/dlog.js");
+// const dlog = require('../../dist/dlog.js');
+const dlog = require('../../src/app');
 
-// todo read config from .dlogrc.runtime
-const config = { filtrate: ["*"], globalLogger: "tlog" };
+const config = {
+  include: ['*'],
+  exclude: [],
+  globalLogger: 'tlog',
+  outputLogger: console.log,
+  argCheck: true,
+  typeCheck: false,
+  meta: {
+    timeStamp: false,
+    file: false
+  }
+};
+
 const logger = dlog.createLogger(config);
-// console.log("instantiated once on first require/import.");
-// console.log("can dlog.config ={} on fly to adjust");
-logger.log({ dlogger: { a: "a" } });
+
+/*
+  to use globalLogger need to require this (dlogger) early in application boot sequence e.g:
+  require('../dlogger.js')
+  tlog.log({ hello: {p1, p2} }); -anywhere in app, no more requires/imports needed.
+*/
 if (config.globalLogger) {
   global[config.globalLogger] = logger;
+  console.log('global ' + config.globalLogger + ' set.');
 }
 
 module.exports = logger;

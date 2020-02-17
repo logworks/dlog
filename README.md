@@ -11,7 +11,7 @@ Useful for large code base investigation. See the execution flows and details fa
 
 Useful tool for debugging. Debuggers run code in a synthetic environment, which can lead to non real behaviours (especially for asynchronous, and time affected operations). Try dlog powered up logging instead.
 
-Note Pre-release. [v 0.1.2](#v0.1.2) Usable, still early POC, do let us know if you find useful!
+Note Pre-release. [v 0.1.6](#v0.1.6) Usable, still early POC, let us know if you find potentially useful.
 
 ## quick start
 
@@ -82,6 +82,7 @@ With typeCheck=true, logging keeps track of function call paramater types and al
         include: ['*'],         // '*' - every named log call. or 'foo', 'bar' -exact matches.
         exclude: [],            // array of exact matches to exclude.
         globalLogger: 'tlog',   // name a global convenience logger.
+        argCheck : true,        // warn if actual arguments passed differ from named parameters.
         typeCheck: false,       // deep compare paramater data types.
         meta: {
             timeStamp: true,    // if true, timestamp added to every log
@@ -110,11 +111,11 @@ console.log is a very flexible api. And is often used thus:
 
 dlog.log enforces:
 
-    dlog.log ( { someIdentifier : {p1, p2 } } )
+    dlog.log ( { someIdentifier : {p1, p2 } }, {/* optional meta-data */ } )
 
-| .log( ... ) rule                    |                     psudocode |
+| .log( {} ) rule                     |                     psudocode |
 | ----------------------------------- | ----------------------------: |
-| Takes a single object.              |                       ( { } ) |
+| First param is an object.           |                       ( { } ) |
 | With one first level Key.           |           ( { identifer : } ) |
 | The identifier's value is an object |       ( { identifer : { } } ) |
 | Containing the paramaters           | ( { identifer : {p1, p2 } } ) |
@@ -139,6 +140,10 @@ Logs should be structured code, not any arbitrary mix of types. By using such a 
 
 ## release notes
 
+### v0.1.6
+
+    argCheck:   see examples/1-node-simple. to enable dlogger config.argCheck : true.
+
 ### v0.1.5
 
 - cli: dlog +
@@ -148,14 +153,14 @@ Logs should be structured code, not any arbitrary mix of types. By using such a 
 
 - dlogger Runtime
 
-  - outputLogger config. enables upstreaming to any logger. 
+  - outputLogger config. enables upstreaming to any logger.
     - Node example with Winston.
     - Web example with Logrocket.
 
 - Non functionals:
+
   - husky pre-commit hook, lint, test.
 
-  
 ### v0.1.4
 
 - config.outputLogger - configure dlog to use other logging libraries.

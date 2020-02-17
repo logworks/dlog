@@ -10,6 +10,7 @@ const config = {
   exclude: [],
   globalLogger: 'tlog',
   outputLogger: console.log,
+  argCheck: true,
   typeCheck: false,
   meta: {
     timeStamp: false,

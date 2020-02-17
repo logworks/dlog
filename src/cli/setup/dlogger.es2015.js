@@ -9,12 +9,11 @@ const config = {
   exclude: [],
   globalLogger: 'tlog',
   outputLogger: console.log,
+  argCheck: true,
   typeCheck: false,
   meta: {
-    level: true,
-    timeStamp: true,
-    file: true,
-    stack: true
+    timeStamp: false,
+    file: false
   }
 };
 

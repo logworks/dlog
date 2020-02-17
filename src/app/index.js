@@ -1,20 +1,27 @@
 'use strict';
 const callDiff = require('./callDiff.js');
 const utils = require('./utils');
+const argChecker = require('./argChecker');
 
 const dlog = {
   logger: {
     config: {},
 
     log: function(logObj, meta) {
-      const { include, exclude, typeCheck, outputLogger } = this.config;
+      const {
+        include,
+        exclude,
+        typeCheck,
+        outputLogger,
+        argCheck
+      } = this.config;
       const { timeStamp, file } = this.config.meta;
       const { isObject } = utils;
 
-      if (!meta) meta = {};
+      const metaOut = {};
 
       if (timeStamp) {
-        meta.ts = new Date();
+        metaOut.ts = new Date();
       }
       let defaultOutputLogger;
       if (outputLogger === undefined || typeof outputLogger !== 'function') {
@@ -53,7 +60,7 @@ const dlog = {
         const parentLine = chop[2];
 
         if (file) {
-          meta.file = srcFile;
+          metaOut.file = srcFile;
         }
 
         if (typeCheck) {
@@ -61,8 +68,17 @@ const dlog = {
         }
 
         outputLogger
-          ? outputLogger(logObj, meta)
-          : defaultOutputLogger(logObj, meta);
+          ? outputLogger(logObj, metaOut)
+          : defaultOutputLogger(logObj, metaOut);
+
+        if (argCheck && meta.arguments) {
+          const argCheckMsg = argChecker(logObj, meta.arguments);
+          if (argCheckMsg) {
+            outputLogger
+              ? outputLogger(argCheckMsg)
+              : defaultOutputLogger(argCheckMsg);
+          }
+        }
 
         return logObj;
       }

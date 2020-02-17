@@ -207,3 +207,28 @@ TypeChecker
 returns object of same structure as srcObject
 with values replaced by types.
 _/
+
+Argcheck:
+CLI:
+argCheck : true
+
+better:
+
+argCheck : {
+on: true/false,
+include:
+exclude:
+}
+note cli could read dlogger. or could get args from error obj, then dont need to pass args in.
+
+Runtime:
+
+argCheck:
+
+    checks config.
+    checks for mismatch.
+    outputs result.
+
+parser.
+
+app/index.
