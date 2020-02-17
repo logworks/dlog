@@ -1,20 +1,16 @@
 import dlog from '@genisense/dlog';
-/*
-  
-  configure/ customise your runtime dlog.log here.
+import LogRocket from './node_modules/logrocket';
+LogRocket.init('YOUR_PRIVATE_LOGROCKET_URI');
 
-*/
 const config = {
   include: ['*'],
   exclude: [],
   globalLogger: 'tlog',
-  outputLogger: console.log,
+  outputLogger: LogRocket.error,
   typeCheck: false,
   meta: {
-    level: true,
     timeStamp: true,
-    file: true,
-    stack: true
+    file: false
   }
 };
 

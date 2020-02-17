@@ -1,6 +1,7 @@
 {
   "globPattern": "./src/**/*.?(js|jsx|ts|tsx)",
-  "excludes": "node_modules|\\.test|XXX|dlogger",
+  "excludes": "node_modules|\\.test|__mocks__|dlogger",
   "module": "commonjs",
-  "nameAs" : "autoLog"
+  "nameAs" : "autoLog",
+  "argCheck" : true
 }

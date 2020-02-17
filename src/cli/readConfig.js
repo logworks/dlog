@@ -5,8 +5,9 @@ const cwd = path.resolve(process.cwd(), '.');
 const CONFIG_FILE = '.dlogrc';
 
 const readConfig = async function() {
+  const ABSOLUTE_PATHED_CONFIG_FILE = cwd + '/' + CONFIG_FILE;
   try {
-    const configJson = await utils.readFile(cwd + '/' + CONFIG_FILE);
+    const configJson = await utils.readFile(ABSOLUTE_PATHED_CONFIG_FILE);
 
     const config = JSON.parse(configJson.data);
     if (!config['globPattern']) {
@@ -20,12 +21,15 @@ const readConfig = async function() {
       process.exit();
     }
     return config;
-  } catch (e) {
-    console.error(`
-    Error, missing ./${CONFIG_FILE} file. 
-    To create config run:\n dlog i`);
-    process.exit();
+  } catch (error) {
+    console.log(
+      `
+      \nCould not read ${ABSOLUTE_PATHED_CONFIG_FILE}
+      Have you ran 'dlog i'? It creates .dlogrc for you.
+      ${error}`
+    );
   }
+  process.exit();
 };
 
 module.exports = readConfig;

@@ -16,10 +16,8 @@ const config = {
   globalLogger: 'tlog',
   typeCheck: false,
   meta: {
-    level: true,
     timeStamp: true,
-    file: true,
-    stack: true
+    file: true
   }
 };
 

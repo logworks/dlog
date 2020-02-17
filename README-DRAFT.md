@@ -1,3 +1,24 @@
+## roadmap
+
+- cli: dlog +
+  - argCheck option. warns when named paramater count differs to actual paramaters recieved. TODO 3
+  - works for spread params: function (...args) TODO 2
+  -
+- Non functionals:
+
+  - refactored cli Q&A, tests.TODO
+  - husky pre-push dlog ? check (eating own dog food) TODO 1
+  - tests & refactoring of cli stdin, stdout. TODO 2
+  - remove gist dependency TODO
+  - improve perf for typechecking TODO
+  - readme - link to coverage instead of badge. TODO (We are not 100% coverage slaves. Behaviours are the way).
+
+- TypeChecker
+
+  - better formated output. TODO 3
+  - timeout if object too complex to be checked at runtime. TODO 3
+  - perf tests. TODO 3
+
 # dlog - logging designed for @development time.
 
 Auto log entire code bases, with filtering, and dynamic type checking.
@@ -153,3 +174,36 @@ parking it, get some advice, sleep on it.
 
 Cannot read property 'bindings' of null
 ../node_modules/@babel/core/node_modules/@babel/traverse/lib/scope/index.js
+
+====== // /\* comment notes removed:
+
+// app/index todo:
+// enforce structure
+// configurable log.
+// default log all if filtrate empty
+
+/\*
+callDiff
+stack tracks hash of function calls (filename, line)
+The param values are converted to type identifiers.
+When subsequently called if the types vary,
+the logger provides the diff.
+
+Note:
+
+to move to logging server when build one.
+
+stack in memory, unmanaged - another reason to move to server,
+remove from app perf, caching options like redis on server.
+
+look for colorised diff for console:
+jasmine / https://github.com/flitbit/diff ?
+
+\*/
+
+TypeChecker
+
+/_
+returns object of same structure as srcObject
+with values replaced by types.
+_/

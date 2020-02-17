@@ -1,0 +1,6 @@
+{
+    "globPattern": "./src/**/*.?(js|jsx|ts|tsx)",
+    "excludes": "node_modules|\\.test",
+    "module" : "es2015",
+    "nameAs" : "autoLog"
+}
