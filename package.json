@@ -1,6 +1,6 @@
 {
   "name": "@genisense/dlog",
-  "version": "0.2.31",
+  "version": "0.2.32",
   "description": "Development time logging with dynmaic type checking.",
   "main": "dist/dlog.js",
   "repository": "git@github.com:logworks/dlog.git",
@@ -56,7 +56,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm build && npm run lint && npm test",
-      "post-commit": "git push --set-upstream dlog-p working:master && npm version patch && npm run hack"
+      "post-commit": "git push --set-upstream dlog-p working:master && npm version patch --force && npm run hack"
     }
   },
   "config": {
