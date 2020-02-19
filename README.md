@@ -3,15 +3,31 @@
 [![Build Status](https://travis-ci.com/logworks/dlog.svg?branch=master)](https://travis-ci.com/logworks/dlog)
 [![Coverage Status](https://coveralls.io/repos/github/logworks/dlog/badge.svg?branch=master)](https://coveralls.io/github/logworks/dlog?branch=master)
 
-Logging designed for development time.
-Tired of typing console.log? - '\$ dlog +' logs all named functions. 'dlog -' removes.
-Runtime dynamic type checking for hard to find bugs.
-Logs as code, not strings.
-Useful for large code base investigation. See the execution flows and details fast.
+Logging focused at development time.
 
-Useful tool for debugging. Debuggers run code in a synthetic environment, which can lead to non real behaviours (especially for asynchronous, and time affected operations). Try dlog powered up logging instead.
+## Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
 
-Note Pre-release. [v 0.1.6](#v0.1.6) Usable, still early POC, let us know if you find potentially useful.
+    $ dlog +        # logs every named function.
+    $ dlog -        # removes all logs added by dlog +.
+    $ dlog ?        # halts CI if dlog present in code pre-push.
+
+## V1.0 Key Target Use Case
+
+### Reusable code walk through execution scenario's to rapidly ramp up new developers to unfamiliar/complex code bases.
+
+### Rationale ( Unapollageticly Opinionated ) :
+
+- Execution trumps code. Just as rivers trump river banks. But this is currently hard to see. Dlog is all about making exection flows tanglible and sharable.
+
+- Debuggers run code in synthetic environments, which can lead to false positive behaviours (especially for asynchronous, and time affected operations). logging is far more effective (with dlog).
+
+- Developers need fast, nay immediate tools to explore execution flows. Stacktraces are too noisey and irrelevant.
+
+- Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
+
+- Dlog is a raidcal experiment. What if such a maligned, over abused utility as console.log holds more lead bullets (not silver), than anyone realised. This is Dlog.
+
+Note Pre-release. [v 0.2.0](#v0.2.0) Usable, still early POC, let us know if you find potentially useful/ input to direction.
 
 ## quick start
 
@@ -22,7 +38,7 @@ Note Pre-release. [v 0.1.6](#v0.1.6) Usable, still early POC, let us know if you
 dlog i creates two files:
 
     .dlogrc  // cli configuration.
-    dlogger.js  // runtime configuration, customisation.
+    dlogger.js  // runtime configuration, customisation point.
 
 Edit .dlogrc. Set the globPattern and excludes to match your project. (globPattern matches the files/directories given, and exclude sets files you dont want logging added to.)
 
@@ -45,26 +61,6 @@ You can also filter on the fly without reloading, for example if running a brows
     #exclude specific functioins - useful for chatty ones:
     dlog.config.exclude = ['onMouseMove']
 
-With typeCheck=true, logging keeps track of function call paramater types and alerts you when they change as a type anomoly. for example:
-
-    foo(astring: '', anumber: 42, anarray: [10,20,30])
-
-    # later called with:
-    foo(astring: '', anumber: 42, anarray: [10,"20",30])
-    # logs :
-    type anomoly detected:
-    foo.anarray was [numbers] got [numbers, strings]
-
-    # deep object comparison:
-
-    bar ({ a: { b: { c: {astring: '', anumber: 42, anarray: [10,20,30]}}}})
-    # later called with:
-    bar ({ a: { b: { c: {astring: '', anumber: 42, anarray: [10,20,/\\/g ]}}}})
-
-    # logs:
-    type anomoly detected:
-    bar.a.b.c.anarray was [Numbers] got [Numbers, Regexs]
-
 ## cli configuration
 
     .dlogrc
@@ -84,10 +80,8 @@ With typeCheck=true, logging keeps track of function call paramater types and al
         globalLogger: 'tlog',   // name a global convenience logger.
         argCheck : true,        // warn if actual arguments passed differ from named parameters.
         typeCheck: false,       // deep compare paramater data types.
-        meta: {
-            timeStamp: true,    // if true, timestamp added to every log
-            file: true         // if true, shows the origin file of the log.
-        }
+        timing: true,           // ms timing between logged function calls.
+        file: true,             // if true, shows the origin file of the log.
     };
 
     globalLogger: set the name of the logger (default here tlog), require once early in
@@ -97,7 +91,7 @@ With typeCheck=true, logging keeps track of function call paramater types and al
         // now in any file can use:
         tlog.log({myTag: {p1, p2}})
 
-    If prefered you can avoid global and require in exlicitly:
+    If prefered you can avoid global and require in explicitly:
 
         const tlog = require('../dlogger.js')
 
@@ -138,17 +132,43 @@ Logs should be structured code, not any arbitrary mix of types. By using such a 
 - middleware.
 - Log server - maybe coming
 
+## experimental features:
+
+### typeCheck
+
+With typeCheck=true, logging keeps track of function call paramater types and alerts you when they change as a type anomoly. for example:
+
+    foo(astring: '', anumber: 42, anarray: [10,20,30])
+
+    # later called with:
+    foo(astring: '', anumber: 42, anarray: [10,"20",30])
+    # logs :
+    type anomoly detected:
+    foo.anarray was [numbers] got [numbers, strings]
+
+    # deep object comparison:
+
+    bar ({ a: { b: { c: {astring: '', anumber: 42, anarray: [10,20,30]}}}})
+    # later called with:
+    bar ({ a: { b: { c: {astring: '', anumber: 42, anarray: [10,20,/\\/g ]}}}})
+
+    # logs:
+    type anomoly detected:
+    bar.a.b.c.anarray was [Numbers] got [Numbers, Regexs]
+
 ## release notes
 
 ### v0.2.0
 
-- Api breaking:
+- Api breaking changes:
 
   - config.meta: Removed. meta wrapper not helpful to api. meta.file, meta.timeStamp moved up to just config.
 
 - new features:
   - argCheck: see examples/1-node-simple. to enable dlogger config.argCheck : true.
   - timing: timeStamp renamed timing. gives millisecond timing between logs.
+  - globPattern - parent dir '../' prevented for dlog cli operations.
+  - ES6 destructuring arguments ' => ({}) exculded from auto logging as false positive named functions.
 
 ### v0.1.5
 

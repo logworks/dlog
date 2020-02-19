@@ -1,0 +1,6 @@
+{
+    "globPattern": "../../../xxyyzz/**/*.?(js|jsx|ts|tsx)",
+    "excludes": "node_modules|\\.test",
+    "module" : "commonjs",
+    "nameAs" : "dlog"
+}

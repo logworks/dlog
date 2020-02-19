@@ -1,6 +1,6 @@
 {
   "name": "@genisense/dlog",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Development time logging with dynmaic type checking.",
   "main": "dist/dlog.js",
   "repository": "git@github.com:logworks/dlog.git",
@@ -9,7 +9,8 @@
   },
   "preferGlobal": false,
   "scripts": {
-    "build": "webpack  -p --devtool source-map && cp dist/dlog.js examples/2-web-simplest/ ",
+    "build": "webpack  -p --devtool source-map &&  git add . && npm version patch && cp dist/dlog.js examples/2-web-simplest/ ",
+    "bung": "git add . && npm version patch",
     "lint": "./node_modules/.bin/eslint src",
     "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "test": "jest",
@@ -40,6 +41,7 @@
   "dependencies": {
     "async": "^3.1.1",
     "deep-diff": "^1.0.2",
+    "error-stack-parser": "^2.0.6",
     "gift": "^0.10.2",
     "glob": "^7.1.6",
     "ms": "^2.1.2"

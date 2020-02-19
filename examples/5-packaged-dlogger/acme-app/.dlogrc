@@ -1,0 +1,7 @@
+{
+    "globPattern": "./src/**/*.?(js|jsx|ts|tsx)",
+    "excludes": "node_modules|\\.test",
+    "module" : "commonjs",
+    "dloggerPackage" : "acme-dlogger-node",
+    "nameAs" : "dlog"
+}

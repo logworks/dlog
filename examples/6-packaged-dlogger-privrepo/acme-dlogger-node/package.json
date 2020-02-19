@@ -1,0 +1,12 @@
+{
+  "name": "acme-dlogger-node",
+  "version": "0.0.2",
+  "description": "",
+  "main": "dlogger.js",
+  "dependencies": {
+    "dlog": "git+ssh://git@github.com:henrykempo/dlog-p.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

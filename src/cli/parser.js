@@ -9,6 +9,8 @@ function getFunctionName(lineCode) {
   let functionName = '';
   //ignore if in single line comment
   if (/^\s*\/\/.*$/.test(lineCode)) return;
+  //ignore arrow fn destructure of arguments e.g. => ({})
+  if (/=>.+\(\{/.test(lineCode)) return;
 
   if (/function(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
     if (lineCode.split('function ').length > 1) {
@@ -52,7 +54,6 @@ const paramaterise = function(signature) {
   if (paramMatch) {
     let params = paramMatch[1];
     params = params.replace(/[{}]/g, '');
-    console.log('params', params);
 
     params.match(/\((.*?)\)/);
     const paramArr = params.split(/[,]/);
@@ -110,15 +111,23 @@ function clearLogging(content, config) {
 }
 
 function prependRequire(content, filePath, config) {
-  const splitter = filePath.split('/');
-  const pathToDlog =
-    './' + '../'.repeat(splitter.length - 2) + LOCAL_DLOGGER_JS;
-
-  if (config.module === 'es2015') {
-    return `import ${config.nameAs} from'${pathToDlog}';\n${content}`;
-  }
-  if (config.module === 'commonjs') {
-    return `const ${config.nameAs} = require('${pathToDlog}');\n${content}`;
+  if (config.dloggerPackage !== undefined) {
+    if (config.module === 'es2015') {
+      return `import ${config.nameAs} from '${config.dloggerPackage}';\n${content}`;
+    }
+    if (config.module === 'commonjs') {
+      return `const ${config.nameAs} = require ('${config.dloggerPackage}');\n${content}`;
+    }
+  } else {
+    const splitter = filePath.split('/');
+    const pathToDlog =
+      './' + '../'.repeat(splitter.length - 2) + LOCAL_DLOGGER_JS;
+    if (config.module === 'es2015') {
+      return `import ${config.nameAs} from '${pathToDlog}';\n${content}`;
+    }
+    if (config.module === 'commonjs') {
+      return `const ${config.nameAs} = require ('${pathToDlog}');\n${content}`;
+    }
   }
 }
 
@@ -161,18 +170,22 @@ function parseFiles(files, config, add, clear) {
   });
   console.log(
     add ? 'Adding' : 'Clearing',
-    ` logs done. ${files.length - 1} files updated.`
+    ` logs done. ${files.length} files updated.
+    ${files}`
   );
 }
 
 function execute(config, add, clear, checkClean) {
   const { globPattern, excludes } = config;
-  console.log(
-    'Using configuration: globPattern, ',
-    globPattern,
-    'excludes:',
-    excludes
-  );
+  console.log('\nUsing configuration: globPattern, ', config);
+
+  if (globPattern.match(/\.\.\//)) {
+    throw new Error(
+      `config.globPattern may not include '../'. 
+      \nIt must only affect subdirectories of current working dir.
+      \nThis is for your own safety!`
+    );
+  }
 
   const globOptions = {};
   glob(globPattern, globOptions, function(error, files) {

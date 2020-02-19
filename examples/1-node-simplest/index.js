@@ -11,3 +11,7 @@ const typeChecking = require('./typeChecking');
 //argChecking();
 typeChecking();
 // timing();
+
+// example, updating config on the fly via global.
+tlog.config.file = true;
+basic();

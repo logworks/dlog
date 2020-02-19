@@ -2,6 +2,7 @@
 const callDiff = require('./callDiff.js');
 const utils = require('./utils');
 const argChecker = require('./argChecker');
+const ErrorStackParser = require('error-stack-parser');
 const ms = require('ms');
 
 let mostRecentTimeStamp;
@@ -60,17 +61,23 @@ const dlog = {
 
       if (includeMatches.length === 1 && excludeMatches.length === 0) {
         const forcedErr = new Error();
-        const chop = forcedErr.stack
-          .split('\n')[2]
-          .split('at ')[1]
-          .split(':');
-        const srcFile = chop[0];
-        // const srcLine = chop[1];
-        const parentLine = chop[2];
+        const errStack = ErrorStackParser.parse(forcedErr);
 
         if (file) {
-          metaOut.file = srcFile;
+          metaOut.file = errStack;
         }
+        // console.log('________', forcedErr);
+        // const chop = forcedErr.stack
+        //   .split('\n')[2]
+        //   .split('at ')[1]
+        //   .split(':');
+        // const srcFile = chop[0];
+        // // const srcLine = chop[1];
+        // const parentLine = chop[2];
+
+        // if (file) {
+        //   metaOut.file = srcFile;
+        // }
 
         if (typeCheck) {
           callDiff(file, parentLine, logObj);

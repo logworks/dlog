@@ -1,0 +1,19 @@
+{
+  "name": "5-packaged-dlogger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dlogger.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dlog": "node ../../../src/cli/dlog.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "acme-dlogger-node": "../acme-dlogger-node"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}

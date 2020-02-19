@@ -66,7 +66,7 @@ const boot = async function() {
         process.stdout.write(helpMessage);
     }
   } catch (error) {
-    process.stdout.write(`Dlog cli unexpected error. \n ${error}`);
+    process.stdout.write(`\n${error}\n`);
   }
 };
 
