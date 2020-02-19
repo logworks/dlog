@@ -1,5 +1,5 @@
 'use strict';
-const callDiff = require('./callDiff.js');
+//const callDiff = require('./callDiff.js');
 const utils = require('./utils');
 const argChecker = require('./argChecker');
 const ErrorStackParser = require('error-stack-parser');
@@ -80,7 +80,7 @@ const dlog = {
         // }
 
         if (typeCheck) {
-          callDiff(file, parentLine, logObj);
+          //   callDiff(file, parentLine, logObj);
         }
 
         outputLogger
