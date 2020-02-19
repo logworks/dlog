@@ -10,13 +10,13 @@
   "preferGlobal": false,
   "scripts": {
     "build": "webpack  -p --devtool source-map && cp dist/dlog.js examples/2-web-simplest/ ",
-    "bung": "git add . && npm version patch",
     "lint": "./node_modules/.bin/eslint src",
     "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "test": "jest",
     "tdd": "jest --watch",
     "commit": "git-cz",
-    "dlog": "node ./src/cli/dlog.js"
+    "dlog": "node ./src/cli/dlog.js",
+    "hack": "cd examples/6-packaged-dlogger-privrepo/acme-dlogger-node/ && npm update @genisense/dlog"
   },
   "keywords": [],
   "author": "Henry Kemp",
@@ -54,7 +54,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm build && npm run lint && npm test",
-      "post-commit": "git push --set-upstream dlog-p working:master && npm version patch"
+      "post-commit": "git push --set-upstream dlog-p working:master && cd examp&& npm version patch && npm run hack"
     }
   },
   "config": {
