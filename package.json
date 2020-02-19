@@ -9,7 +9,7 @@
   },
   "preferGlobal": false,
   "scripts": {
-    "build": "webpack  -p --devtool source-map &&  git add . && npm version patch && cp dist/dlog.js examples/2-web-simplest/ ",
+    "build": "webpack  -p --devtool source-map && cp dist/dlog.js examples/2-web-simplest/ ",
     "bung": "git add . && npm version patch",
     "lint": "./node_modules/.bin/eslint src",
     "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
@@ -53,7 +53,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm build && npm run lint && npm test"
+      "pre-commit": "npm build && npm run lint && npm test",
+      "post-commit" "npm version patch"
     }
   },
   "config": {
