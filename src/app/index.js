@@ -64,7 +64,7 @@ const dlog = {
         const errStack = ErrorStackParser.parse(forcedErr);
 
         if (file) {
-          metaOut.file = errStack;
+          metaOut.file = errStack[1].fileName + ':' + errStack[1].lineNumber;
         }
         // console.log('________', forcedErr);
         // const chop = forcedErr.stack

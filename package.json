@@ -16,7 +16,9 @@
     "tdd": "jest --watch",
     "commit": "git-cz",
     "dlog": "node ./src/cli/dlog.js",
-    "hack": "cd examples/6-packaged-dlogger-privrepo/acme-dlogger-node/ && npm update @genisense/dlog"
+    "hack": "cd examples/6-packaged-dlogger-privrepo/acme-dlogger-node/ && npm update @genisense/dlog",
+    "example:node": "cd examples/1-node-simplest",
+    "example:web": "npm run build && cd examples/2-web-simplest && http-server"
   },
   "keywords": [],
   "author": "Henry Kemp",
