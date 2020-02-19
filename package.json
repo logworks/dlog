@@ -56,7 +56,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm build && npm run lint && npm test",
-      "post-commit": "git push --set-upstream dlog-p working:master && cd examp&& npm version patch && npm run hack"
+      "post-commit": "git push --set-upstream dlog-p working:master && npm version patch && npm run hack"
     }
   },
   "config": {
