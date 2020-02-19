@@ -4,6 +4,7 @@
   "description": "",
   "main": "dlogger.js",
   "dependencies": {
+    "@genisense/dlog": "git+ssh://git@github.com/henrykempo/dlog-p.git",
     "dlog": "git+ssh://git@github.com:henrykempo/dlog-p.git"
   },
   "keywords": [],
