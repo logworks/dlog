@@ -37,7 +37,6 @@ describe('getFunctionName extracts function name from valid function signatures.
   it(`Gets function name from a line of code representing a function declaration'`, function() {
     namedFunctions.forEach(namedFunction => {
       const res = parser.getFunctionName(namedFunction);
-      // console.log('test input ', namedFunction, 'res: ', res);
       expect(res).toBe('functionName');
     });
   });
@@ -56,8 +55,23 @@ describe('getFunctionName extracts function name from valid function signatures.
  up to the caller to apply file name / parent dir.
  see: defaultFunctionName
 */
-  it(`returns default for default export unnamed functions`, function() {
+  it(`returns default for default export unnamed arrow functions`, function() {
     const namedFunction = 'export default (arg1) => {';
+    expect(parser.getFunctionName(namedFunction)).toBe('default');
+  });
+
+  it(`returns default for default export unnamed  functions`, function() {
+    const namedFunction = 'export default function (arg1) {';
+    expect(parser.getFunctionName(namedFunction)).toBe('defaultfunction');
+  });
+
+  it(`returns default for default export unnamed async functions`, function() {
+    const namedFunction = 'export default async function (arg1) {';
+    expect(parser.getFunctionName(namedFunction)).toBe('defaultfunction');
+  });
+
+  it(`returns default for default export unnamed async arrow functions`, function() {
+    const namedFunction = 'export default async  (arg1) => {';
     expect(parser.getFunctionName(namedFunction)).toBe('default');
   });
 

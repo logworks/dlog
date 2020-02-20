@@ -84,7 +84,7 @@ const paramaterise = function(signature) {
 };
 
 const getDefaultFunctionName = (functionName, filePath) => {
-  if (functionName === 'default') {
+  if (functionName === 'default' || functionName === 'defaultfunction') {
     const filePathElements = filePath.split('/');
     const fileName = filePathElements[filePathElements.length - 1].split(
       '.'
