@@ -1,7 +1,4 @@
-const autodlog = require ('./dlogger.js');
 const tick = delay => {
-  autodlog.log( { 'tick' : {delay} }, { arguments } )
-
 
   setTimeout(() => {
     tock(delay - 5);
@@ -9,8 +6,6 @@ const tick = delay => {
 };
 
 const tock = delay => {
-  autodlog.log( { 'tock' : {delay} }, { arguments } )
-
   if (delay > 1) {
     setTimeout(() => {
       tick(delay - 5);

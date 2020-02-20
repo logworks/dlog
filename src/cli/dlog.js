@@ -17,12 +17,12 @@ dlog
      ?      checks for dlog statements in code. (useful for CI).
          `;
 
-const boot = async function() {
+const boot = async function () {
   let config;
   try {
     switch (cmd) {
       case '-': {
-        process.stdout.write('- removing logs');
+        process.stdout.write('\n- removing logs\n');
         config = await readConfig();
         parser.execute(config, false, true);
         break;
@@ -30,14 +30,14 @@ const boot = async function() {
       //case "--": "remove global convenience logging tlog TODO"
       case '?': {
         process.stdout.write(
-          'dlog ? checking for dlog statements in source code...'
+          '\ndlog ? checking for dlog statements in source code...\n'
         );
         config = await readConfig();
         parser.execute(config, false, false, true);
         break;
       }
       case '++': {
-        process.stdout.write('++  Add logging, skip git status check.');
+        process.stdout.write('\n++  Add logging, skip git status check.\n');
         config = await readConfig();
         parser.execute(config, true);
         break;
@@ -46,8 +46,8 @@ const boot = async function() {
         const proceed = await gitCheck();
         if (proceed) {
           config = await readConfig();
-          process.stdout.write('config', config);
-          process.stdout.write('+ adding logs');
+          process.stdout.write(`\nconfig: ${config}\n`);
+          process.stdout.write('+ adding logs\n');
           parser.execute(config, true);
         }
         break;
@@ -55,7 +55,7 @@ const boot = async function() {
       case 'v': {
         const packagePath = path.resolve(__dirname) + '/../../package.json';
         const pjson = require(packagePath);
-        process.stdout.write('dlog version: ', pjson.version);
+        process.stdout.write(`dlog version: ${pjson.version}\n\n`);
         break;
       }
       case 'i':

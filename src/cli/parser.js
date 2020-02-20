@@ -164,21 +164,20 @@ function prependRequire(content, filePath, config) {
   }
 }
 
-function hasDlogging(files, config) {
-  ac.eachLimit(files, fileConcurrency, function (filePath, limitCallBack) {
+async function hasDlogging(files, config) {
+  await ac.eachLimit(files, fileConcurrency, function (filePath, limitCallBack) {
     utils.readFile(filePath).then(function (res) {
       const checkHasDlogX = new RegExp(`.*${config.nameAs}.*`, 'g'); // /.*dlog.*/g;
       if (checkHasDlogX.test(res.data)) {
-        console.log(
-          `dlog found in code.
-                    <Expected capture Error for CI/pre commit/push hooking.>
-                     First detection exits. First file with dlog detected: ${filePath}`
+        process.stdout.write(
+          `dlog found in code:  ${filePath}.  First detection exits code(1)\n\n`
         );
         process.exit(1);
       }
       limitCallBack();
     });
   });
+  console.log('Code clean of dlog checked with current config.\n')
 }
 
 function parseFiles(files, config, add, clear) {

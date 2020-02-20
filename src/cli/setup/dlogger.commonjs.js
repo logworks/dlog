@@ -1,15 +1,16 @@
 const dlog = require('@genisense/dlog');
 
-/*
-  
-  configure/ customise your runtime dlog.log here.
+const verboseLogger = (...args) => {
+  for (let arg of args) {
+    console.dir(arg);
+  }
+};
 
-*/
 const config = {
   include: ['*'],
   exclude: [],
   globalLogger: 'tlog',
-  outputLogger: console.log,
+  outputLogger: verboseLogger,
   argCheck: true,
   typeCheck: false,
   timing: false,

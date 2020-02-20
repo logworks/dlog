@@ -26,7 +26,7 @@ Logging focused at development time.
 - Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
 
 
-Note Pre-release. [v 0.3.0](#v0.3.0) Usable, still early POC, let us know if you find potentially useful or would like to input into direction of project.
+Note Pre-release. [v 0.3.2](#v0.3.2) Usable, still early POC, let us know if you find potentially useful or would like to input into direction of project.
 
 ## quick start
 
@@ -163,7 +163,12 @@ With typeCheck=true, logging keeps track of function call paramater types and al
 
 ## release notes
 
-### v0.2.0
+## v0.3.2
+    - cli output to stdout better formatting.
+    - verbose logger example added to dlogger.js.
+
+
+### v0.3.1
 
 - Api breaking changes:
 
