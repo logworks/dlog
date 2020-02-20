@@ -38,7 +38,7 @@ async function installFactoryFile(moduleSpecification) {
 
     await utils.writeFile(cwd + '/' + LOG_FACTORY_FILE, srcjs.data);
 
-    process.stdout.write(`./${LOG_FACTORY_FILE} created.`);
+    process.stdout.write(`\n./${LOG_FACTORY_FILE} created.`);
     return true;
   }
 }
@@ -47,12 +47,12 @@ async function installConfigFile(moduleSpecification) {
   const LOG_CONFIG_FILE = '.dlogrc';
   try {
     const targetjson = await utils.readFile(cwd + '/' + LOG_CONFIG_FILE);
-    process.stdout.write(targetjson, 'You already have ./' + LOG_CONFIG_FILE);
+    process.stdout.write('\n' + targetjson, 'You already have ./' + LOG_CONFIG_FILE);
     return false;
   } catch (e) {
     utils
       .readFile(path.resolve(__dirname) + '/setup/' + LOG_CONFIG_FILE)
-      .then(function(srcjson) {
+      .then(function (srcjson) {
         //
         let config = JSON.parse(srcjson.data);
         config.module = moduleSpecification;
@@ -60,7 +60,7 @@ async function installConfigFile(moduleSpecification) {
           cwd + '/' + LOG_CONFIG_FILE,
           JSON.stringify(config, undefined, 2)
         );
-        process.stdout.write(`./${LOG_CONFIG_FILE} created.`);
+        process.stdout.write(`\n./${LOG_CONFIG_FILE} created.`);
         return true;
       });
   }

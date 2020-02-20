@@ -6,10 +6,8 @@ const config = {
   globalLogger: 'tlog',
   outputLogger: console.log,
   typeCheck: false,
-  meta: {
-    timeStamp: false,
-    file: false
-  }
+  timing: false,
+  file: false
 };
 const logger = dlog.createLogger(config);
 
@@ -17,7 +15,7 @@ if (config.globalLogger) {
   global[config.globalLogger] = logger;
 }
 
-describe('basic logging without meta options', () => {
+describe('basic logging without advanced configuration options', () => {
   it('throws an error if invalid paramater -not an Object is passed.', () => {
     try {
       logger.log('astring');
@@ -45,4 +43,18 @@ describe('basic logging without meta options', () => {
   });
 });
 
-//TODO describe('logging with meta options', () => {});
+describe('logging with extra configuration options', () => {
+
+  it('logs ms timing when config.timing = true', () => {
+    logger.config.timing = true
+    logger.config.outputLogger = (...args) => {
+      expect(args).toEqual([{ firstTime: {} }]);
+    }
+    logger.log({ firstTime: {} });
+    logger.config.outputLogger = (...args) => {
+      expect(args).toEqual([{ secondTime: {} }, { timing: "1ms" }]);
+    }
+    logger.log({ secondTime: {} });
+  });
+
+});

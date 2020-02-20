@@ -15,9 +15,9 @@ Logging focused at development time.
 
 ### Reusable code walk through execution scenario's to rapidly ramp up new developers to unfamiliar/complex code bases.
 
-### Rationale ( Yes, Unapollageticly Opinionated ) :
+### Rationale ( Unapollageticly Opinionated bit -) :
 
-- Execution trumps code. Just as rivers trump river banks. But this is currently hard to see. Dlog is all about making exection flows tanglible and sharable.
+- Execution trumps code. Just as rivers trump river banks. Dlog is all about making exection flows tanglible and sharable.
 
 - Debuggers run code in synthetic environments, which can lead to false positive behaviours (especially for asynchronous, and time affected operations). logging is far more effective (with dlog).
 
@@ -26,7 +26,8 @@ Logging focused at development time.
 - Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
 
 
-Note Pre-release. [v 0.3.2](#v0.3.2) Usable, still early POC, let us know if you find potentially useful or would like to input into direction of project.
+### Notice 
+Pre-release. [v 0.3.2](#v0.3.2) Usable, still early POC, let us know if you find potentially useful or would like to input into direction of project.
 
 ## quick start
 
@@ -51,23 +52,27 @@ You are now ready to Log & Roll:
 
 You can also filter on the fly without reloading, for example if running a browser app, at the console:
 
+    # if you set globalLogger, can use it to change config from command line
+    tlog.config.typeCheck = true
+
     # To only log functions named foo or bar
-    dlog.config.include = ['foo','bar']
+    tlog.config.include = ['foo','bar']
 
     # Log every function (that was added according to globPattern config)
-    dlog.config.include = ['*']
+    tlog.config.include = ['*']
 
     #exclude specific functioins - useful for chatty ones:
-    dlog.config.exclude = ['onMouseMove']
+    tlog.config.exclude = ['onMouseMove']
 
 ## cli configuration
 
     .dlogrc
 
-    "globPattern": "./src/**/*.?(js|jsx|ts|tsx)", //glob for files to include.
-    "excludes": "node_modules|\\.test",  // regExp applied to exclude from files found by globbing.
+    "globPattern": "./src/**/*.?(js|jsx|ts|tsx)", - glob for files to include.
+    "excludes": "node_modules|\\.test",  - regExp applied to exclude from files found by globbing.
     "module" : "e.g: es2015/commonjs.    - Added on $ dlog i depending on choice of module system",
-    "nameAs" : "dlog/whateverLog    - auto added log identifier can be changed to avoid name clashes."
+    "nameAs" : "dlog/whateverLog        - auto added log identifier can be changed to avoid name clashes.",
+    "argCheck" : true/false             - adds arguments to logging for named param comparison.
 
 ## runtime configuration
 
