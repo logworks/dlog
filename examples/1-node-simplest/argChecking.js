@@ -1,11 +1,9 @@
-const dlog = require('./dlogger.js');
 /*
     example of config.argCheck = true.
     notifies if parameters recieved differs to named parameters.
 */
 const argChecking = function() {
   function fnWithOptions(p1, options) {
-    dlog.log({ fnWithOptions: { p1, options } }, { arguments });
   }
 
   fnWithOptions('single-param-with-options ok', {}); // wont log argCheck warning

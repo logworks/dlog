@@ -1,6 +1,6 @@
 {
     "globPattern": "./src/**/*.?(js|jsx|ts|tsx)",
-    "excludes": "node_modules|\\.test",
-    "module" : "e.g: es2015/commonjs.      - Added by parser on $ dlog i.",
-    "nameAs" : "autoLog"
+    "excludes": "node_modules|\\.test|dlogger.js",
+    "module" : "e.g: es2015/commonjs - Added when $ dlog i.",
+    "nameAs" : "autoDlog"
 }

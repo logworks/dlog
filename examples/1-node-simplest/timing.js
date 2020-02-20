@@ -1,5 +1,3 @@
-const dlog = require('./dlogger.js');
-
 const tick = delay => {
   dlog.log({ tick: { delay } });
   setTimeout(() => {

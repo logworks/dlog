@@ -1,4 +1,3 @@
-const dlog = require('./dlogger.js');
 
 const typCheckingExample = () => {};
 

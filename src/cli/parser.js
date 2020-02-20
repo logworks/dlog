@@ -11,6 +11,8 @@ function getFunctionName(lineCode) {
   if (/^\s*\/\/.*$/.test(lineCode)) return;
   //ignore arrow fn destructure of arguments e.g. => ({})
   if (/=>.+\(\{/.test(lineCode)) return;
+  // ignore if arrow assignment fn = arg => res === matcher
+  if (/=>.+=.+\{/.test(lineCode)) return;
 
   if (/function(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
     if (lineCode.split('function ').length > 1) {
@@ -26,17 +28,22 @@ function getFunctionName(lineCode) {
         if (textInTheLeftOfTheParams.split('=').length > 0) {
           functionName = textInTheLeftOfTheParams
             .split('=')[0]
-            .replace(/export |module.exports |const |var |let |=|(\s*)/g, '');
+            .replace(
+              /export |exports\.|module.exports |const |var |let |=|(\s*)/g,
+              ''
+            );
         }
       } else {
         functionName = textInTheLeftOfTheParams.replace(
-          /async|public|private|protected|static|export |(\s*)/g,
+          /async|public|private|protected|static|export |exports\.|(\s*)/g,
           ''
         );
       }
     }
   }
+
   functionName = functionName.split(':')[0];
+  // console.log('________', functionName);
   const validFunctionNameX = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
   if (validFunctionNameX.test(functionName)) {
     const exceptionTrap = /(if|.then)/.test(functionName);
@@ -76,9 +83,28 @@ const paramaterise = function(signature) {
   }
 };
 
-const addLogging = function(content, config) {
+const getDefaultFunctionName = (functionName, filePath) => {
+  if (functionName === 'default') {
+    const filePathElements = filePath.split('/');
+    const fileName = filePathElements[filePathElements.length - 1].split(
+      '.'
+    )[0];
+    if (fileName === 'index') {
+      const dirName = filePathElements[filePathElements.length - 2];
+      return dirName;
+    } else {
+      return fileName;
+    }
+  } else {
+    return functionName;
+  }
+};
+
+const addLogging = function(content, config, filePath) {
   const buildLogLine = function(match) {
-    const functionName = getFunctionName(match);
+    const simpleFunctionName = getFunctionName(match);
+    const functionName = getDefaultFunctionName(simpleFunctionName, filePath);
+
     if (!functionName) return match;
     const params = paramaterise(match);
     if (!params) return match;
@@ -101,12 +127,12 @@ const addLogging = function(content, config) {
 
 function clearLogging(content, config) {
   const logSignatureX = new RegExp(`\n.*${config.nameAs}.log.*\n`, 'g');
-  const es2015Module = 'import';
-  const commonjsModule = 'require';
-  const logSignatureImportX = new RegExp(
-    `.*(${es2015Module}|${commonjsModule}).*dlogger.*\n`,
-    'g'
-  );
+
+  const incluseExp =
+    config.module === 'commonjs'
+      ? `.*${config.nameAs}.*require.*\n`
+      : `.*import.*${config.nameAs}.*\n`;
+  const logSignatureImportX = new RegExp(incluseExp, 'g');
   return content.replace(logSignatureX, '').replace(logSignatureImportX, '');
 }
 
@@ -156,7 +182,7 @@ function parseFiles(files, config, add, clear) {
         let content;
         if (add) {
           content = clearLogging(res.data, config);
-          const contentWithLogging = addLogging(content, config);
+          const contentWithLogging = addLogging(content, config, filePath);
           if (contentWithLogging !== content)
             content = prependRequire(contentWithLogging, filePath, config);
         } else if (clear) {
@@ -175,6 +201,33 @@ function parseFiles(files, config, add, clear) {
   );
 }
 
+function buildFileList(globPattern, excludes, cb) {
+  const globOptions = {};
+  glob(globPattern, globOptions, function(error, files) {
+    if (error) {
+      console.log(`glob error executing globPattern: ${globPattern} `, error);
+      cb(null);
+    } else {
+      const rootGlob = globPattern.replace(/\*\*\//, '');
+      glob(rootGlob, globOptions, function(error, rootFiles) {
+        if (error) {
+          console.log(`glob error executing rootGlob: ${rootGlob} `, error);
+          cb(null);
+        } else {
+          const allFiles = [...rootFiles, ...files];
+          const excludeX = new RegExp(excludes);
+          const reducedFilesList = [];
+          for (let file of allFiles) {
+            if (!excludeX.test(file)) reducedFilesList.push(file);
+          }
+          const deDuped = [...new Set(reducedFilesList)];
+          cb(deDuped);
+        }
+      });
+    }
+  });
+}
+
 function execute(config, add, clear, checkClean) {
   const { globPattern, excludes } = config;
   console.log('\nUsing configuration: globPattern, ', config);
@@ -186,32 +239,12 @@ function execute(config, add, clear, checkClean) {
       \nThis is for your own safety!`
     );
   }
-
-  const globOptions = {};
-  glob(globPattern, globOptions, function(error, files) {
-    if (error) {
-      console.log(`glob error executing globPattern: ${globPattern} `, error);
-    } else {
-      // munge- ** to include first dir files.
-      const rootGlob = globPattern.replace(/\*\*\//, '');
-      glob(rootGlob, globOptions, function(error, rootFiles) {
-        if (error) {
-          console.log(`glob error executing rootGlob: ${rootGlob} `, error);
-        } else {
-          const allFiles = [...rootFiles, ...files];
-          const excludeX = new RegExp(excludes);
-          const reducedFilesList = [];
-          for (let file of allFiles) {
-            if (!excludeX.test(file)) reducedFilesList.push(file);
-          }
-          if (add || clear) {
-            parseFiles(reducedFilesList, config, add, clear);
-          }
-          if (checkClean) {
-            hasDlogging(reducedFilesList, config);
-          }
-        }
-      });
+  buildFileList(globPattern, excludes, fileList => {
+    if (add || clear) {
+      parseFiles(fileList, config, add, clear);
+    }
+    if (checkClean) {
+      hasDlogging(fileList, config);
     }
   });
 }
@@ -219,6 +252,7 @@ function execute(config, add, clear, checkClean) {
 module.exports = {
   execute, // single usage entry point fn.
   getFunctionName, // exported for testing only. extracts function name.
+  getDefaultFunctionName, // special case name function after file / parent dir if index.
   hasDlogging, // exported for testing only. checks if dlog in codebase. (CI no no -exit(1))
   clearLogging, // exported for testing only. Removes logging from given content string
   addLogging, //exported for testing only. Adds logging to given content string,

@@ -19,7 +19,8 @@ const namedFunctions = [
   'static functionName(arg1: any): any {',
   'export functionName(arg1: any): any {',
   'functionName({arg1, arg2}) {',
-  'functionName({arg1, arg2}) { // inline comment after function'
+  'functionName({arg1, arg2}) { // inline comment after function',
+  'exports.functionName = function(arg1, arg2) {'
 ];
 
 const namedFunctionExceptions = [
@@ -28,19 +29,52 @@ const namedFunctionExceptions = [
   'const mapStateToProps = (state) => ({',
   'const mapStateToProps = (state): * => ({',
   'render={({ isLoading }) => primaryAction({',
-  'setActiveChannel = e => this.setState({'
+  'setActiveChannel = e => this.setState({',
+  "const isSerializedJSON = str => str[0] === '{'"
 ];
 
 describe('getFunctionName extracts function name from valid function signatures.', () => {
   it(`Gets function name from a line of code representing a function declaration'`, function() {
     namedFunctions.forEach(namedFunction => {
-      expect(parser.getFunctionName(namedFunction)).toBe('functionName');
+      const res = parser.getFunctionName(namedFunction);
+      // console.log('test input ', namedFunction, 'res: ', res);
+      expect(res).toBe('functionName');
     });
   });
+
   it(`Does not get function name from a line of code easily mistaken for a false positive function declaration'`, function() {
     namedFunctionExceptions.forEach(namedFunction => {
       expect(parser.getFunctionName(namedFunction)).toBe(undefined);
     });
+  });
+  /*
+ export default function declared inline un-named special case.
+ the functionName is effectivly the filename.
+ further, if the file is named index, its the parent dir name!
+ e.g. 'export default (arg1) => {'
+ getFunctionName returns 'default' in this case, and it is 
+ up to the caller to apply file name / parent dir.
+ see: defaultFunctionName
+*/
+  it(`returns default for default export unnamed functions`, function() {
+    const namedFunction = 'export default (arg1) => {';
+    expect(parser.getFunctionName(namedFunction)).toBe('default');
+  });
+
+  it(`getDefaultFunctionName returns functionName as name of file`, function() {
+    const namedFunction = 'default';
+    const filePath = 'src/component/TestComponent.js';
+    expect(parser.getDefaultFunctionName(namedFunction, filePath)).toBe(
+      'TestComponent'
+    );
+  });
+
+  it(`getDefaultFunctionName returns parent dir name if file named index`, function() {
+    const namedFunction = 'default';
+    const filePath = 'src/component/TestComponent/index.js';
+    expect(parser.getDefaultFunctionName(namedFunction, filePath)).toBe(
+      'TestComponent'
+    );
   });
 });
 

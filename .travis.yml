@@ -11,3 +11,8 @@ cache:
 script:
   - npm run lint
   - npm run test:coveralls
+
+deploy:
+  provider: npm
+  on:
+    branch: prod

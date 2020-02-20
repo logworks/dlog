@@ -169,6 +169,8 @@ With typeCheck=true, logging keeps track of function call paramater types and al
   - timing: timeStamp renamed timing. gives millisecond timing between logs.
   - globPattern - parent dir '../' prevented for dlog cli operations.
   - ES6 destructuring arguments ' => ({}) exculded from auto logging as false positive named functions.
+  - export.functName - autlogged.
+  - export default function -unnamed, logged as the file name, or parent dir if file named index.
 
 ### v0.1.5
 
