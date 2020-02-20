@@ -1,5 +1,6 @@
 const glob = require('glob');
 const ac = require('async');
+const detectIndent = require('detect-indent');
 const utils = require('./utils');
 const fileConcurrency = 10;
 
@@ -55,7 +56,7 @@ function getFunctionName(lineCode) {
   }
 }
 
-const paramaterise = function(signature) {
+const paramaterise = function (signature) {
   const paramMatch = signature.match(/\((.*?)\)/);
 
   if (paramMatch) {
@@ -100,8 +101,10 @@ const getDefaultFunctionName = (functionName, filePath) => {
   }
 };
 
-const addLogging = function(content, config, filePath) {
-  const buildLogLine = function(match) {
+const addLogging = function (content, config, filePath) {
+  const indentUnit = detectIndent(content).indent || '  ';
+
+  const buildLogLine = function (match) {
     const simpleFunctionName = getFunctionName(match);
     const functionName = getDefaultFunctionName(simpleFunctionName, filePath);
 
@@ -113,9 +116,13 @@ const addLogging = function(content, config, filePath) {
       if (config.argCheck) {
         meta = ', { arguments }';
       }
+
+      const functionIndentMatch = match.match(/^(\s+)\w/);
+      const functionIndent = (functionIndentMatch && functionIndentMatch[1]) ? functionIndentMatch[1] : ''
+      const indentWith = indentUnit + functionIndent;
       return (
         match +
-        `\n  ${config.nameAs}.log({'${functionName}': ${params} }  ${meta})\n`
+        `\n${indentWith}${config.nameAs}.log( { '${functionName}' : ${params} }${meta} )\n`
       );
     } else {
       return match;
@@ -158,8 +165,8 @@ function prependRequire(content, filePath, config) {
 }
 
 function hasDlogging(files, config) {
-  ac.eachLimit(files, fileConcurrency, function(filePath, limitCallBack) {
-    utils.readFile(filePath).then(function(res) {
+  ac.eachLimit(files, fileConcurrency, function (filePath, limitCallBack) {
+    utils.readFile(filePath).then(function (res) {
       const checkHasDlogX = new RegExp(`.*${config.nameAs}.*`, 'g'); // /.*dlog.*/g;
       if (checkHasDlogX.test(res.data)) {
         console.log(
@@ -175,10 +182,10 @@ function hasDlogging(files, config) {
 }
 
 function parseFiles(files, config, add, clear) {
-  ac.eachLimit(files, fileConcurrency, function(filePath, limitCallBack) {
+  ac.eachLimit(files, fileConcurrency, function (filePath, limitCallBack) {
     utils
       .readFile(filePath)
-      .then(function(res) {
+      .then(function (res) {
         let content;
         if (add) {
           content = clearLogging(res.data, config);
@@ -190,26 +197,25 @@ function parseFiles(files, config, add, clear) {
         }
         return utils.writeFile(res.sourcePath, content);
       })
-      .then(function() {
+      .then(function () {
         limitCallBack();
       });
   });
   console.log(
     add ? 'Adding' : 'Clearing',
-    ` logs done. ${files.length} files updated.
-    ${files}`
+    ` logs done. ${files.length} files checked.`
   );
 }
 
 function buildFileList(globPattern, excludes, cb) {
   const globOptions = {};
-  glob(globPattern, globOptions, function(error, files) {
+  glob(globPattern, globOptions, function (error, files) {
     if (error) {
       console.log(`glob error executing globPattern: ${globPattern} `, error);
       cb(null);
     } else {
       const rootGlob = globPattern.replace(/\*\*\//, '');
-      glob(rootGlob, globOptions, function(error, rootFiles) {
+      glob(rootGlob, globOptions, function (error, rootFiles) {
         if (error) {
           console.log(`glob error executing rootGlob: ${rootGlob} `, error);
           cb(null);

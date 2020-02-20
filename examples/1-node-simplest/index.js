@@ -4,12 +4,14 @@ const basic = require('./basic.js');
 const argChecking = require('./argChecking');
 const timing = require('./timing');
 const typeChecking = require('./typeChecking');
+const indentDetect = require('./indentDetect');
 
-// basic();
+basic();
 argChecking();
 typeChecking();
+indentDetect();
+// example, updating config on the fly via global.
 // timing();
 
-// example, updating config on the fly via global.
 tlog.config.file = true;
-// basic();
+basic();

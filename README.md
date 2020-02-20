@@ -15,7 +15,7 @@ Logging focused at development time.
 
 ### Reusable code walk through execution scenario's to rapidly ramp up new developers to unfamiliar/complex code bases.
 
-### Rationale ( Unapollageticly Opinionated ) :
+### Rationale ( Yes, Unapollageticly Opinionated ) :
 
 - Execution trumps code. Just as rivers trump river banks. But this is currently hard to see. Dlog is all about making exection flows tanglible and sharable.
 
@@ -25,9 +25,8 @@ Logging focused at development time.
 
 - Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
 
-- Dlog is a raidcal experiment. What if such a maligned, over abused utility as console.log holds more lead bullets (not silver), than anyone realised. This is Dlog.
 
-Note Pre-release. [v 0.2.0](#v0.2.0) Usable, still early POC, let us know if you find potentially useful/ input to direction.
+Note Pre-release. [v 0.3.0](#v0.3.0) Usable, still early POC, let us know if you find potentially useful or would like to input into direction of project.
 
 ## quick start
 
@@ -128,11 +127,12 @@ Logs should be structured code, not any arbitrary mix of types. By using such a 
 
 - Browser and Node examples √
 - example integration with other loggers e.g. Winston. √
+- walkthrough production size code base - Spectrum chat. - coming
 - type checking depth/execution control - coming
-- middleware.
 - Log server - maybe coming
 
 ## experimental features:
+    typeCheck has no depth/time limit checking, so can suck time. Dont run it against react props for now which can be enormously deep objects!
 
 ### typeCheck
 
@@ -156,6 +156,11 @@ With typeCheck=true, logging keeps track of function call paramater types and al
     type anomoly detected:
     bar.a.b.c.anarray was [Numbers] got [Numbers, Regexs]
 
+### argCheck
+
+    if config.argCheck = true on (both in .dlogrc, and dlogger.js config),
+    arguments passed are compared against named paramaters. 
+
 ## release notes
 
 ### v0.2.0
@@ -172,6 +177,7 @@ With typeCheck=true, logging keeps track of function call paramater types and al
   - export.functName - autlogged.
   - export default function -unnamed, logged as the file name, or parent dir if file named index.
   - note, ignores multi-line function signatures. (to be implemented)
+  - auto indentation.
 
 ### v0.1.5
 
@@ -179,6 +185,7 @@ With typeCheck=true, logging keeps track of function call paramater types and al
 
   - works with object deconstruction in function params.
   - ignores single line // commented out functions.
+ 
 
 - dlogger Runtime
 

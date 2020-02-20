@@ -20,7 +20,8 @@ const namedFunctions = [
   'export functionName(arg1: any): any {',
   'functionName({arg1, arg2}) {',
   'functionName({arg1, arg2}) { // inline comment after function',
-  'exports.functionName = function(arg1, arg2) {'
+  'exports.functionName = function(arg1, arg2) {',
+  'export const functionName = (communityIds: Array<string>): Promise<?DBCommunitySettings> => {'
 
   //  Todo: multi-line function signatures:
   //   export default (

@@ -1,7 +1,7 @@
 const autodlog = require ('./dlogger.js');
 const typCheckingExample = () => {
   const wantsAString = function(str) {
-  autodlog.log({'wantsAString': {str : str} }  , { arguments })
+    autodlog.log( { 'wantsAString' : {str : str} }, { arguments } )
 
     return str;
   };
