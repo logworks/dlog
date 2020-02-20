@@ -1,6 +1,6 @@
 {
   "name": "@genisense/dlog",
-  "version": "0.2.76",
+  "version": "0.2.77",
   "description": "Development time logging with dynmaic type checking.",
   "main": "dist/dlog.js",
   "repository": "git@github.com:logworks/dlog.git",
