@@ -11,7 +11,7 @@ const argChecker = (logObj, args) => {
     paramCount = Object.keys(logObj[keys[0]]).length;
   }
   if (paramCount !== argArr.length) {
-    const message = `[ArgCheck Warning] ${keys[0]}: ${paramCount} params : ${argArr.length} args. args: [${argArr}]`;
+    const message = `[ArgCheck] ${keys[0]}: ${paramCount} params : ${argArr.length} args. args: [${argArr}]`;
     return message;
   }
 };

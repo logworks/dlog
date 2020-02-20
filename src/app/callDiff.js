@@ -6,10 +6,11 @@ const typeChecker = require('./typeChecker');
 
 const stack = {};
 
-const callDiff = function(file, parentLine, params) {
+const callDiff = function(file, params) {
+  // console.log('callDiff', file, params);
   const hash = crypto
     .createHash('md5')
-    .update(file + parentLine)
+    .update(file)
     .digest('hex');
 
   let b = typeChecker(params);
@@ -34,17 +35,6 @@ const callDiff = function(file, parentLine, params) {
         //     )
         // }
       }
-
-      console.log(
-        'Type Anomolies detected:\n',
-        '\n prior :',
-        //JSON.stringify(a),
-        '\nlatest :',
-        //JSON.stringify(b),
-        //"\nDiff\n",
-
-        diffs
-      );
     }
     return diffs;
   } else {

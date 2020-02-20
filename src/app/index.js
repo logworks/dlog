@@ -1,5 +1,5 @@
 'use strict';
-//const callDiff = require('./callDiff.js');
+const callDiff = require('./callDiff.js');
 const utils = require('./utils');
 const argChecker = require('./argChecker');
 const ErrorStackParser = require('error-stack-parser');
@@ -22,7 +22,7 @@ const dlog = {
         file
       } = this.config;
 
-      const { isObject } = utils;
+      const { isObject, hasKeys } = utils;
 
       const metaOut = {};
 
@@ -63,36 +63,40 @@ const dlog = {
         const forcedErr = new Error();
         const errStack = ErrorStackParser.parse(forcedErr);
 
+        const filePath = errStack[1].fileName + ':' + errStack[1].lineNumber;
+
         if (file) {
-          metaOut.file = errStack[1].fileName + ':' + errStack[1].lineNumber;
+          metaOut.file = filePath;
         }
-        // console.log('________', forcedErr);
-        // const chop = forcedErr.stack
-        //   .split('\n')[2]
-        //   .split('at ')[1]
-        //   .split(':');
-        // const srcFile = chop[0];
-        // // const srcLine = chop[1];
-        // const parentLine = chop[2];
-
-        // if (file) {
-        //   metaOut.file = srcFile;
-        // }
-
-        if (typeCheck) {
-          //   callDiff(file, parentLine, logObj);
+        if (hasKeys(metaOut)) {
+          outputLogger
+            ? outputLogger(logObj, metaOut)
+            : defaultOutputLogger(logObj, metaOut);
+        } else {
+          outputLogger ? outputLogger(logObj) : defaultOutputLogger(logObj);
         }
-
-        outputLogger
-          ? outputLogger(logObj, metaOut)
-          : defaultOutputLogger(logObj, metaOut);
-
         if (argCheck && meta && meta.arguments) {
           const argCheckMsg = argChecker(logObj, meta.arguments);
           if (argCheckMsg) {
             outputLogger
               ? outputLogger(argCheckMsg)
               : defaultOutputLogger(argCheckMsg);
+          }
+        }
+        if (typeCheck) {
+          const diffs = callDiff(filePath, logObj);
+          if (diffs) {
+            for (let diff of diffs) {
+              const diffLine = `${diff.path.join('.')} expect: ${
+                diff.lhs
+              } received: ${diff.rhs}`;
+
+              const typeAnomolyMsg = `[TypeCheck] ${diffLine}`;
+
+              outputLogger
+                ? outputLogger(typeAnomolyMsg)
+                : defaultOutputLogger(typeAnomolyMsg);
+            }
           }
         }
 

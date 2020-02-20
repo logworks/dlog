@@ -2,5 +2,6 @@
     "globPattern": "./**/*.?(js|jsx|ts|tsx)",
     "excludes": "node_modules|\\.test|dlogger.js",
     "module" : "commonjs",
-    "nameAs" : "autodlog"
+    "nameAs" : "autodlog",
+    "argCheck" : true
 }

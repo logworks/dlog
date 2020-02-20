@@ -21,6 +21,18 @@ const namedFunctions = [
   'functionName({arg1, arg2}) {',
   'functionName({arg1, arg2}) { // inline comment after function',
   'exports.functionName = function(arg1, arg2) {'
+
+  //  Todo: multi-line function signatures:
+  //   export default (
+  //   { id }: DBThread,
+  //   {
+  //     first,
+  //     after,
+  //     last,
+  //     before,
+  //   }: { ...PaginationOptions, last: number, before: string },
+  //   { user }: GraphQLContext
+  // ) => {
 ];
 
 const namedFunctionExceptions = [

@@ -6,10 +6,10 @@ const timing = require('./timing');
 const typeChecking = require('./typeChecking');
 
 // basic();
-//argChecking();
+argChecking();
 typeChecking();
 // timing();
 
 // example, updating config on the fly via global.
 tlog.config.file = true;
-basic();
+// basic();
