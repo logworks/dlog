@@ -1,0 +1,8 @@
+{
+    "globPattern": "./src/**/*.?(js|jsx|ts|tsx)",
+    "excludes": "node_modules|\\.test|dlog.js",
+    "module" : "commonjs",
+    "nameAs" : "dlog",
+    "dlogPackage" : "src/dlog.js",
+    "argCheck" : true
+}

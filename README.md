@@ -185,6 +185,8 @@ Reusable code walk through execution scenario's to rapidly ramp up new developer
 ### v0.3.3
     - dlogger.js renamed dlog.js
     - tlog.log (example global logger) renamed d.log
+    - d.r() doctor doctor - gives ten slowest and ten most called functions summary.
+    - better console formatting.
 
 ### v0.3.2
     - cli output to stdout better formatting.

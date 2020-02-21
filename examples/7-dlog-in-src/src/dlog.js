@@ -1,26 +1,32 @@
-//const dlog = require('@genisense/dlog');
-const dlog = require('../../src/app/');
+const dlog = require('../../../src/app');
+
+const getType = elem => {
+  dlog.log({ 'getType': { elem } }, { arguments })
+
+  return Object.prototype.toString.call(elem).slice(8, -1);
+};
 
 const logHeadline = (args) => {
-  const getType = elem => {
-    return Object.prototype.toString.call(elem).slice(8, -1);
-  };
+  dlog.log({ 'logHeadline': { args: args } }, { arguments })
+
   const fName = Object.keys(args[0])[0]
   const params = Object.keys(args[0][fName])
 
   const paramTypes = params.map((key) => key + ':' + getType(args[0][fName][key]))
 
-  const timing = args[1].timing || ''
-  const file = args[1].file || ''
-  return (`[dlog][${timing}] ${fName} (${params}) (${paramTypes}) ${file}`)
+  const timing = args && args[1] && args[1].timing || ''
+  //const file = args[1].file || ''
+  return (`[dlog][${timing}] ${fName} (${params}) (${paramTypes})`)
 }
 
 const customLogger = (...args) => {
-  console.log('_____', args)
   console.log(logHeadline(args))
   const fName = Object.keys(args[0])[0]
   const params = args[0][fName]
+  console.group();
   console.log(params)
+  // console.dir(params) 
+  console.groupEnd();
 };
 
 const config = {
@@ -28,22 +34,27 @@ const config = {
   exclude: [],
   globalLogger: 'd',
   outputLogger: customLogger,
-  argCheck: true,
-  typeCheck: false,
+  argCheck: true, //needs also to be set in .dlogrc before $ dlog + run. -or always add to meta.
   timing: true,
-  file: false
+  file: false,
+  typeCheck: true
 };
 
 const logger = dlog.createLogger(config);
 
 /*
-  to use globalLogger need to require this (dlog) early in application boot sequence e.g:
-  require('../dlog.js')
   d.log({ hello: {p1, p2} }); -anywhere in app, no more requires/imports needed.
 */
 if (config.globalLogger) {
   global[config.globalLogger] = logger;
   console.log('global ' + config.globalLogger + ' set.');
 }
+
+console.log('dlog.config', logger.config);
+
+
+process.on('exit', () => {
+  logger.r()
+})
 
 module.exports = logger;
