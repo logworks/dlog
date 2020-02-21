@@ -6,38 +6,36 @@
 Logging focused at development time.
 Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
 
-    $ dlog +        # logs every named function.
+Pre-release. [v 0.3.3](#v0.3.3) early POC so API is likeley to change.
+
+Install
+
+    npm i -D @genisense/dlog   #or#   yarn add -D @genisense/dlog
+    npm i -g @genisense/dlog 
+    dlog i # initialise
+
+Cli commands:
+
+    $ dlog +        # auto-logs every named function.
     $ dlog -        # removes all logs added by dlog +.
     $ dlog ?        # halts CI if dlog present in code pre-push.
 
-## V1.0 Key Target Use Case
+Run application (node or browser), at console:
 
-### Reusable code walk through execution scenario's to rapidly ramp up new developers to unfamiliar/complex code bases.
+    d.log( { label: { param1, param2 } } )
+    d.r() // report metrics, anomolies, suggests.
+    d.c() // get and set log configuration.
 
-### Rationale ( the unapollageticly opinionated bit -)
-
-- Execution trumps code. Just as rivers the river banks are not the river. Dlog is about making exection flow views tanglible reusable, sharable.
-
-- Debuggers run code in synthetic environments, which can lead to false positive behaviours (especially for asynchronous, and time affected operations). Automated logging is more effective (with dlog).
-
-- Developers need fast, actually immediate tools to explore execution flows. Stacktraces have too much noise to signal.
-
-- Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
+TODO: EXAMPLE SCREEN VID.
 
 
-### Notice 
-Pre-release. [v 0.3.2](#v0.3.2) Usable, still early POC, let us know if you find potentially useful or would like to input into direction of project. 
 
 ## quick start
 
-    npm i -D @genisense/dlog
-    npm i -g @genisense/dlog
-    dlog i
+once installed - see top, '$ dlog i' creates two files:
 
-dlog i creates two files:
-
-    .dlogrc  // cli configuration.
-    dlogger.js  // runtime configuration, customisation point.
+    ./.dlogrc  // $ dlog  (cli configuration)
+    ./dlog.js  // runtime configuration, customisation point.
 
 Edit .dlogrc. Set the globPattern and excludes to match your project. (globPattern matches the files/directories given, and exclude sets files you dont want logging added to.)
 
@@ -51,7 +49,7 @@ You are now ready to Log & Roll:
 
 You can also filter on the fly without reloading, for example if running a browser app, at the console:
 
-    # if you set globalLogger, can use it to change config from command line
+    # with globalLogger, can use it to change config from console
     d.config.typeCheck = true
 
     # To only log functions named foo or bar
@@ -96,9 +94,9 @@ You can also filter on the fly without reloading, for example if running a brows
 
     If prefered you can avoid global and require in explicitly:
 
-        const d = require('../dlogger.js')
+        const d = require('../dlog.js')
 
-    Globals are an anti-pattern, but dlog is intended to be fast in, fast out at development time, so acceptable as should never be pushed.
+    Globals are usually an anti-pattern, but dlog is intended to be fast in, fast out at development time, so acceptable as should never be pushed.
 
 ## .log API
 
@@ -164,6 +162,23 @@ With typeCheck=true, logging keeps track of function call paramater types and al
 
     if config.argCheck = true on (both in .dlogrc, and dlogger.js config),
     arguments passed are compared against named paramaters. 
+
+### Roadmap
+
+V 1.0 Key Target Use Case.
+
+Reusable code walk through execution scenario's to rapidly ramp up new developers to unfamiliar/complex code bases.
+
+### Rationale ( the unapollageticly opinionated bit -)
+
+- Execution trumps code. Just as rivers the river banks are not the river. Dlog is about making exection flow views tanglible reusable, sharable.
+
+- Debuggers run code in synthetic environments, which can lead to false positive behaviours (especially for asynchronous, and time affected operations). Automated logging is more effective (with dlog).
+
+- Developers need fast, actually immediate tools to explore execution flows. Stacktraces have too much noise to signal.
+
+- Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
+
 
 ## release notes
 
