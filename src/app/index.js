@@ -4,6 +4,7 @@ const utils = require('./utils');
 const argChecker = require('./argChecker');
 const ErrorStackParser = require('error-stack-parser');
 const ms = require('ms');
+const reporter = require('./reporter')
 
 let mostRecentTimeStamp;
 
@@ -32,7 +33,7 @@ const dlog = {
         if (mostRecentTimeStamp) {
           metaOut.timing = ms(Math.abs(current - mostRecentTimeStamp));
         } else {
-          metaOut.timing = '-ms'
+          metaOut.timing = '0ms'
         }
         mostRecentTimeStamp = current;
       }
@@ -66,10 +67,10 @@ const dlog = {
         const forcedErr = new Error();
         const errStack = ErrorStackParser.parse(forcedErr);
 
-        const filePath = errStack[1].fileName + ':' + errStack[1].lineNumber;
+        const fileAndLine = errStack[1].fileName + ':' + errStack[1].lineNumber;
 
         if (file) {
-          metaOut.file = filePath;
+          metaOut.file = fileAndLine;
         }
         if (hasKeys(metaOut)) {
           outputLogger
@@ -87,7 +88,7 @@ const dlog = {
           }
         }
         if (typeCheck) {
-          const diffs = callDiff(filePath, logObj);
+          const diffs = callDiff(fileAndLine, logObj);
           if (diffs) {
             for (let diff of diffs) {
               const diffLine = `${diff.path.join('.')} expect: ${
@@ -102,11 +103,16 @@ const dlog = {
             }
           }
         }
-
+        reporter.setReport(fileAndLine, logObj, metaOut)
         return logObj;
       }
+    },
+    r: () => {
+      return reporter.getReport()
     }
+
   },
+
 
   createLogger: function (config) {
     this.logger.config = config;

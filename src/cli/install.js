@@ -40,7 +40,13 @@ async function installFactoryFile(moduleSpecification) {
 
     if (moduleSpecification === 'commonjs') {
       head = `const dlog = require('@genisense/dlog');\n`
-      foot = `\nmodule.exports = logger;`
+      foot =
+        `
+process.on('exit', () => {
+  logger.r()
+})
+
+module.exports = logger;`
     }
     if (moduleSpecification === 'es2015') {
       head = `import dlog from '@genisense/dlog';\n`

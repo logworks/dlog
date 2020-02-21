@@ -1,4 +1,4 @@
-const dlog = require('./dlogger');
+const dlog = require('./dlog');
 const basic = function () {
   dlog.log({
     basic: {

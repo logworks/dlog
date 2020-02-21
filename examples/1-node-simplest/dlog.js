@@ -20,9 +20,10 @@ const customLogger = (...args) => {
   console.log(logHeadline(args))
   const fName = Object.keys(args[0])[0]
   const params = args[0][fName]
-  //dealers choice : .log - immediatly visible. .dir - collapsed object
+  console.group();
   console.log(params)
   // console.dir(params) 
+  console.groupEnd();
 };
 
 const config = {
@@ -47,5 +48,9 @@ if (config.globalLogger) {
 }
 
 console.log('dlog config', logger.config);
+
+process.on('exit', () => {
+  logger.r()
+})
 
 module.exports = logger;
