@@ -27,18 +27,30 @@ async function chooseModuleSpecification() {
 }
 
 async function installFactoryFile(moduleSpecification) {
-  const LOG_FACTORY_FILE = 'dlogger.js';
+  const DEST_FACTORY_FILE = 'dlog.js';
 
   try {
-    await utils.readFile(cwd + '/' + LOG_FACTORY_FILE);
+    await utils.readFile(cwd + '/' + DEST_FACTORY_FILE);
   } catch (e) {
     const srcjs = await utils.readFile(
-      path.resolve(__dirname) + `/setup/dlogger.${moduleSpecification}.js`
+      path.resolve(__dirname) + `/setup/dlog.body`
     );
+    // wrap body according to moduleSpecification
+    let head, foot;
 
-    await utils.writeFile(cwd + '/' + LOG_FACTORY_FILE, srcjs.data);
+    if (moduleSpecification === 'commonjs') {
+      head = `const dlog = require('@genisense/dlog');\n`
+      foot = `\nmodule.exports = logger;`
+    }
+    if (moduleSpecification === 'es2015') {
+      head = `import dlog from '@genisense/dlog';\n`
+      foot = `\nexport default logger;`
+    }
+    const destjs = head + srcjs.data + foot;
 
-    process.stdout.write(`\n./${LOG_FACTORY_FILE} created.`);
+    await utils.writeFile(cwd + '/' + DEST_FACTORY_FILE, destjs);
+
+    process.stdout.write(`\n./${DEST_FACTORY_FILE} created.`);
     return true;
   }
 }

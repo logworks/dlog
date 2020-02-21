@@ -13,7 +13,7 @@ const dlog = require('@genisense/dlog');
 const config = {
   include: ['*'],
   exclude: [],
-  globalLogger: 'tlog',
+  globalLogger: 'd',
   typeCheck: false,
   meta: {
     timeStamp: true,
@@ -28,7 +28,7 @@ if (config.globalLogger) {
   console.log('global ' + config.globalLogger + ' set.');
   // to use, need to require this (dlogger) early in application boot sequence e.g:
   // require('../dlogger.js')
-  // tlog.log({ hello: {p1, p2} }); -anywhere in app, no more requires/imports needed.
+  // d.log({ hello: {p1, p2} }); -anywhere in app, no more requires/imports needed.
 }
 
 module.exports = logger;

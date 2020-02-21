@@ -141,68 +141,71 @@ describe('execute ', () => {
 });
 
 describe('parser.prependRequire', () => {
-  it(' If config.dloggerPackage:Unspecified returns paths to filePath/dlogger.js', () => {
+  it(' If config.dlogPackage:Unspecified returns paths to filePath/dlog.js', () => {
     const content = '';
     config = {
       module: 'commonjs',
-      nameAs: 'dlog'
+      nameAs: 'dlog',
+      // dlogPackage: 'acme-dlog-node'
     };
     const res = parser.prependRequire(
       content,
       './test/testsub.file.js',
       config
     );
-    expect(res).toBe(`const dlog = require ('./../dlogger.js');\n`);
+    expect(res).toBe(`const dlog = require ('./../dlog.js');\n`);
   });
 
-  it(' If config.dloggerPackage Unspecified, returns paths to filePath/dlogger.js. With import if config.module=es2015', () => {
+  it(' If config.dlogPackage Unspecified, returns paths to filePath/dlog.js. With import if config.module=es2015', () => {
     const content = '';
     config = {
       module: 'es2015',
-      nameAs: 'dlog'
+      nameAs: 'dlog',
+      // dlogPackage: 'acme-dlog-node'
+
     };
     const res = parser.prependRequire(
       content,
       './test/testsub/file.js',
       config
     );
-    expect(res).toBe(`import dlog from './../../dlogger.js';\n`);
+    expect(res).toBe(`import dlog from './../../dlog.js';\n`);
   });
 
-  it('if config.dloggerPackage:Specified, it is inclused. With require if config.module=commonjs', () => {
+  it('if config.dlogPackage:Specified, it is inclused. With require if config.module=commonjs', () => {
     const content = '';
     config = {
-      dloggerPackage: 'acme-dlogger-node',
+      dlogPackage: 'acme-dlog-node',
       module: 'commonjs',
       nameAs: 'dlog'
     };
     const res = parser.prependRequire(content, null, config);
 
-    expect(res).toEqual(`const dlog = require ('acme-dlogger-node');\n`);
+    expect(res).toEqual(`const dlog = require ('acme-dlog-node');\n`);
   });
 
-  it('if config.dloggerPackage:Specified, it is inclused. With import if config.module=es2015', () => {
+  it('if config.dlogPackage:Specified, it is inclused. With import if config.module=es2015', () => {
     const content = '';
     config = {
-      dloggerPackage: 'acme-dlogger-node',
+      dlogPackage: 'acme-dlog-node',
       module: 'es2015',
-      nameAs: 'dlogger'
+      nameAs: 'dlog'
     };
     const res = parser.prependRequire(content, null, config);
 
-    expect(res).toEqual(`import dlogger from 'acme-dlogger-node';\n`);
+    expect(res).toEqual(`import dlog from 'acme-dlog-node';\n`);
   });
 });
 
 
 describe('addLogging (content, config, filePath)', () => {
 
-  it.only('injects auto logging into an export default unnamed arrow function', () => {
+  it('injects auto logging into an export default unnamed arrow function', () => {
     const content =
       `export default () => { return }`
     const config = {
       "globPattern": "./**/*.?(js|jsx|ts|tsx)",
-      "excludes": "node_modules|\\.test|dlogger.js",
+      "excludes": "node_modules|\\.test|dlog.js",
       "module": "commonjs",
       "nameAs": "autodlog",
       "argCheck": true

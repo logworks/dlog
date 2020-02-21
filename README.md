@@ -52,16 +52,16 @@ You are now ready to Log & Roll:
 You can also filter on the fly without reloading, for example if running a browser app, at the console:
 
     # if you set globalLogger, can use it to change config from command line
-    tlog.config.typeCheck = true
+    d.config.typeCheck = true
 
     # To only log functions named foo or bar
-    tlog.config.include = ['foo','bar']
+    d.config.include = ['foo','bar']
 
     # Log every function (that was added according to globPattern config)
-    tlog.config.include = ['*']
+    d.config.include = ['*']
 
     #exclude specific functioins - useful for chatty ones:
-    tlog.config.exclude = ['onMouseMove']
+    d.config.exclude = ['onMouseMove']
 
 ## cli configuration
 
@@ -80,23 +80,23 @@ You can also filter on the fly without reloading, for example if running a brows
     config = {
         include: ['*'],         // '*' - every named log call. or 'foo', 'bar' -exact matches.
         exclude: [],            // array of exact matches to exclude.
-        globalLogger: 'tlog',   // name a global convenience logger.
+        globalLogger: 'd',   // name a global convenience logger.
         argCheck : true,        // warn if actual arguments passed differ from named parameters.
         typeCheck: false,       // deep compare paramater data types.
         timing: true,           // ms timing between logged function calls.
         file: true,             // if true, shows the origin file of the log.
     };
 
-    globalLogger: set the name of the logger (default here tlog), require once early in
+    globalLogger: set the name of the logger (default here d), require once early in
     application boot sequence e.g:
 
         require('../dlogger.js') //no assignment necessary.
         // now in any file can use:
-        tlog.log({myTag: {p1, p2}})
+        d.log({myTag: {p1, p2}})
 
     If prefered you can avoid global and require in explicitly:
 
-        const tlog = require('../dlogger.js')
+        const d = require('../dlogger.js')
 
     Globals are an anti-pattern, but dlog is intended to be fast in, fast out at development time, so acceptable as should never be pushed.
 
@@ -167,7 +167,11 @@ With typeCheck=true, logging keeps track of function call paramater types and al
 
 ## release notes
 
-## v0.3.2
+### v0.3.3
+    - dlogger.js renamed dlog.js
+    - tlog.log (example global logger) renamed d.log
+
+### v0.3.2
     - cli output to stdout better formatting.
     - verbose logger example added to dlogger.js.
 
