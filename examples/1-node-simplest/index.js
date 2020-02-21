@@ -1,5 +1,5 @@
 // initialise logging early in app bootup
-
+const dlog = require('./dlogger');
 const basic = require('./basic.js');
 const argChecking = require('./argChecking');
 const timing = require('./timing');
@@ -13,5 +13,5 @@ indentDetect();
 // example, updating config on the fly via global.
 // timing();
 
-tlog.config.file = true;
-basic();
+//d.config.file = true;
+//basic();

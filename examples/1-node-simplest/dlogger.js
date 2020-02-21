@@ -1,19 +1,37 @@
 //const dlog = require('@genisense/dlog'); //real world
 const dlog = require('../../src/app'); //using dlog src.
 
-const verboseLogger = (...args) => {
-  for (let arg of args) {
-    console.dir(arg);
-  }
+const getType = elem => {
+  return Object.prototype.toString.call(elem).slice(8, -1);
+};
+
+const logHeadline = (args) => {
+  const fName = Object.keys(args[0])[0]
+  const params = Object.keys(args[0][fName])
+
+  const paramTypes = params.map((key) => key + ':' + getType(args[0][fName][key]))
+
+  const timing = args && args[1] && args[1].timing || ''
+  //const file = args[1].file || ''
+  return (`[dlog][${timing}] ${fName} (${params}) (${paramTypes})`)
+}
+
+const customLogger = (...args) => {
+  console.log(logHeadline(args))
+  const fName = Object.keys(args[0])[0]
+  const params = args[0][fName]
+  //dealers choice : .log - immediatly visible. .dir - collapsed object
+  console.log(params)
+  // console.dir(params) 
 };
 
 const config = {
   include: ['*'],
   exclude: [],
-  globalLogger: 'tlog',
-  outputLogger: verboseLogger,
+  globalLogger: 'd',
+  outputLogger: customLogger,
   argCheck: true, //needs also to be set in .dlogrc before $ dlog + run. -or always add to meta.
-  timing: false,
+  timing: true,
   file: false,
   typeCheck: true
 };

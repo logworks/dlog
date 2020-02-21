@@ -10,7 +10,7 @@ function getFunctionName(lineCode) {
   let functionName = '';
   //ignore if in single line comment
   if (/^\s*\/\/.*$/.test(lineCode)) return;
-  //ignore arrow fn destructure of arguments e.g. => ({})
+  //implicit returns. ignore arrow fn destructure of arguments e.g. => ({})
   if (/=>.+\(\{/.test(lineCode)) return;
   // ignore if arrow assignment fn = arg => res === matcher
   if (/=>.+=.+\{/.test(lineCode)) return;
@@ -44,7 +44,6 @@ function getFunctionName(lineCode) {
   }
 
   functionName = functionName.split(':')[0];
-  // console.log('________', functionName);
   const validFunctionNameX = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
   if (validFunctionNameX.test(functionName)) {
     const exceptionTrap = /(if|.then)/.test(functionName);

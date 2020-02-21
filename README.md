@@ -4,8 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/logworks/dlog/badge.svg?branch=master)](https://coveralls.io/github/logworks/dlog?branch=master)
 
 Logging focused at development time.
-
-## Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
+Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
 
     $ dlog +        # logs every named function.
     $ dlog -        # removes all logs added by dlog +.
@@ -15,19 +14,19 @@ Logging focused at development time.
 
 ### Reusable code walk through execution scenario's to rapidly ramp up new developers to unfamiliar/complex code bases.
 
-### Rationale ( Unapollageticly Opinionated bit -) :
+### Rationale ( the unapollageticly opinionated bit -)
 
-- Execution trumps code. Just as rivers trump river banks. Dlog is all about making exection flows tanglible and sharable.
+- Execution trumps code. Just as rivers the river banks are not the river. Dlog is about making exection flow views tanglible reusable, sharable.
 
-- Debuggers run code in synthetic environments, which can lead to false positive behaviours (especially for asynchronous, and time affected operations). logging is far more effective (with dlog).
+- Debuggers run code in synthetic environments, which can lead to false positive behaviours (especially for asynchronous, and time affected operations). Automated logging is more effective (with dlog).
 
-- Developers need fast, nay immediate tools to explore execution flows. Stacktraces are too noisey and irrelevant.
+- Developers need fast, actually immediate tools to explore execution flows. Stacktraces have too much noise to signal.
 
 - Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
 
 
 ### Notice 
-Pre-release. [v 0.3.2](#v0.3.2) Usable, still early POC, let us know if you find potentially useful or would like to input into direction of project.
+Pre-release. [v 0.3.2](#v0.3.2) Usable, still early POC, let us know if you find potentially useful or would like to input into direction of project. 
 
 ## quick start
 
