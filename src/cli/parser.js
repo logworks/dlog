@@ -4,13 +4,13 @@ const detectIndent = require('detect-indent');
 const utils = require('./utils');
 const fileConcurrency = 10;
 
-const LOCAL_DLOGGER_JS = 'dlogger.js';
+const LOCAL_DLOG_JS = 'dlog.js';
 
 function getFunctionName(lineCode) {
   let functionName = '';
   //ignore if in single line comment
   if (/^\s*\/\/.*$/.test(lineCode)) return;
-  //ignore arrow fn destructure of arguments e.g. => ({})
+  //implicit returns. ignore arrow fn destructure of arguments e.g. => ({})
   if (/=>.+\(\{/.test(lineCode)) return;
   // ignore if arrow assignment fn = arg => res === matcher
   if (/=>.+=.+\{/.test(lineCode)) return;
@@ -44,7 +44,6 @@ function getFunctionName(lineCode) {
   }
 
   functionName = functionName.split(':')[0];
-  // console.log('________', functionName);
   const validFunctionNameX = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
   if (validFunctionNameX.test(functionName)) {
     const exceptionTrap = /(if|.then)/.test(functionName);
@@ -144,17 +143,17 @@ function clearLogging(content, config) {
 }
 
 function prependRequire(content, filePath, config) {
-  if (config.dloggerPackage !== undefined) {
+  if (config.dlogPackage !== undefined) {
     if (config.module === 'es2015') {
-      return `import ${config.nameAs} from '${config.dloggerPackage}';\n${content}`;
+      return `import ${config.nameAs} from '${config.dlogPackage}';\n${content}`;
     }
     if (config.module === 'commonjs') {
-      return `const ${config.nameAs} = require ('${config.dloggerPackage}');\n${content}`;
+      return `const ${config.nameAs} = require ('${config.dlogPackage}');\n${content}`;
     }
   } else {
     const splitter = filePath.split('/');
     const pathToDlog =
-      './' + '../'.repeat(splitter.length - 2) + LOCAL_DLOGGER_JS;
+      './' + '../'.repeat(splitter.length - 2) + LOCAL_DLOG_JS;
     if (config.module === 'es2015') {
       return `import ${config.nameAs} from '${pathToDlog}';\n${content}`;
     }
@@ -261,7 +260,7 @@ module.exports = {
   hasDlogging, // exported for testing only. checks if dlog in codebase. (CI no no -exit(1))
   clearLogging, // exported for testing only. Removes logging from given content string
   addLogging, //exported for testing only. Adds logging to given content string,
-  prependRequire, // exported for testing only. Adds req/impor dlogger to top of file.
+  prependRequire, // exported for testing only. Adds require/import dlog to top of file.
   paramaterise, // extract named params.
   parseFiles // exported for testing only. file reader & writer. calls adds or clearLogging for all files given
 };

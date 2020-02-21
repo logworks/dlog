@@ -1,11 +1,30 @@
-// initialise logging early in app bootup
-let dlogger;
 const setupLogging = () => {
+
+  const logHeadline = (args) => {
+    const getType = elem => {
+      return Object.prototype.toString.call(elem).slice(8, -1);
+    };
+    const fName = Object.keys(args[0])[0]
+    const params = Object.keys(args[0][fName])
+
+    const paramTypes = params.map((key) => key + ':' + getType(args[0][fName][key]))
+
+    const timing = args[1].timing || ''
+    const file = args[1].file || ''
+    return (`[dlog][${timing}] ${fName} (${params}) (${paramTypes}) ${file}`)
+  }
+
+  const customLogger = (...args) => {
+    console.log(logHeadline(args))
+    const fName = Object.keys(args[0])[0]
+    const params = args[0][fName]
+    console.log(params)
+  };
   const config = {
     include: ['*'],
     exclude: [],
-    globalLogger: 'tlog',
-    outputLogger: console.log,
+    globalLogger: 'd',
+    outputLogger: customLogger,
     argCheck: true,
     timing: true,
     file: true,
@@ -14,27 +33,20 @@ const setupLogging = () => {
 
   const logger = dlog.createLogger(config);
 
-  dlogger = dlog.createLogger(config);
-  console.log('instantiated once on first require/import.');
-  console.log('can dlog.config ={} on fly to adjust');
-
   if (config.globalLogger) {
-    window[config.globalLogger] = dlogger;
+    window[config.globalLogger] = logger;
   }
 };
 
 const boot = () => {
   setupLogging();
-  dlogger.log({
-    componentA: {
+  d.log({
+    example: {
       p1:
-        'dlog used for automated function logging (reoved and added with dlog cli'
-    }
-  });
-  tlog.log({
-    globalLogging: {
-      p1:
-        'tlog - temp, quick access (window.tlog) to save requiring into file before use, for manual logging.'
+        'dlog used for automated function logging (reoved and added with dlog cli',
+      p2: 'another param',
+      p3: { going: { deeper: { a: 1, b: /\\\\/ } } },
+      p4: { goingSeriously: { deeper: { andDeeper: { andEvenDeeper: [1, 2, 3, 4, 5, 6, 7, 'a', 'b', 'c'] } } } }
     }
   });
 };

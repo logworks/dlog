@@ -10,7 +10,7 @@ const cmd = process.argv[process.argv.length - 1];
 const helpMessage = `help:
 dlog
      v      version.  
-     i      installs ./.dlogrc and ./dlogger.js. 
+     i      installs ./.dlogrc and ./dlog.js. 
      +      add logging to source files according to .dlogrc settngs
      -      remove logging .
      ++     force add logging (skip's git status check)
@@ -27,7 +27,7 @@ const boot = async function () {
         parser.execute(config, false, true);
         break;
       }
-      //case "--": "remove global convenience logging tlog TODO"
+      //case "--": "remove global convenience logging d.log TODO"
       case '?': {
         process.stdout.write(
           '\ndlog ? checking for dlog statements in source code...\n'

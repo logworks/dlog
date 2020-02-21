@@ -6,8 +6,7 @@ const typeChecker = require('./typeChecker');
 
 const stack = {};
 
-const callDiff = function(file, params) {
-  // console.log('callDiff', file, params);
+const callDiff = function (file, params) {
   const hash = crypto
     .createHash('md5')
     .update(file)

@@ -4,6 +4,7 @@ const utils = require('./utils');
 const argChecker = require('./argChecker');
 const ErrorStackParser = require('error-stack-parser');
 const ms = require('ms');
+const reporter = require('./reporter')
 
 let mostRecentTimeStamp;
 
@@ -11,7 +12,7 @@ const dlog = {
   logger: {
     config: {},
 
-    log: function(logObj, meta) {
+    log: function (logObj, meta) {
       const {
         include,
         exclude,
@@ -26,10 +27,13 @@ const dlog = {
 
       const metaOut = {};
 
+
       if (timing) {
         const current = new Date();
         if (mostRecentTimeStamp) {
           metaOut.timing = ms(Math.abs(current - mostRecentTimeStamp));
+        } else {
+          metaOut.timing = '0ms'
         }
         mostRecentTimeStamp = current;
       }
@@ -52,8 +56,8 @@ const dlog = {
       const includeMatches = include.includes('*')
         ? ['one-length-array']
         : include.filter(item => {
-            return item === logKeyName;
-          });
+          return item === logKeyName;
+        });
 
       const excludeMatches = exclude.filter(item => {
         return item === logKeyName;
@@ -63,10 +67,10 @@ const dlog = {
         const forcedErr = new Error();
         const errStack = ErrorStackParser.parse(forcedErr);
 
-        const filePath = errStack[1].fileName + ':' + errStack[1].lineNumber;
+        const fileAndLine = errStack[1].fileName + ':' + errStack[1].lineNumber;
 
         if (file) {
-          metaOut.file = filePath;
+          metaOut.file = fileAndLine;
         }
         if (hasKeys(metaOut)) {
           outputLogger
@@ -84,12 +88,12 @@ const dlog = {
           }
         }
         if (typeCheck) {
-          const diffs = callDiff(filePath, logObj);
+          const diffs = callDiff(fileAndLine, logObj);
           if (diffs) {
             for (let diff of diffs) {
               const diffLine = `${diff.path.join('.')} expect: ${
                 diff.lhs
-              } received: ${diff.rhs}`;
+                } received: ${diff.rhs}`;
 
               const typeAnomolyMsg = `[TypeCheck] ${diffLine}`;
 
@@ -99,13 +103,18 @@ const dlog = {
             }
           }
         }
-
+        reporter.setReport(fileAndLine, logObj, metaOut)
         return logObj;
       }
+    },
+    r: () => {
+      return reporter.getReport()
     }
+
   },
 
-  createLogger: function(config) {
+
+  createLogger: function (config) {
     this.logger.config = config;
     return this.logger;
   }

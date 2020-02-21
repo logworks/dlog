@@ -4,41 +4,38 @@
 [![Coverage Status](https://coveralls.io/repos/github/logworks/dlog/badge.svg?branch=master)](https://coveralls.io/github/logworks/dlog?branch=master)
 
 Logging focused at development time.
+Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
 
-## Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
+Pre-release. [v 0.3.3](#v0.3.3) early POC so API is likeley to change.
 
-    $ dlog +        # logs every named function.
+Install
+
+    npm i -D @genisense/dlog   #or#   yarn add -D @genisense/dlog
+    npm i -g @genisense/dlog 
+    dlog i # initialise
+
+Cli commands:
+
+    $ dlog +        # auto-logs every named function.
     $ dlog -        # removes all logs added by dlog +.
     $ dlog ?        # halts CI if dlog present in code pre-push.
 
-## V1.0 Key Target Use Case
+Run application (node or browser), at console:
 
-### Reusable code walk through execution scenario's to rapidly ramp up new developers to unfamiliar/complex code bases.
+    d.log( { label: { param1, param2 } } )
+    d.r() // report metrics, anomolies, suggests.
+    d.c() // get and set log configuration.
 
-### Rationale ( Unapollageticly Opinionated bit -) :
-
-- Execution trumps code. Just as rivers trump river banks. Dlog is all about making exection flows tanglible and sharable.
-
-- Debuggers run code in synthetic environments, which can lead to false positive behaviours (especially for asynchronous, and time affected operations). logging is far more effective (with dlog).
-
-- Developers need fast, nay immediate tools to explore execution flows. Stacktraces are too noisey and irrelevant.
-
-- Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
+TODO: EXAMPLE SCREEN VID.
 
 
-### Notice 
-Pre-release. [v 0.3.2](#v0.3.2) Usable, still early POC, let us know if you find potentially useful or would like to input into direction of project.
 
 ## quick start
 
-    npm i -D @genisense/dlog
-    npm i -g @genisense/dlog
-    dlog i
+once installed - see top, '$ dlog i' creates two files:
 
-dlog i creates two files:
-
-    .dlogrc  // cli configuration.
-    dlogger.js  // runtime configuration, customisation point.
+    ./.dlogrc  // $ dlog  (cli configuration)
+    ./dlog.js  // runtime configuration, customisation point.
 
 Edit .dlogrc. Set the globPattern and excludes to match your project. (globPattern matches the files/directories given, and exclude sets files you dont want logging added to.)
 
@@ -52,17 +49,17 @@ You are now ready to Log & Roll:
 
 You can also filter on the fly without reloading, for example if running a browser app, at the console:
 
-    # if you set globalLogger, can use it to change config from command line
-    tlog.config.typeCheck = true
+    # with globalLogger, can use it to change config from console
+    d.config.typeCheck = true
 
     # To only log functions named foo or bar
-    tlog.config.include = ['foo','bar']
+    d.config.include = ['foo','bar']
 
     # Log every function (that was added according to globPattern config)
-    tlog.config.include = ['*']
+    d.config.include = ['*']
 
     #exclude specific functioins - useful for chatty ones:
-    tlog.config.exclude = ['onMouseMove']
+    d.config.exclude = ['onMouseMove']
 
 ## cli configuration
 
@@ -81,25 +78,25 @@ You can also filter on the fly without reloading, for example if running a brows
     config = {
         include: ['*'],         // '*' - every named log call. or 'foo', 'bar' -exact matches.
         exclude: [],            // array of exact matches to exclude.
-        globalLogger: 'tlog',   // name a global convenience logger.
+        globalLogger: 'd',   // name a global convenience logger.
         argCheck : true,        // warn if actual arguments passed differ from named parameters.
         typeCheck: false,       // deep compare paramater data types.
         timing: true,           // ms timing between logged function calls.
         file: true,             // if true, shows the origin file of the log.
     };
 
-    globalLogger: set the name of the logger (default here tlog), require once early in
+    globalLogger: set the name of the logger (default here d), require once early in
     application boot sequence e.g:
 
         require('../dlogger.js') //no assignment necessary.
         // now in any file can use:
-        tlog.log({myTag: {p1, p2}})
+        d.log({myTag: {p1, p2}})
 
     If prefered you can avoid global and require in explicitly:
 
-        const tlog = require('../dlogger.js')
+        const d = require('../dlog.js')
 
-    Globals are an anti-pattern, but dlog is intended to be fast in, fast out at development time, so acceptable as should never be pushed.
+    Globals are usually an anti-pattern, but dlog is intended to be fast in, fast out at development time, so acceptable as should never be pushed.
 
 ## .log API
 
@@ -166,9 +163,30 @@ With typeCheck=true, logging keeps track of function call paramater types and al
     if config.argCheck = true on (both in .dlogrc, and dlogger.js config),
     arguments passed are compared against named paramaters. 
 
+### Roadmap
+
+V 1.0 Key Target Use Case.
+
+Reusable code walk through execution scenario's to rapidly ramp up new developers to unfamiliar/complex code bases.
+
+### Rationale ( the unapollageticly opinionated bit -)
+
+- Execution trumps code. Just as rivers the river banks are not the river. Dlog is about making exection flow views tanglible reusable, sharable.
+
+- Debuggers run code in synthetic environments, which can lead to false positive behaviours (especially for asynchronous, and time affected operations). Automated logging is more effective (with dlog).
+
+- Developers need fast, actually immediate tools to explore execution flows. Stacktraces have too much noise to signal.
+
+- Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
+
+
 ## release notes
 
-## v0.3.2
+### v0.3.3
+    - dlogger.js renamed dlog.js
+    - tlog.log (example global logger) renamed d.log
+
+### v0.3.2
     - cli output to stdout better formatting.
     - verbose logger example added to dlogger.js.
 

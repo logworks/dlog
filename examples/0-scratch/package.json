@@ -1,16 +1,15 @@
 {
-  "name": "1-node-simplest",
+  "name": "0-scratch",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dlog": "../../src/cli/dlog.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@genisense/dlog": "^0.1.5"
+    "@genisense/dlog": "^0.3.2"
   }
 }
