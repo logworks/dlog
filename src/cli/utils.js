@@ -46,6 +46,16 @@ function writeFile(savePath, data) {
   require('resolvedPathToTargetFromOrigin')
 */
 function simplisticRelativePathResolve(filePathOrigin, filePathTarget) {
+  // if either start with ./, remove.
+
+  if (filePathOrigin.slice(0, 2) === './') {
+    filePathOrigin = filePathOrigin.slice(2, filePathOrigin.length);
+  }
+  if (filePathTarget.slice(0, 2) === './') {
+    filePathTarget = filePathTarget.slice(2, filePathTarget.length);
+  }
+  console.log('_', filePathOrigin, '__', filePathTarget);
+
   const targetSplit = filePathTarget.split('/');
   const targetFile = targetSplit[targetSplit.length - 1];
   const targetPath = targetSplit.slice(0, targetSplit.length - 1);

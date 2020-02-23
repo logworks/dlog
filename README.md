@@ -3,36 +3,36 @@
 [![Build Status](https://travis-ci.com/logworks/dlog.svg?branch=master)](https://travis-ci.com/logworks/dlog)
 [![Coverage Status](https://coveralls.io/repos/github/logworks/dlog/badge.svg?branch=master)](https://coveralls.io/github/logworks/dlog?branch=master)
 
-Logging focused at development time.
+<p align="center">
+<img src="https://user-images.githubusercontent.com/60403446/75112639-99b52200-563d-11ea-8059-ed8426ade334.png">
+</p>
+
+Logging focused on development time.
 Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
 
-Pre-release. [v 0.3.3](#v0.3.3) early POC so API is likeley to change.
+Pre v1.0.0: [v 0.3.4](#v0.3.4) early POC so API is frequently changing (re-run \$ dlog i when updating)
 
-Install
+## Installation
 
-    npm i -D @genisense/dlog   #or#   yarn add -D @genisense/dlog
-    npm i -g @genisense/dlog 
-    dlog i # initialise
+    $ npm i -D @genisense/dlog   #or#   yarn add -D @genisense/dlog
+    $ npm i -g @genisense/dlog
+    $ dlog i # initialise
 
-Cli commands:
+## Cli commands:
 
     $ dlog +        # auto-logs every named function.
     $ dlog -        # removes all logs added by dlog +.
-    $ dlog ?        # halts CI if dlog present in code pre-push.
+    $ dlog ?        # halts for CI if dlog present in code pre-push.
 
 Run application (node or browser), at console:
 
-    d.log( { label: { param1, param2 } } )
+    d.log( { label: { param1, param2 } } ) // cleaner, easier than console.log
     d.r() // report metrics, anomolies, suggests.
-    d.c() // get and set log configuration.
-
-TODO: EXAMPLE SCREEN VID.
-
-
+    d.config // get and set log configuration on the fly.
 
 ## quick start
 
-once installed - see top, '$ dlog i' creates two files:
+once installed - see top, '\$ dlog i' creates two files:
 
     ./.dlogrc  // $ dlog  (cli configuration)
     ./dlog.js  // runtime configuration, customisation point.
@@ -69,6 +69,7 @@ You can also filter on the fly without reloading, for example if running a brows
     "excludes": "node_modules|\\.test",  - regExp applied to exclude from files found by globbing.
     "module" : "e.g: es2015/commonjs.    - Added on $ dlog i depending on choice of module system",
     "nameAs" : "dlog/whateverLog        - auto added log identifier can be changed to avoid name clashes.",
+    "localDlogPath" : "./src/dlog.js",  -dlog put in root by default. if you move it, say to src, set this to match.
     "argCheck" : true/false             - adds arguments to logging for named param comparison.
 
 ## runtime configuration
@@ -134,6 +135,7 @@ Logs should be structured code, not any arbitrary mix of types. By using such a 
 - Log server - maybe coming
 
 ## experimental features:
+
     typeCheck has no depth/time limit checking, so can suck time. Dont run it against react props for now which can be enormously deep objects!
 
 ### typeCheck
@@ -161,7 +163,7 @@ With typeCheck=true, logging keeps track of function call paramater types and al
 ### argCheck
 
     if config.argCheck = true on (both in .dlogrc, and dlogger.js config),
-    arguments passed are compared against named paramaters. 
+    arguments passed are compared against named paramaters.
 
 ### Roadmap
 
@@ -179,19 +181,27 @@ Reusable code walk through execution scenario's to rapidly ramp up new developer
 
 - Dlog autmates logging for named functions only. Named functions are (or should be) the black boxes that matter in any code base. (and if they are not, using Dlog will help refactor to let it be so).
 
-
 ## release notes
 
+### v0.3.4
+
+    - logger.formatters.devToolsColorized.
+    - dlog i sets output to colorised by default.
+    - Can put dlog.js in src or wherever now, just configure path in .dlogrc "localDlogPath"
+    - d.r() tabularised.
+    - $ dlog +, reports files changed.
+
 ### v0.3.3
+
     - dlogger.js renamed dlog.js
     - tlog.log (example global logger) renamed d.log
     - d.r() doctor doctor - gives ten slowest and ten most called functions summary.
     - better console formatting.
 
 ### v0.3.2
+
     - cli output to stdout better formatting.
     - verbose logger example added to dlogger.js.
-
 
 ### v0.3.1
 
@@ -215,15 +225,14 @@ Reusable code walk through execution scenario's to rapidly ramp up new developer
 
   - works with object deconstruction in function params.
   - ignores single line // commented out functions.
- 
 
-- dlogger Runtime
+* dlogger Runtime
 
   - outputLogger config. enables upstreaming to any logger.
     - Node example with Winston.
     - Web example with Logrocket.
 
-- Non functionals:
+* Non functionals:
 
   - husky pre-commit hook, lint, test.
 

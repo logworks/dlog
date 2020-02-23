@@ -73,4 +73,14 @@ describe('simplisticRelativePathResolve', () => {
     );
     expect(recieved).toBe('./../../tsub/target.js');
   });
+
+  it.only('E. only one path starts with ./', () => {
+    const filePathOrigin = 'src/source.js';
+    const filePathTarget = './src/target.js';
+    const recieved = utils.simplisticRelativePathResolve(
+      filePathOrigin,
+      filePathTarget
+    );
+    expect(recieved).toBe('./target.js');
+  });
 });

@@ -1,4 +1,4 @@
-const dlog = require('../../../src/app');
+const dlog = require('../../src/app');
 
 const getType = elem => {
   return Object.prototype.toString.call(elem).slice(8, -1);

@@ -1,7 +1,8 @@
 {
-    "globPattern": "./**/*.?(js|jsx|ts|tsx)",
-    "excludes": "node_modules|\\.test|dlogger.js",
-    "module" : "commonjs",
-    "nameAs" : "autodlog",
-    "argCheck" : true
+  "globPattern": "./**/*.?(js|jsx|ts|tsx)",
+  "excludes": "dlog.js|node_modules|\\.test",
+  "module": "commonjs",
+  "localDlogPath": "./dlog.js",
+  "nameAs": "dlog",
+  "argCheck": false
 }

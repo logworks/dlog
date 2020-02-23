@@ -47,14 +47,14 @@ const namedFunctionExceptions = [
 ];
 
 describe('getFunctionName extracts function name from valid function signatures.', () => {
-  it(`Gets function name from a line of code representing a function declaration'`, function () {
+  it(`Gets function name from a line of code representing a function declaration'`, function() {
     namedFunctions.forEach(namedFunction => {
       const res = parser.getFunctionName(namedFunction);
       expect(res).toBe('functionName');
     });
   });
 
-  it(`Does not get function name from a line of code easily mistaken for a false positive function declaration'`, function () {
+  it(`Does not get function name from a line of code easily mistaken for a false positive function declaration'`, function() {
     namedFunctionExceptions.forEach(namedFunction => {
       expect(parser.getFunctionName(namedFunction)).toBe(undefined);
     });
@@ -68,37 +68,37 @@ describe('getFunctionName extracts function name from valid function signatures.
  up to the caller to apply file name / parent dir.
  see: defaultFunctionName
 */
-  it(`returns default for default export unnamed arrow functions`, function () {
+  it(`returns default for default export unnamed arrow functions`, function() {
     const namedFunction = 'export default (arg1) => {';
     expect(parser.getFunctionName(namedFunction)).toBe('default');
   });
 
-  it(`returns defaultfunction for default export unnamed functions`, function () {
+  it(`returns defaultfunction for default export unnamed functions`, function() {
     const namedFunction = 'export default function (arg1) {';
     expect(parser.getFunctionName(namedFunction)).toBe('defaultfunction');
   });
 
-  it(`returns defaultfunction for default export unnamed functions, with no params`, function () {
+  it(`returns defaultfunction for default export unnamed functions, with no params`, function() {
     const namedFunction = 'export default function () {';
     expect(parser.getFunctionName(namedFunction)).toBe('defaultfunction');
   });
 
-  it(`returns defaultfunction for default export unnamed async functions`, function () {
+  it(`returns defaultfunction for default export unnamed async functions`, function() {
     const namedFunction = 'export default async function (arg1) {';
     expect(parser.getFunctionName(namedFunction)).toBe('defaultfunction');
   });
 
-  it(`returns default for default export unnamed async arrow functions`, function () {
+  it(`returns default for default export unnamed async arrow functions`, function() {
     const namedFunction = 'export default async  (arg1) => {';
     expect(parser.getFunctionName(namedFunction)).toBe('default');
   });
 
-  it(`returns default for default export unnamed arrow functions, with no params`, function () {
+  it(`returns default for default export unnamed arrow functions, with no params`, function() {
     const namedFunction = 'export default () => {';
     expect(parser.getFunctionName(namedFunction)).toBe('default');
   });
 
-  it(`getDefaultFunctionName returns functionName as name of file`, function () {
+  it(`getDefaultFunctionName returns functionName as name of file`, function() {
     const namedFunction = 'default';
     const filePath = 'src/component/TestComponent.js';
     expect(parser.getDefaultFunctionName(namedFunction, filePath)).toBe(
@@ -106,7 +106,7 @@ describe('getFunctionName extracts function name from valid function signatures.
     );
   });
 
-  it(`getDefaultFunctionName returns parent dir name if file named index`, function () {
+  it(`getDefaultFunctionName returns parent dir name if file named index`, function() {
     const namedFunction = 'default';
     const filePath = 'src/component/TestComponent/index.js';
     expect(parser.getDefaultFunctionName(namedFunction, filePath)).toBe(
@@ -140,78 +140,18 @@ describe('execute ', () => {
   });
 });
 
-describe('parser.prependRequire', () => {
-  it(' If config.dlogPackage:Unspecified returns paths to filePath/dlog.js', () => {
-    const content = '';
-    config = {
+describe('addLogging (content, config, filePath)', () => {
+  it('injects auto logging into an export default unnamed arrow function', () => {
+    const content = `export default () => { return }`;
+    const config = {
+      globPattern: './**/*.?(js|jsx|ts|tsx)',
+      excludes: 'node_modules|\\.test|dlog.js',
       module: 'commonjs',
-      nameAs: 'dlog',
-      // dlogPackage: 'acme-dlog-node'
+      nameAs: 'autodlog',
+      argCheck: true
     };
-    const res = parser.prependRequire(
-      content,
-      './test/testsub.file.js',
-      config
-    );
-    expect(res).toBe(`const dlog = require ('./../dlog.js');\n`);
-  });
-
-  it(' If config.dlogPackage Unspecified, returns paths to filePath/dlog.js. With import if config.module=es2015', () => {
-    const content = '';
-    config = {
-      module: 'es2015',
-      nameAs: 'dlog',
-      // dlogPackage: 'acme-dlog-node'
-
-    };
-    const res = parser.prependRequire(
-      content,
-      './test/testsub/file.js',
-      config
-    );
-    expect(res).toBe(`import dlog from './../../dlog.js';\n`);
-  });
-
-  it('if config.dlogPackage:Specified, it is inclused. With require if config.module=commonjs', () => {
-    const content = '';
-    config = {
-      dlogPackage: 'acme-dlog-node',
-      module: 'commonjs',
-      nameAs: 'dlog'
-    };
-    const res = parser.prependRequire(content, null, config);
-
-    expect(res).toEqual(`const dlog = require ('acme-dlog-node');\n`);
-  });
-
-  it('if config.dlogPackage:Specified, it is inclused. With import if config.module=es2015', () => {
-    const content = '';
-    config = {
-      dlogPackage: 'acme-dlog-node',
-      module: 'es2015',
-      nameAs: 'dlog'
-    };
-    const res = parser.prependRequire(content, null, config);
-
-    expect(res).toEqual(`import dlog from 'acme-dlog-node';\n`);
+    const filePath = 'src/testing/defaultTester.js';
+    const res = parser.addLogging(content, config, filePath);
+    expect(res).toEqual(`export default () => { return }`);
   });
 });
-
-
-describe('addLogging (content, config, filePath)', () => {
-
-  it('injects auto logging into an export default unnamed arrow function', () => {
-    const content =
-      `export default () => { return }`
-    const config = {
-      "globPattern": "./**/*.?(js|jsx|ts|tsx)",
-      "excludes": "node_modules|\\.test|dlog.js",
-      "module": "commonjs",
-      "nameAs": "autodlog",
-      "argCheck": true
-    }
-    const filePath = 'src/testing/defaultTester.js'
-    const res = parser.addLogging(content, config, filePath)
-    expect(res).toEqual(`export default () => { return }`)
-  })
-})

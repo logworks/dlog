@@ -1,10 +1,13 @@
+const autodlog = require('./dlog.js');
 const typCheckingExample = () => {
-  const wantsAString = function(str) {
+  const wantsAStringFn = function(str) {
+    autodlog.log({ wantsAStringFn: { str: str } }, { arguments });
+
     return str;
   };
 
-  wantsAString('have a string');
-  wantsAString(['heres an array instead']);
+  wantsAStringFn('have a string');
+  wantsAStringFn(['heres an array instead']);
 };
 
 module.exports = typCheckingExample;

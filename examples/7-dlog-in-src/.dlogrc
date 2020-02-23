@@ -3,6 +3,6 @@
     "excludes": "node_modules|\\.test|dlog.js",
     "module" : "commonjs",
     "nameAs" : "dlog",
-    "dlogPackage" : "src/dlog.js",
+    "localDlogPath" : "src/dlog.js",
     "argCheck" : true
 }

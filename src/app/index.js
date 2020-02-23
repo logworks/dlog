@@ -4,7 +4,9 @@ const utils = require('./utils');
 const argChecker = require('./argChecker');
 const ErrorStackParser = require('error-stack-parser');
 const ms = require('ms');
-const reporter = require('./reporter')
+const reporter = require('./reporter');
+const colors = require('./color').colors;
+const formatters = require('./formatters');
 
 let mostRecentTimeStamp;
 
@@ -12,7 +14,7 @@ const dlog = {
   logger: {
     config: {},
 
-    log: function (logObj, meta) {
+    log: function(logObj, meta) {
       const {
         include,
         exclude,
@@ -27,13 +29,12 @@ const dlog = {
 
       const metaOut = {};
 
-
       if (timing) {
         const current = new Date();
         if (mostRecentTimeStamp) {
           metaOut.timing = ms(Math.abs(current - mostRecentTimeStamp));
         } else {
-          metaOut.timing = '0ms'
+          metaOut.timing = '0ms';
         }
         mostRecentTimeStamp = current;
       }
@@ -56,8 +57,8 @@ const dlog = {
       const includeMatches = include.includes('*')
         ? ['one-length-array']
         : include.filter(item => {
-          return item === logKeyName;
-        });
+            return item === logKeyName;
+          });
 
       const excludeMatches = exclude.filter(item => {
         return item === logKeyName;
@@ -82,9 +83,7 @@ const dlog = {
         if (argCheck && meta && meta.arguments) {
           const argCheckMsg = argChecker(logObj, meta.arguments);
           if (argCheckMsg) {
-            outputLogger
-              ? outputLogger(argCheckMsg)
-              : defaultOutputLogger(argCheckMsg);
+            console.log(argCheckMsg);
           }
         }
         if (typeCheck) {
@@ -93,28 +92,25 @@ const dlog = {
             for (let diff of diffs) {
               const diffLine = `${diff.path.join('.')} expect: ${
                 diff.lhs
-                } received: ${diff.rhs}`;
+              } received: ${diff.rhs}`;
 
-              const typeAnomolyMsg = `[TypeCheck] ${diffLine}`;
-
-              outputLogger
-                ? outputLogger(typeAnomolyMsg)
-                : defaultOutputLogger(typeAnomolyMsg);
+              const typeAnomolyMsg = `[dlog][TypeCheck] ${diffLine}`;
+              console.log(typeAnomolyMsg);
             }
           }
         }
-        reporter.setReport(fileAndLine, logObj, metaOut)
+        reporter.setReport(fileAndLine, logObj, metaOut);
         return logObj;
       }
     },
     r: () => {
-      return reporter.getReport()
-    }
-
+      return reporter.getReport();
+    },
+    colors: colors,
+    formatters: formatters
   },
 
-
-  createLogger: function (config) {
+  createLogger: function(config) {
     this.logger.config = config;
     return this.logger;
   }

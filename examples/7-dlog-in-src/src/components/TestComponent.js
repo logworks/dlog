@@ -1,4 +1,4 @@
-const dlog = require ('./../../dlog.js');
+const dlog = require ('./../../../src/dlog.js');
 
 exports.namedOnExport = function(p1, p2) {
   dlog.log( { 'namedOnExport' : {p1 : p1, p2 : p2} }, { arguments } )
