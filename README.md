@@ -10,7 +10,7 @@
 Logging focused on development time.
 Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
 
-Pre v1.0.0: [v 0.3.4](#v0.3.4) early POC so API is frequently changing (re-run \$ dlog i when updating)
+Pre v1.0.0: [v 0.3.42](#v0.3.42) early POC so API is frequently changing (re-run \$ dlog i when updating)
 
 ## Installation
 
@@ -199,6 +199,9 @@ Reusable code walk through execution scenario's to rapidly ramp up new developer
 
 
 ## release notes
+
+### v0.3.42
+    - fix issue 30. running against big production codebase (spectrum), package export broke.
 
 ### v0.3.4
 
