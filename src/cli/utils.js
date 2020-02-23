@@ -8,8 +8,8 @@
 const fs = require('fs');
 
 function readFile(sourcePath) {
-  return new Promise(function(resolve, reject) {
-    fs.readFile(sourcePath, 'utf8', function(err, data) {
+  return new Promise(function (resolve, reject) {
+    fs.readFile(sourcePath, 'utf8', function (err, data) {
       if (err) {
         reject(err);
       } else {
@@ -20,9 +20,9 @@ function readFile(sourcePath) {
 }
 
 function writeFile(savePath, data) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     // data, { encoding: 'utf-8', flag: 'w' }
-    fs.writeFile(savePath, data, function(err) {
+    fs.writeFile(savePath, data, function (err) {
       if (err) {
         reject(err);
       } else {
@@ -54,7 +54,6 @@ function simplisticRelativePathResolve(filePathOrigin, filePathTarget) {
   if (filePathTarget.slice(0, 2) === './') {
     filePathTarget = filePathTarget.slice(2, filePathTarget.length);
   }
-  console.log('_', filePathOrigin, '__', filePathTarget);
 
   const targetSplit = filePathTarget.split('/');
   const targetFile = targetSplit[targetSplit.length - 1];
