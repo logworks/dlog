@@ -10,9 +10,9 @@ const config = {
 };
 
 const logger = dlog.createLogger(config);
-
+  
 const customLogger = (...args) => {
-  logger.formatters.devToolInColor(args);
+  dlog.formatters.devToolInColor(args);
   //now can pass raw log up to another log handler if want to.
 };
 

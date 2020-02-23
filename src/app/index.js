@@ -106,16 +106,19 @@ const dlog = {
     },
     r: () => {
       return reporter.getReport();
-    },
-    colors: colors,
-    formatters: formatters
+    }
   },
 
 
   createLogger: function (config) {
-    this.logger.config = config;
-    return this.logger;
+    dlog.logger.config = config;
+    return dlog.logger;
   }
 };
 
-module.exports = dlog;
+module.exports = {
+  //logger: dlog.logger,
+  createLogger: dlog.createLogger,
+  colors: colors,
+  formatters: formatters
+}
