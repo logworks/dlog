@@ -1,0 +1,16 @@
+{
+  "name": "7-dlog-in-src",
+  "version": "1.0.0",
+  "description": "some apps prevent importing/requiring from outside src dir. This is an example of how to configure dlog in this case",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dlog": "../../src/cli/dlog.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@genisense/dlog": "^0.3.3"
+  }
+}

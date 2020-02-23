@@ -6,14 +6,27 @@ const timing = require('./timing');
 const typeChecking = require('./typeChecking');
 const indentDetect = require('./indentDetect');
 
-basic();
+const vanilla = function (p1) {
+  dlog.log({ vanilla: { p1 } });
+  return p1;
+};
 
-argChecking();
-typeChecking();
+const mint = function () {
+  dlog.log({ mint: {} });
+  return;
+};
+
+// vanilla('A');
+// vanilla('A', 'B');
+// vanilla();
+// mint('A', 'B');
+// basic();
+
 indentDetect();
 // example, updating config on the fly via global.
 timing();
+//argChecking();
+typeChecking();
 
 //d.config.file = true;
-basic();
-
+// basic();

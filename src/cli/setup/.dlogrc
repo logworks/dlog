@@ -1,7 +1,8 @@
 {
   "globPattern": "./src/**/*.?(js|jsx|ts|tsx)",
-  "excludes": "node_modules|\\.test|dlog.js",
-  "module": "commonjs",
+  "excludes": "dlog.js|node_modules|\\.test",
+  "module": "commonjs/es2015  {set by user choice during $dog i}",
+  "localDlogPath" : "./dlog.js",
   "nameAs": "dlog",
   "argCheck": false
 }

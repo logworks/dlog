@@ -1,44 +1,27 @@
 
-const logHeadline = (args) => {
-  const getType = elem => {
-    return Object.prototype.toString.call(elem).slice(8, -1);
-  };
-  const fName = Object.keys(args[0])[0]
-  const params = Object.keys(args[0][fName])
-
-  const paramTypes = params.map((key) => key + ':' + getType(args[0][fName][key]))
-
-  const timing = args[1].timing || ''
-  const file = args[1].file || ''
-  return (`[dlog][${timing}] ${fName} (${params}) (${paramTypes}) ${file}`)
-}
-
-const customLogger = (...args) => {
-  console.log(logHeadline(args))
-  const fName = Object.keys(args[0])[0]
-  const params = args[0][fName]
-  console.log(params)
-};
-
 const config = {
   include: ['*'],
   exclude: [],
   globalLogger: 'd',
-  outputLogger: customLogger,
-  argCheck: true,
-  typeCheck: false,
   timing: true,
-  file: false
+  argCheck: false, //Todo needs also to be set in .dlogrc before $ dlog + run. -or just always add arguments to meta.
+  file: false,
+  typeCheck: false
 };
 
 const logger = dlog.createLogger(config);
 
+const customLogger = (...args) => {
+  logger.formatters.devToolInColor(args);
+  //now can pass raw log up to another log handler if want to.
+};
+
+logger.config.outputLogger = customLogger;
+
 /*
-  to use globalLogger need to require this (dlog) early in application boot sequence e.g:
-  require('../dlog.js')
   d.log({ hello: {p1, p2} }); -anywhere in app, no more requires/imports needed.
 */
 if (config.globalLogger) {
   global[config.globalLogger] = logger;
-  console.log('global ' + config.globalLogger + ' set.');
+  // console.log('global ' + config.globalLogger + ' set.');
 }

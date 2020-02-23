@@ -140,60 +140,19 @@ describe('execute ', () => {
   });
 });
 
-describe('parser.prependRequire', () => {
-  it(' If config.dlogPackage:Unspecified returns paths to filePath/dlog.js', () => {
-    const content = '';
-    config = {
+describe('addLogging (content, config, filePath)', () => {
+  it('injects auto logging into an export default unnamed arrow function', () => {
+    const content = `export default () => { return }`;
+    const config = {
+      globPattern: './**/*.?(js|jsx|ts|tsx)',
+      excludes: 'node_modules|\\.test|dlog.js',
       module: 'commonjs',
-      nameAs: 'dlog',
-      // dlogPackage: 'acme-dlog-node'
+      nameAs: 'autodlog',
+      argCheck: true
     };
-    const res = parser.prependRequire(
-      content,
-      './test/testsub.file.js',
-      config
-    );
-    expect(res).toBe(`const dlog = require ('./../dlog.js');\n`);
-  });
-
-  it(' If config.dlogPackage Unspecified, returns paths to filePath/dlog.js. With import if config.module=es2015', () => {
-    const content = '';
-    config = {
-      module: 'es2015',
-      nameAs: 'dlog',
-      // dlogPackage: 'acme-dlog-node'
-
-    };
-    const res = parser.prependRequire(
-      content,
-      './test/testsub/file.js',
-      config
-    );
-    expect(res).toBe(`import dlog from './../../dlog.js';\n`);
-  });
-
-  it('if config.dlogPackage:Specified, it is inclused. With require if config.module=commonjs', () => {
-    const content = '';
-    config = {
-      dlogPackage: 'acme-dlog-node',
-      module: 'commonjs',
-      nameAs: 'dlog'
-    };
-    const res = parser.prependRequire(content, null, config);
-
-    expect(res).toEqual(`const dlog = require ('acme-dlog-node');\n`);
-  });
-
-  it('if config.dlogPackage:Specified, it is inclused. With import if config.module=es2015', () => {
-    const content = '';
-    config = {
-      dlogPackage: 'acme-dlog-node',
-      module: 'es2015',
-      nameAs: 'dlog'
-    };
-    const res = parser.prependRequire(content, null, config);
-
-    expect(res).toEqual(`import dlog from 'acme-dlog-node';\n`);
+    const filePath = 'src/testing/defaultTester.js';
+    const res = parser.addLogging(content, config, filePath);
+    expect(res).toEqual(`export default () => { return }`);
   });
 });
 

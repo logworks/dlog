@@ -1,12 +1,17 @@
+const autodlog = require('./dlog.js');
 function indentDetect() {
-  const outer = p => {
-    const inner = p => {
+  const outerFn = p => {
+    autodlog.log({ outerFn: { p } }, { arguments });
+
+    const innerFn = p => {
+      autodlog.log({ innerFn: { p } }, { arguments });
+
       return p;
     };
-    const res = inner(p);
+    const res = innerFn(p);
     return res;
   };
-  outer(1);
+  outerFn(1);
 }
 
 module.exports = indentDetect;

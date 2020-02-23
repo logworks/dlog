@@ -4,7 +4,9 @@ const utils = require('./utils');
 const argChecker = require('./argChecker');
 const ErrorStackParser = require('error-stack-parser');
 const ms = require('ms');
-const reporter = require('./reporter')
+const reporter = require('./reporter');
+const colors = require('./color').colors;
+const formatters = require('./formatters');
 
 let mostRecentTimeStamp;
 
@@ -33,7 +35,7 @@ const dlog = {
         if (mostRecentTimeStamp) {
           metaOut.timing = ms(Math.abs(current - mostRecentTimeStamp));
         } else {
-          metaOut.timing = '0ms'
+          metaOut.timing = '0ms';
         }
         mostRecentTimeStamp = current;
       }
@@ -82,9 +84,7 @@ const dlog = {
         if (argCheck && meta && meta.arguments) {
           const argCheckMsg = argChecker(logObj, meta.arguments);
           if (argCheckMsg) {
-            outputLogger
-              ? outputLogger(argCheckMsg)
-              : defaultOutputLogger(argCheckMsg);
+            console.log(argCheckMsg);
           }
         }
         if (typeCheck) {
@@ -95,22 +95,20 @@ const dlog = {
                 diff.lhs
                 } received: ${diff.rhs}`;
 
-              const typeAnomolyMsg = `[TypeCheck] ${diffLine}`;
-
-              outputLogger
-                ? outputLogger(typeAnomolyMsg)
-                : defaultOutputLogger(typeAnomolyMsg);
+              const typeAnomolyMsg = `[dlog][TypeCheck] ${diffLine}`;
+              console.log(typeAnomolyMsg);
             }
           }
         }
-        reporter.setReport(fileAndLine, logObj, metaOut)
+        reporter.setReport(fileAndLine, logObj, metaOut);
         return logObj;
       }
     },
     r: () => {
-      return reporter.getReport()
-    }
-
+      return reporter.getReport();
+    },
+    colors: colors,
+    formatters: formatters
   },
 
 

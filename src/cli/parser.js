@@ -4,8 +4,6 @@ const detectIndent = require('detect-indent');
 const utils = require('./utils');
 const fileConcurrency = 10;
 
-const LOCAL_DLOG_JS = 'dlog.js';
-
 function getFunctionName(lineCode) {
   let functionName = '';
   //ignore if in single line comment
@@ -117,7 +115,10 @@ const addLogging = function (content, config, filePath) {
       }
 
       const functionIndentMatch = match.match(/^(\s+)\w/);
-      const functionIndent = (functionIndentMatch && functionIndentMatch[1]) ? functionIndentMatch[1] : ''
+      const functionIndent =
+        functionIndentMatch && functionIndentMatch[1]
+          ? functionIndentMatch[1]
+          : '';
       const indentWith = indentUnit + functionIndent;
       return (
         match +
@@ -143,23 +144,15 @@ function clearLogging(content, config) {
 }
 
 function prependRequire(content, filePath, config) {
-  if (config.dlogPackage !== undefined) {
-    if (config.module === 'es2015') {
-      return `import ${config.nameAs} from '${config.dlogPackage}';\n${content}`;
-    }
-    if (config.module === 'commonjs') {
-      return `const ${config.nameAs} = require ('${config.dlogPackage}');\n${content}`;
-    }
-  } else {
-    const splitter = filePath.split('/');
-    const pathToDlog =
-      './' + '../'.repeat(splitter.length - 2) + LOCAL_DLOG_JS;
-    if (config.module === 'es2015') {
-      return `import ${config.nameAs} from '${pathToDlog}';\n${content}`;
-    }
-    if (config.module === 'commonjs') {
-      return `const ${config.nameAs} = require ('${pathToDlog}');\n${content}`;
-    }
+  const pathToDlog = utils.simplisticRelativePathResolve(
+    filePath,
+    config.localDlogPath
+  );
+  if (config.module === 'es2015') {
+    return `import ${config.nameAs} from '${pathToDlog}';\n${content}`;
+  }
+  if (config.module === 'commonjs') {
+    return `const ${config.nameAs} = require ('${pathToDlog}');\n${content}`;
   }
 }
 
@@ -176,11 +169,12 @@ async function hasDlogging(files, config) {
       limitCallBack();
     });
   });
-  console.log('Code clean of dlog checked with current config.\n')
+  console.log('Code clean of dlog checked with current config.\n');
 }
 
-function parseFiles(files, config, add, clear) {
-  ac.eachLimit(files, fileConcurrency, function (filePath, limitCallBack) {
+async function parseFiles(files, config, add, clear) {
+  let addedFileCount = 0;
+  await ac.eachLimit(files, fileConcurrency, function (filePath, limitCallBack) {
     utils
       .readFile(filePath)
       .then(function (res) {
@@ -188,8 +182,10 @@ function parseFiles(files, config, add, clear) {
         if (add) {
           content = clearLogging(res.data, config);
           const contentWithLogging = addLogging(content, config, filePath);
-          if (contentWithLogging !== content)
+          if (contentWithLogging !== content) {
             content = prependRequire(contentWithLogging, filePath, config);
+            addedFileCount += 1;
+          }
         } else if (clear) {
           content = clearLogging(res.data, config);
         }
@@ -199,10 +195,14 @@ function parseFiles(files, config, add, clear) {
         limitCallBack();
       });
   });
-  console.log(
-    add ? 'Adding' : 'Clearing',
-    ` logs done. ${files.length} files checked.`
-  );
+  if (add) {
+    console.log(
+      `dlog: adding logging: ${files.length} files inspected, ${addedFileCount} updated.`
+    );
+  }
+  if (clear) {
+    console.log(`dlog: clearing logging completed.`);
+  }
 }
 
 function buildFileList(globPattern, excludes, cb) {
