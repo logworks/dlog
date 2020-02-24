@@ -6,6 +6,7 @@
 <p align="center">
 <img src="https://user-images.githubusercontent.com/60403446/75112639-99b52200-563d-11ea-8059-ed8426ade334.png">
 </p>
+Output above (overridable, configurable) Colorized ms timing (time of arrival from previous function call), function name, named parameters, detected param types, truncated ellipsed data. d.r() report - callable anytime, for node calls on process exit as well: Most frequently called functions, Slowest (by avg to arrive at function calls). Timing metrics are indicative only. Subject to improvements.
 
 Logging focused on development time.
 Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
