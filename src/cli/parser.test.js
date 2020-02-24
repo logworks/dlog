@@ -21,8 +21,13 @@ const namedFunctions = [
   'functionName({arg1, arg2}) {',
   'functionName({arg1, arg2}) { // inline comment after function',
   'exports.functionName = function(arg1, arg2) {',
-  'export const functionName = (communityIds: Array<string>): Promise<?DBCommunitySettings> => {'
-
+  'export const functionName = (communityIds: Array<string>): Promise<?DBCommunitySettings> => {',
+  // unparsable (without proper squash & parse approach - beyond regx)
+  // prettier-ignore
+  //'export const isAuthedResolver = (resolver: Function) => async (obj: any, args: any, context: GraphQLContext, info: any) => {'
+  // to simplified: fn => fn => same line:
+  //'export const isAuthedResolver = (resolver: Function) => (obj) => {'
+  // 'export const functionName = (resolver: Function) => ' -works, stylistic parsable code issue?
   //  Todo: multi-line function signatures:
   //   export default (
   //   { id }: DBThread,
