@@ -1,22 +1,20 @@
 
+const customLogger = (...args) => {
+  dlog.formatters.colorizedSummary(args);
+};
+
 const config = {
   include: ['*'],
   exclude: [],
+  outputLogger: customLogger,
   globalLogger: 'd',
   timing: true,
-  argCheck: false, //Todo needs also to be set in .dlogrc before $ dlog + run. -or just always add arguments to meta.
+  argCheck: false,
   file: false,
   typeCheck: false
 };
 
 const logger = dlog.createLogger(config);
-  
-const customLogger = (...args) => {
-  dlog.formatters.devToolInColor(args);
-  //now can pass raw log up to another log handler if want to.
-};
-
-logger.config.outputLogger = customLogger;
 
 /*
   d.log({ hello: {p1, p2} }); -anywhere in app, no more requires/imports needed.

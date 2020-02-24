@@ -3,15 +3,37 @@
 [![Build Status](https://travis-ci.com/logworks/dlog.svg?branch=master)](https://travis-ci.com/logworks/dlog)
 [![Coverage Status](https://coveralls.io/repos/github/logworks/dlog/badge.svg?branch=master)](https://coveralls.io/github/logworks/dlog?branch=master)
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/60403446/75112639-99b52200-563d-11ea-8059-ed8426ade334.png">
+
+## terminal output:
+<p align="left">
+<img src="https://user-images.githubusercontent.com/60403446/75177991-170c8f80-572f-11ea-973c-ec00ed34e277.png">
 </p>
-Output above (overridable, configurable) Colorized ms timing (time of arrival from previous function call), function name, named parameters, detected param types, truncated ellipsed data. d.r() report - callable anytime, for node calls on process exit as well: Most frequently called functions, Slowest (by avg to arrive at function calls). Timing metrics are indicative only. Subject to improvements.
+
+## web dev-tools output:
+<p align="left">
+<img src="https://user-images.githubusercontent.com/60403446/75178083-4b804b80-572f-11ea-8e19-2c8f11a42385.png">
+</p>
+
+
+The above shows standard output from dlog's auto-logging named function summary: 
+
+- overridable, configurable, upstreamable.
+- Colorized ms timing (time of arrival from previous function call).
+- function name.
+- Named parameters :infered param types.
+- Truncated ellipsed data. 
+- d.r() reports:
+  - most frequently called functions.
+  - slowest.
+
+Tables:: Most frequently called functions, Slowest (by avg to arrive at function calls) produced by calling d.r() report. callable anytime, for node applications gets called on process exit.  
+
+Timing metrics are indicative of time between log calls.
 
 Logging focused on development time.
 Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
 
-Pre v1.0.0: [v 0.3.42](#v0.3.42) early POC so API is frequently changing (re-run \$ dlog i when updating)
+Pre v1.0.0: [v 0.3.43](##v0.3.43) early POC so API is frequently changing (re-run \$ dlog i when updating)
 
 ## Installation
 
@@ -200,6 +222,11 @@ Reusable code walk through execution scenario's to rapidly ramp up new developer
 
 
 ## release notes
+
+### v0.3.43
+    - colorised terminal output.
+    - devToolInColor() formatter marked for deprecation in favour of colorizedSummary()
+    - colorizedSummary works for tty & web dev consoles.
 
 ### v0.3.42
     - fix issue 30. running against big production codebase (spectrum), package export broke.

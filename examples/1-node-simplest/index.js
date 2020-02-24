@@ -3,6 +3,7 @@ const dlog = require('./dlog');
 const basic = require('./basic.js');
 const argChecking = require('./argChecking');
 const timing = require('./timing');
+const timingLongShort = require('./timingLongShort')
 const typeChecking = require('./typeChecking');
 const indentDetect = require('./indentDetect');
 
@@ -24,9 +25,10 @@ const mint = function () {
 
 indentDetect();
 // example, updating config on the fly via global.
-timing();
-//argChecking();
-typeChecking();
+// timing();
+argChecking();
+//typeChecking();
+timingLongShort()
 
 //d.config.file = true;
 // basic();

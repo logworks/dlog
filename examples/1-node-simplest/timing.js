@@ -1,4 +1,6 @@
 const autodlog = require('./dlog.js');
+
+
 const tick = delay => {
   autodlog.log({ tick: { delay } }, { arguments });
 
