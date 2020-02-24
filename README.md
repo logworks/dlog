@@ -33,11 +33,7 @@ Timing metrics are indicative of time between log calls.
 Logging focused on development time.
 Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
 
-Pre v1.0.0: [v 0.3.43](##v0.3.43) early POC so API is frequently changing (re-run \$ dlog i when updating)
-
-## Installation
-
-    $ npm i -D @genisense/dlog   #or#   yarn add -D @genisense/dlog
+Pre v1.0.0: [v 0.3.42](#v0.3.42) early POC so API is frequently changing (re-run \$ dlog i when updating)
     $ npm i -g @genisense/dlog
     $ dlog i # initialise
 
@@ -227,14 +223,6 @@ Reusable code walk through execution scenario's to rapidly ramp up new developer
     - colorised terminal output.
     - devToolInColor() formatter marked for deprecation in favour of colorizedSummary()
     - colorizedSummary works for tty & web dev consoles.
-
-### v0.3.42
-    - fix issue 30. running against big production codebase (spectrum), package export broke.
-
-### v0.3.4
-
-    - logger.formatters.devToolsColorized.
-    - dlog i sets output to colorised by default.
     - Can put dlog.js in src or wherever now, just configure path in .dlogrc "localDlogPath"
     - d.r() tabularised.
     - $ dlog +, reports files changed.
