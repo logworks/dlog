@@ -1,7 +1,7 @@
 {
-  "name": "1-node-simplest",
+  "name": "scratch-local-example",
   "version": "1.0.0",
-  "description": "",
+  "description": "simple app using dlog for manual testing, pre-automated. mirrors examples/1-node-simplest",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,7 +11,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@genisense/dlog": "^0.3.43"
+    "@genisense/dlog": "^0.1.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ansi-styles": "^4.2.1"
+  }
 }

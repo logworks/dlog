@@ -1,3 +1,5 @@
+// const dlog = require('../../dist/dlog');
+const dlog = require('../../src/app');
 
 const customLogger = (...args) => {
   const logLineArr = dlog.formatters.colorizedSummary(args);
@@ -22,6 +24,7 @@ const config = {
   file: false,
   argCheck: false,
   typeCheck: false
+
 };
 
 const logger = dlog.createLogger(config);
@@ -34,3 +37,9 @@ console.log('dlog config', logger.config)
 if (config.globalLogger) {
   global[config.globalLogger] = logger;
 }
+
+process.on('exit', () => {
+  logger.r();
+});
+
+module.exports = logger;

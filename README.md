@@ -33,7 +33,7 @@ Timing metrics are indicative of time between log calls.
 Logging focused on development time.
 Aim :- 100% unobtrusive, zero coding, exploratory logging/debugging.
 
-Pre v1.0.0: [v 0.3.42](#v0.3.42) early POC so API is frequently changing (re-run \$ dlog i when updating)
+Pre v1.0.0: [v 0.4.0](#v0.4.0) early POC so API is frequently changing (re-run \$ dlog i when updating)
     $ npm i -g @genisense/dlog
     $ dlog i # initialise
 
@@ -218,6 +218,12 @@ Reusable code walk through execution scenario's to rapidly ramp up new developer
 
 
 ## release notes
+
+### v0.4.0
+    - workaround for webpack baking color detection for terminal.
+    - all console output moved to outputLogger.
+    - outputLogger required, removed default console.log.
+    - includeDetail config option. gives stack breadcrumbs, stack, full param data.
 
 ### v0.3.43
     - colorised terminal output.

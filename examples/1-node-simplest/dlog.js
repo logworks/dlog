@@ -1,5 +1,5 @@
-// const dlog = require('@genisense/dlog');
-const dlog = require('../../src/app');
+const dlog = require('@genisense/dlog');
+//const dlog = require('node_modules/@genisense/dlog/src/app');
 
 const customLogger = (...args) => {
   dlog.formatters.colorizedSummary(args);
