@@ -16,6 +16,7 @@ const colors = {
   pink: '#D96DB7', //color
   brown: '#94542F', //chrome devtools color
   orange: '#C79F42', //color
+  yellow: '#C79F42', // ansi color has no orange.
   grey: '#9194A1', //color
   greyDark: '#575868' //color,
 };

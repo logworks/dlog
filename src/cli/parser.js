@@ -110,9 +110,7 @@ const addLogging = function (content, config, filePath) {
     if (!params) return match;
     if (/\w/.test(functionName)) {
       let meta = '';
-      if (config.argCheck) {
-        meta = ', { arguments }';
-      }
+      meta = ', { arguments }';
 
       const functionIndentMatch = match.match(/^(\s+)\w/);
       const functionIndent =

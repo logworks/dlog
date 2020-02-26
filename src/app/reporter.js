@@ -1,6 +1,5 @@
 'use strict';
 const crypto = require('crypto');
-const ms = require('ms');
 const _ = require('lodash');
 const stack = {};
 
@@ -71,7 +70,7 @@ const setReport = function (fileAndLine, logObj, meta) {
   if (stack[hash]) {
     const hitCount = stack[hash].hitCount + 1;
     stack[hash].hitCount = hitCount;
-    const timingMs = ms(meta.timing);
+    const timingMs = meta.timing;
     stack[hash].timingMax =
       timingMs > stack[hash].timingMax ? timingMs : stack[hash].timingMax;
     stack[hash].timingMin =
@@ -84,12 +83,12 @@ const setReport = function (fileAndLine, logObj, meta) {
     stack[hash] = {
       hitCount: 1,
       fileAndLine,
-      functionName
+      functionName,
     };
     if (meta && meta.timing) {
-      stack[hash].timingAverage = ms(meta.timing);
-      stack[hash].timingMax = ms(meta.timing);
-      stack[hash].timingMin = ms(meta.timing);
+      stack[hash].timingAverage = meta.timing;
+      stack[hash].timingMax = meta.timing;
+      stack[hash].timingMin = meta.timing;
     }
   }
 };

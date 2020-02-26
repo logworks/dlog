@@ -1,8 +1,8 @@
 
-      // webpack bakes supports-color - terminal color detection, so for now using source.
-      // const dlog = require('@genisense/dlog');
+// webpack bakes supports-color - terminal color detection, so for now using source.
+// const dlog = require('@genisense/dlog');
 
-      const dlog = require('./node_modules/@genisense/dlog/src/app');
+const dlog = require('./node_modules/@genisense/dlog/src/app');
 
 const customLogger = (...args) => {
   const logLineArr = dlog.formatters.colorizedSummary(args);

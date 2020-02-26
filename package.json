@@ -1,6 +1,6 @@
 {
   "name": "@genisense/dlog",
-  "version": "0.3.43",
+  "version": "0.4.0",
   "description": "Development time automated logging, debuging with dynamic type checking.",
   "main": "dist/dlog.js",
   "repository": "git@github.com:logworks/dlog.git",
@@ -42,14 +42,15 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "ansi-styles": "^4.2.1",
     "async": "^3.1.1",
-    "chalk": "^3.0.0",
     "deep-diff": "^1.0.2",
     "detect-indent": "^6.0.0",
     "error-stack-parser": "^2.0.6",
     "gift": "^0.10.2",
     "glob": "^7.1.6",
-    "ms": "^2.1.2"
+    "ms": "^2.1.2",
+    "supports-color": "^7.1.0"
   },
   "jest": {
     "verbose": false,
