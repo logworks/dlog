@@ -5,7 +5,7 @@
 */
 
 
-counter = 10000000
+counter = 10
 longDelay = 80;
 shortDelay = 10;
 

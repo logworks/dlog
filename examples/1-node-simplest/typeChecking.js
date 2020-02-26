@@ -1,7 +1,7 @@
-const autodlog = require('./dlog.js');
+const dlog = require ('./dlog.js');
 const typCheckingExample = () => {
   const wantsAStringFn = function(str) {
-    autodlog.log({ wantsAStringFn: { str: str } }, { arguments });
+    dlog.log( { 'wantsAStringFn' : {str : str} }, { arguments } )
 
     return str;
   };

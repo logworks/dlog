@@ -1,5 +1,5 @@
+const dlog = require('./dlog.js');
 // initialise logging early in app bootup
-const dlog = require('./dlog');
 const basic = require('./basic.js');
 const argChecking = require('./argChecking');
 const timing = require('./timing');
@@ -8,12 +8,11 @@ const typeChecking = require('./typeChecking');
 const indentDetect = require('./indentDetect');
 
 const vanilla = function (p1) {
-  dlog.log({ vanilla: { p1 } });
+  dlog.log({ 'vanilla': { p1: p1 } }, { arguments })
   return p1;
 };
 
 const mint = function () {
-  dlog.log({ mint: {} });
   return;
 };
 
@@ -26,8 +25,8 @@ const mint = function () {
 //indentDetect();
 // example, updating config on the fly via global.
 //timing();
-timingLongShort();
-//argChecking();
+//timingLongShort();
+argChecking();
 //typeChecking();
 
 //d.config.file = true;

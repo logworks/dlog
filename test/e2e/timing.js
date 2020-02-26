@@ -1,7 +1,7 @@
-const autodlog = require('./dlog.js');
+const dlog = require ('./dlog.js');
 const STEP = 1
 const tick = delay => {
-  autodlog.log({ tick: { delay } }, { arguments });
+  dlog.log( { 'tick' : {delay} }, { arguments } )
 
   setTimeout(() => {
     tock(delay - STEP);
@@ -9,7 +9,7 @@ const tick = delay => {
 };
 
 const tock = delay => {
-  autodlog.log({ tock: { delay } }, { arguments });
+  dlog.log( { 'tock' : {delay} }, { arguments } )
 
   if (delay > 1) {
     setTimeout(() => {

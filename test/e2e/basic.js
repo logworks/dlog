@@ -1,12 +1,5 @@
-const dlog = require('./dlog');
-const basic = function () {
-  dlog.log({
-    basic: {
-      msg:
-        'dlog used for automated function logging (reoved and added with dlog cli'
-    }
-  });
 
+const basic = function () {
   d.log({
     globalLogging: {
       msg:
