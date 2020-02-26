@@ -12,4 +12,5 @@ __mocks__
 .env*
 test/x*
 test/scratch*
+test/e2e
 README-DRAFT.md 

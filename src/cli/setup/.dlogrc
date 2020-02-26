@@ -3,6 +3,5 @@
   "excludes": "dlog.js|node_modules|\\.test",
   "module": "commonjs/es2015  {set by user choice during $dog i}",
   "localDlogPath" : "./dlog.js",
-  "nameAs": "dlog",
-  "argCheck": false
+  "nameAs": "dlog"
 }
