@@ -61,24 +61,23 @@ Run application (node or browser), at console:
 
 You can filter without reloading, for example if running a browser app, at the console:
 
-    # with globalLogger, can use it to change config from console
-    d.config.includeDetails = ['baz']
-
-    # To only log functions named foo or bar
+    # with globalLogger set in dlog.js, can change config from console
+   
+    # only log functions named foo or bar
     d.config.include = ['foo','bar']
 
-    #see more details for particular functions:
+    # see more details for particular functions:
     # d.config.includeDetails = ['foo']
 
     # Log every function (that was added according to globPattern config)
     d.config.include = ['*']
 
-    #exclude specific functioins - useful to quiet chatty ones:
+    # exclude specific functioins - useful to quiet chatty ones:
     d.config.exclude = ['onMouseMove']
 
 ## cli configuration
 
-    .dlogrc
+.dlogrc:
 
     "globPattern": "./src/**/*.?(js|jsx|ts|tsx)", - glob for files to include.
     "excludes": "node_modules|\\.test",  - regExp applied to exclude from files found by globbing.
@@ -92,8 +91,8 @@ You can filter without reloading, for example if running a browser app, at the c
 
 - requires source is under git control. (dlog can potential change a lot of files, so this is a safety feature).
 - warns if git is not clean (i.e. un-staged files)
-- dlog blats your codebase with logging. Just like console.logs it should not be pushed. To that end we recommend using at least a pre-commit hook (easily done with husky). > dlog ? will halt the commit if an logs are in source folder.
-- must run dlog at command line in dir that has package.json and be git initialised.
+- dlog blats your codebase with logging. Just like console.logs it should not be pushed. To that end we recommend using at least a pre-commit hook (easily done with husky). $ dlog ? will halt the commit if any automatic dlogs are in source folder.
+- Must run $ dlog at command line in dir that has package.json and be git initialised.
 
 
 ## features:
@@ -101,11 +100,14 @@ You can filter without reloading, for example if running a browser app, at the c
 ### includeDetails
 
     d.config.includeDetails = ['foo']
-    // or to persist change in dlog.js
+    // or persist changes to config in dlog.js
+
 Details of functions named here output additional info:
  - stack breadcrumb summary. >> foo > bar > baz
  - stack : files and lines of parent calls.
  - Full output of parameter data.
+
+This is probably the feature you will use the most.
 
 ### .log API
 
@@ -116,9 +118,9 @@ console.log is a very flexible api. And is often used thus:
 
     console.log ( "some indentifier : ", "p1: ", p1, " p2: ", p2 );
 
-dlog.log enforces:
+d.log enforces:
 
-    dlog.log ( { someIdentifier : {p1, p2 } }, {/* optional meta-data */ } )
+    d.log ( { someIdentifier : {p1, p2 } } )
 
 | .log( {} ) rule                     |                     psudocode |
 | ----------------------------------- | ----------------------------: |
@@ -128,7 +130,7 @@ dlog.log enforces:
 | Containing the paramaters           | ( { identifer : {p1, p2 } } ) |
 
 With ES6 destructuring you can do this already with console.log, but dlog enforces the structure.
-Logs should be structured code, not any arbitrary mix of types. By using such a standard the quality and usefulness of all your logging can be much improved.
+Logs should be structured code, not any arbitrary mix of strings and types. By using dlog to enforce such a standard the quality and usefulness of all your logging can be much improved.
 
 globalLogger: set the name of the logger (default here d), require once early in
 application boot sequence e.g:
@@ -146,7 +148,7 @@ Globals are usually an anti-pattern, but dlog is intended to be fast in, fast ou
 
 ### argCheck option
 
-arguments passed are compared against named paramaters.
+Arguments passed are compared against named paramaters. Useful to alert when they mismatch.
 
 ### typeCheck
 
@@ -169,9 +171,6 @@ With typeCheck=true, logging keeps track of function call paramater types and al
     # logs:
     type anomoly detected:
     bar.a.b.c.anarray was [Numbers] got [Numbers, Regexs]
-
-
-
 
 ## examples
 
