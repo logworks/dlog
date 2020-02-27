@@ -9,12 +9,12 @@ Aim :- 100% Automatic unobtrusive, zero coding, exploratory logging/debugging to
 
 ## terminal output:
 <p align="left">
-<img src="https://user-images.githubusercontent.com/60403446/75177991-170c8f80-572f-11ea-973c-ec00ed34e277.png">
+<img src="https://user-images.githubusercontent.com/60403446/75459955-bff9fb00-5978-11ea-8da1-4ab157e7c859.png">
 </p>
 
 ## web dev-tools output:
 <p align="left">
-<img src="https://user-images.githubusercontent.com/60403446/75178083-4b804b80-572f-11ea-8e19-2c8f11a42385.png">
+<img src="https://user-images.githubusercontent.com/60403446/75460199-123b1c00-5979-11ea-95e8-49ece57ffe92.png">
 </p>
 
 
