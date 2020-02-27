@@ -30,7 +30,7 @@ The above shows standard output from dlog's auto-logging named function summary:
   - slowest.
 
 
-Pre v1.0.0: [v 0.4.0](./RELEASES.md) early POC so API is frequently changing (re-run \$ dlog i when updating)
+Pre v1.0.0: [v 0.4.2](./RELEASES.md) early POC so API is frequently changing (re-run $ dlog i when updating)
 
 ## install
 
