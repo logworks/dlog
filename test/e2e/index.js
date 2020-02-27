@@ -1,4 +1,4 @@
-const dlog = require ('./dlog.js');
+const dlog = require('./dlog.js');
 // initialise logging early in app bootup
 const basic = require('./basic.js');
 const argChecking = require('./argChecking');
@@ -8,7 +8,7 @@ const typeChecking = require('./typeChecking');
 const indentDetect = require('./indentDetect');
 
 const vanilla = function (p1) {
-  dlog.log( { 'vanilla' : {p1 : p1} }, { arguments } )
+  dlog.log({ 'vanilla': { p1: p1 } }, { arguments })
   return p1;
 };
 
