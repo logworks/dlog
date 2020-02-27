@@ -1,12 +1,15 @@
-const dlog = require ('./dlog.js');
+const dlog = require('./dlog.js');
 function indentDetect() {
   const outerFn = p => {
-    dlog.log( { 'outerFn' : {p} }, { arguments } )
+    dlog.log({ 'outerFn': { p } }, { arguments })
 
     const innerFn = p => {
-      dlog.log( { 'innerFn' : {p} }, { arguments } )
+      dlog.log({ 'innerFn': { p } }, { arguments })
+      const sanctum = p => {
+        dlog.log({ 'sanctum': { p } }, { arguments })
+      }
 
-      return p;
+      sanctum(p);
     };
     const res = innerFn(p);
     return res;

@@ -25,7 +25,6 @@ const dlog = {
         typeCheck,
         outputLogger,
         argCheck,
-        timing,
         file,
         stack
       } = this.config;
@@ -33,17 +32,6 @@ const dlog = {
       const { isObject } = utils;
 
       const metaOut = {};
-
-
-      if (timing) {
-        const current = new Date();
-        if (mostRecentTimeStamp) {
-          metaOut.timing = Math.abs(current - mostRecentTimeStamp);
-        } else {
-          metaOut.timing = 1;
-        }
-        mostRecentTimeStamp = current;
-      }
 
       const logRoot = Object.keys(logObj);
 
@@ -71,7 +59,18 @@ const dlog = {
         const forcedErr = new Error();
         const errStack = ErrorStackParser.parse(forcedErr);
 
-        const fileAndLine = errStack[1].fileName + ':' + errStack[1].lineNumber;
+        const current = new Date();
+
+
+        const fileAndLine = errStack[1].fileName + '_' + errStack[1].lineNumber;
+
+        if (mostRecentTimeStamp) {
+          metaOut.timing = Math.abs(current - mostRecentTimeStamp);
+        } else {
+          metaOut.timing = 1;
+        }
+        mostRecentTimeStamp = current;
+
 
         if (file) {
           metaOut.file = fileAndLine;
@@ -120,7 +119,6 @@ const dlog = {
 };
 
 module.exports = {
-  //logger: dlog.logger,
   createLogger: dlog.createLogger,
   colors: colors,
   formatters: formatters

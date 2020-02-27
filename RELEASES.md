@@ -1,5 +1,11 @@
 ## Release notes
 
+### v0.4.2
+  - timing non optional
+  - extract stack from details
+  - timing associated with parent in stack
+  - timing displayed on stack rather than function arrived at from last fuction call.
+
 ### v0.4.0
     - workaround for webpack baking color detection for terminal.
     - all console output now done from outputLogger.

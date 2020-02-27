@@ -1,17 +1,21 @@
 
-// webpack bakes supports-color - terminal color detection, so for now using source.
-// const dlog = require('@genisense/dlog');
+// webpack bakes supports-color - terminal color detection, so for now using source:
+// const dlog = require('./node_modules/@genisense/dlog/src/app');
 
-const dlog = require('./node_modules/@genisense/dlog/src/app');
+// tap into current source code:
+const dlog = require('../../src/app')
 
 const customLogger = (...args) => {
+
+  const stackBreadCrumbs = dlog.formatters.stackBreadCrumbs(args)
   const logLineArr = dlog.formatters.colorizedSummary(args);
-  console.log(...logLineArr)
+  console.log(...logLineArr, stackBreadCrumbs)
 
   const details = dlog.formatters.details(args)
   if (details) {
-    console.log(details[1]) //stack breadcrumbs
-    console.dir(details[2]) // app stack
+    const applicationStack = dlog.formatters.applicationStack(args)
+    console.log('includeDetails : stack, data')
+    console.log(applicationStack) // app stack
     console.dir(details[0]) // full param data
   }
 };
@@ -19,10 +23,9 @@ const customLogger = (...args) => {
 const config = {
   include: ['*'],
   exclude: [],
-  includeDetails: [],
+  includeDetails: ['sanctum'],
   outputLogger: customLogger,
   globalLogger: 'd',
-  timing: true,
   stack: true,
   file: false,
   argCheck: false,

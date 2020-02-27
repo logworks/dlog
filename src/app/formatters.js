@@ -13,34 +13,52 @@ const setConfig = _config => {
 }
 /*
   provides detail of params data.
-  todo: check stack=true
 */
 const details = args => {
-
   const fName = Object.keys(args[0])[0];
   if (config.includeDetails.includes(fName)) {
 
-    const stack = args[1].stack
-    let stackBreadcrumbs = 'details: '
-    const stackDetails = []
-    //for (item of args[1].stack) {
-    for (let i = stack.length - 1; i > 1; i--) {
-      if (!stack[i].fileName.match('internal')) {
-        stackDetails.push(stack[i].fileName + ':' + stack[i].lineNumber)
-        if (stack[i].functionName.match("Object.<anonymous>")) {
-          stackBreadcrumbs += ' >> '
-        } else {
-          stackBreadcrumbs += stack[i].functionName + ' > '
-        }
-      }
-    }
-    stackBreadcrumbs += fName
-    //console.log(args[1].stack)
     const params = args[0][fName];
-    return [params, stackBreadcrumbs, stackDetails]
+    return [params]
   } else {
     return null
   }
+}
+
+/*
+  @ return Array of application stack calls only. 
+*/
+const applicationStack = args => {
+
+  const stack = args[1].stack
+  const stackDetails = []
+
+  for (let i = stack.length - 1; i >= 1; i--) {
+    if (!stack[i].fileName.match('internal')) {
+      stackDetails.push(stack[i].functionName + ' ' + stack[i].fileName + ':' + stack[i].lineNumber)
+    }
+  }
+  return stackDetails
+}
+
+const stackBreadCrumbs = args => {
+  const stack = args[1].stack
+  const fName = Object.keys(args[0])[0];
+  let stackBreadcrumbs = ''
+  const stackDetails = []
+
+  for (let i = stack.length - 1; i > 1; i--) {
+    if (!stack[i].fileName.match('internal')) {
+      stackDetails.push(stack[i].fileName + ':' + stack[i].lineNumber)
+      if (stack[i].functionName.match("Object.<anonymous>")) {
+        stackBreadcrumbs += '>> '
+      } else {
+        stackBreadcrumbs += stack[i].functionName + ' > '
+      }
+    }
+  }
+  stackBreadcrumbs += fName
+  return stackBreadcrumbs
 }
 
 /*
@@ -65,15 +83,27 @@ const colorizedSummary = args => {
       ? paramsSpaced.slice(0, 30) + '...'
       : paramsSpaced;
 
-  const paramTypes = paramKeys.map(
-    key => key + ' : ' + getType(args[0][fName][key])
-  );
+  //browser coloring:
   let styles = [
-    // `color:${colors.???}`, ms timing pre-pends below
+    // `color:${colors.???}`, ms timing pre-pends -below
     'color: inherit',
     `color:${colors.blue}`,
-    'color: inherit'
+    // for paramTypes push colors - below.
+    // 'color: inherit' //add final inherit to reset just before render -below
   ];
+
+  const paramTypes = paramKeys.map(
+
+    key => {
+      if (useTty) {
+        return ` ${style.blue.open}${key}${style.blue.close} : ${style.cyan.open}${getType(args[0][fName][key])}${style.cyan.close}`
+        //      ' ' + key + ' : ' + getType(args[0][fName][key])
+      } else {
+        styles = [...styles, `color:${colors.blue}`, `color:${colors.teal}`]
+        return ` %c${key} : %c${getType(args[0][fName][key])}`
+      }
+    });
+
 
   let timing = args[1].timing;
   let color = 'white'
@@ -86,13 +116,16 @@ const colorizedSummary = args => {
     styles = [`color:${colors[color]}`, ...styles]; //browser coloring
   }
 
+  const padTiming = 6 - ms(timing).length
+
   if (useTty) {
     const ttyFormat =
-      [`\n[dlog][${style[color].open}${ms(timing)}${style[color].close}] ${style.blue.open}${fName} (${paramTypes})${style.blue.close} (${paramsTruncated}) `]
+      [`[dlog]${style[color].open} ${ms(timing)}${style[color].close}${' '.repeat(padTiming)} ${style.blue.open}${fName} (${paramTypes})${style.blue.close} (${paramsTruncated}) `]
     return ttyFormat
   } else {
+    styles.push('color: inherit')
     const webFormat = [
-      `[dlog][%c${ms(timing)}%c] %c${fName} (${paramTypes})%c (${paramsTruncated}) `,
+      `[dlog] %c${ms(timing)}%c %c${fName} (${paramTypes})%c (${paramsTruncated}) `,
       ...styles]
     return webFormat
   }
@@ -108,6 +141,7 @@ module.exports = {
   },
   colorizedSummary,
   details,
+  applicationStack,
+  stackBreadCrumbs,
   setConfig
-
 };

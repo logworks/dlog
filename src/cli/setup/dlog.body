@@ -17,7 +17,6 @@ const config = {
   includeDetails: [],
   outputLogger: customLogger,
   globalLogger: 'd',
-  timing: true,
   stack: true,
   file: false,
   argCheck: false,

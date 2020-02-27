@@ -1,3 +1,20 @@
+        // timing stack TODO
+        // - outside fn (static): const timingStack = {};
+        // const parentCall = errStack[2].fileName + '_' + errStack[2].lineNumber;
+        // const grandParentCall = errStack[3].fileName + '_' + errStack[3].lineNumber;
+
+        // //assign timing to parent:
+        // timingStack[parentCall] = Math.abs(current - timingStack[grandParentCall]);
+        // // put reference to current call on timingStack:
+        // timingStack[fileAndLine] = null
+
+        //  console.log(errStack) //timingStack)
+        // first timing / something wrong.
+
+
+        // old way of timing: keep for now for comparison, reconciliation.
+
+
 ## roadmap
 
 - cli: dlog +

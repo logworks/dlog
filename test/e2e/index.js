@@ -21,12 +21,10 @@ const mint = function () {
 // vanilla();
 // mint('A', 'B');
 // basic();
-
-//indentDetect();
-// example, updating config on the fly via global.
-//timing();
+timing();
+indentDetect();
 //timingLongShort();
-argChecking();
+// argChecking();
 //typeChecking();
 
 //d.config.file = true;
