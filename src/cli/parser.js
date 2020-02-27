@@ -54,7 +54,8 @@ function getFunctionName(lineCode) {
 }
 
 const paramaterise = function (signature) {
-  const paramMatch = signature.match(/\((.*?)\)/);
+  //replace ... to handle spread ...args
+  const paramMatch = signature.replace('...', '').match(/\((.*?)\)/);
 
   if (paramMatch) {
     let params = paramMatch[1];
@@ -126,7 +127,7 @@ const addLogging = function (content, config, filePath) {
       return match;
     }
   };
-  const functionSignatureX = /(.*function.*\{|.*=>.*\{)/g;
+  const functionSignatureX = /(.*function.*\)\s+\{|.*=>\s+\{)/g // /(.*function.*\{|.*=>.*\{)/g;
   return content.replace(functionSignatureX, buildLogLine);
 };
 

@@ -1,10 +1,10 @@
 ## Release notes
 
 ### v0.4.2
-  - timing non optional
-  - extract stack from details
-  - timing associated with parent in stack
-  - timing displayed on stack rather than function arrived at from last fuction call.
+  - stack breadcrumbs moved from details. default dlog.js shows on summary line.
+  - colorize param types.
+  - dlog + edge case: ...args
+  - dlog + ensure log added immediatly after function body open {
 
 ### v0.4.0
     - workaround for webpack baking color detection for terminal.
