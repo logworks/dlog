@@ -184,6 +184,7 @@ async function parseFiles(files, config, add, clear) {
           if (contentWithLogging !== content) {
             content = prependRequire(contentWithLogging, filePath, config);
             addedFileCount += 1;
+            process.stdout.write('\n' + filePath)
           }
         } else if (clear) {
           content = clearLogging(res.data, config);

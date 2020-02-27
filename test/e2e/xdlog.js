@@ -1,9 +1,10 @@
 
-// webpack bakes supports-color - terminal color detection, so for now using source.
-// const dlog = require('@genisense/dlog');
+// webpack bakes supports-color - terminal color detection, so for now using source:
+// const dlog = require('./node_modules/@genisense/dlog/src/app');
 
-const dlog = require('./node_modules/@genisense/dlog/src/app');
-const util = require('util') //util.inspect* example
+// tap into current source code:
+const dlog = require('../../src/app')
+// var util = require('util') //util.inspect* example
 
 /*
   When d.log() called, outputs to this function
@@ -24,10 +25,10 @@ const customLogger = (...args) => {
   if (details) {
     const applicationStack = dlog.formatters.applicationStack(args)
     console.log('includeDetails : stack, data')
-    // console.dir(applicationStack)
-    console.log(util.inspect(applicationStack, false, null, true)) //util.inspect* example
-    // console.dir(details[0])
-    console.log(util.inspect(details[0], false, null, true)) //util.inspect* example
+    console.dir(applicationStack)
+    // console.log(util.inspect(applicationStack, false, null, true)) //util.inspect* example
+    console.dir(details[0])
+    // console.log(util.inspect(details[0], false, null, true)) //util.inspect* example
 
   }
 };

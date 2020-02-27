@@ -249,3 +249,18 @@ argCheck:
 parser.
 
 app/index.
+
+
+edge cases:
+from minimatch.js:
+
+function filter (pattern, options) {
+  dlog.log( { 'filter' : {pattern : pattern, options : options} }, { arguments } )
+
+  options = options || {}
+  return function (p, i, list) {
+    dlog.log( { 'returnfunction' : {p : p, i : i, list : list} }, { arguments } )
+
+    return minimatch(p, pattern, options)
+  }
+}

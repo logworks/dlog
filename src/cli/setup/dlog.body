@@ -1,4 +1,14 @@
+// var util = require('util') //util.inspect* example
 
+/*
+  When d.log() called, outputs to this function
+  see config.outputLogger below.
+  customise how you want, pass raw/formatted data on.
+  
+  util.inspect*
+  useful for full depth object inspection.
+  commented out - client dependency if you want to use it.
+*/
 const customLogger = (...args) => {
 
   const stackBreadCrumbs = dlog.formatters.stackBreadCrumbs(args)
@@ -9,8 +19,11 @@ const customLogger = (...args) => {
   if (details) {
     const applicationStack = dlog.formatters.applicationStack(args)
     console.log('includeDetails : stack, data')
-    console.log(applicationStack) // app stack
-    console.dir(details[0]) // full param data
+    console.dir(applicationStack)
+    // console.log(util.inspect(applicationStack, false, null, true)) //util.inspect* example
+    console.dir(details[0])
+    // console.log(util.inspect(details[0], false, null, true)) //util.inspect* example
+
   }
 };
 
