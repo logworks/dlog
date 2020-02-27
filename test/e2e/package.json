@@ -1,0 +1,21 @@
+{
+  "name": "scratch-local-example",
+  "version": "1.0.0",
+  "description": "simple app using dlog for testing, pre-auting npm pack testing. dlog/npm pack  dlog/test/e2e npm run update",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dlog": "../../src/cli/dlog.js",
+    "update": "npm i ../../genisense-dlog-0.4.0.tgz"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@genisense/dlog": "file:../../genisense-dlog-0.4.0.tgz",
+    "util": "^0.12.2"
+  },
+  "dependencies": {
+    "ansi-styles": "^4.2.1"
+  }
+}

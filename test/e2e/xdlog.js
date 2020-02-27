@@ -1,3 +1,9 @@
+
+// webpack bakes supports-color - terminal color detection, so for now using source:
+// const dlog = require('./node_modules/@genisense/dlog/src/app');
+
+// tap into current source code:
+const dlog = require('../../src/app')
 // var util = require('util') //util.inspect* example
 
 /*
@@ -30,7 +36,7 @@ const customLogger = (...args) => {
 const config = {
   include: ['*'],
   exclude: [],
-  includeDetails: [],
+  includeDetails: ['sanctum'],
   outputLogger: customLogger,
   globalLogger: 'd',
   stack: true,
@@ -49,3 +55,9 @@ console.log('dlog config', logger.config)
 if (config.globalLogger) {
   global[config.globalLogger] = logger;
 }
+
+process.on('exit', () => {
+  logger.r()
+})
+
+module.exports = logger;

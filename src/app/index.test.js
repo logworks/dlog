@@ -33,13 +33,19 @@ describe('basic logging without advanced configuration options', () => {
   });
 
   it('allows logs matching include', () => {
+    logger.outputLogger = args => {
+      expect(allowedLog).toEqual({ ok: {} });
+    }
     allowedLog = logger.log({ ok: {} });
-    expect(allowedLog).toEqual({ ok: {} });
   });
 
   it('excludes logs matching exclude', () => {
+    logger.outputLogger = args => {
+      //should not be called. -TODO spy
+      expect(false).toBe(true)
+    }
     excludelogger = logger.log({ x: {} });
-    expect(excludelogger).toBe(undefined);
+    expect(excludelogger).toBe(null);
   });
 });
 

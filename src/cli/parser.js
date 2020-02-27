@@ -54,7 +54,8 @@ function getFunctionName(lineCode) {
 }
 
 const paramaterise = function (signature) {
-  const paramMatch = signature.match(/\((.*?)\)/);
+  //replace ... to handle spread ...args
+  const paramMatch = signature.replace('...', '').match(/\((.*?)\)/);
 
   if (paramMatch) {
     let params = paramMatch[1];
@@ -110,9 +111,7 @@ const addLogging = function (content, config, filePath) {
     if (!params) return match;
     if (/\w/.test(functionName)) {
       let meta = '';
-      if (config.argCheck) {
-        meta = ', { arguments }';
-      }
+      meta = ', { arguments }';
 
       const functionIndentMatch = match.match(/^(\s+)\w/);
       const functionIndent =
@@ -128,7 +127,7 @@ const addLogging = function (content, config, filePath) {
       return match;
     }
   };
-  const functionSignatureX = /(.*function.*\{|.*=>.*\{)/g;
+  const functionSignatureX = /(.*function.*\)\s+\{|.*=>\s+\{)/g // /(.*function.*\{|.*=>.*\{)/g;
   return content.replace(functionSignatureX, buildLogLine);
 };
 
@@ -185,6 +184,7 @@ async function parseFiles(files, config, add, clear) {
           if (contentWithLogging !== content) {
             content = prependRequire(contentWithLogging, filePath, config);
             addedFileCount += 1;
+            process.stdout.write('\n' + filePath)
           }
         } else if (clear) {
           content = clearLogging(res.data, config);

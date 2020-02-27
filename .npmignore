@@ -6,11 +6,11 @@ test
 .prettierrc
 .eslint.json
 webpack.config.babel.js
-/src/app
 /scripts
 /dlogger.js
 __mocks__
 .env*
 test/x*
 test/scratch*
+test/e2e
 README-DRAFT.md 

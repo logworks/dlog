@@ -12,21 +12,20 @@ const vanilla = function (p1) {
   return p1;
 };
 
-const mint = function () {  return;
+const mint = function () {
+  return;
 };
 
-// vanilla('A');
+//vanilla('A');
 // vanilla('A', 'B');
 // vanilla();
 // mint('A', 'B');
 // basic();
-
+timing();
 indentDetect();
-// example, updating config on the fly via global.
-// timing();
-argChecking();
+//timingLongShort();
+// argChecking();
 //typeChecking();
-timingLongShort()
 
 //d.config.file = true;
 // basic();

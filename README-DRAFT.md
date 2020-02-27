@@ -1,3 +1,20 @@
+        // timing stack TODO
+        // - outside fn (static): const timingStack = {};
+        // const parentCall = errStack[2].fileName + '_' + errStack[2].lineNumber;
+        // const grandParentCall = errStack[3].fileName + '_' + errStack[3].lineNumber;
+
+        // //assign timing to parent:
+        // timingStack[parentCall] = Math.abs(current - timingStack[grandParentCall]);
+        // // put reference to current call on timingStack:
+        // timingStack[fileAndLine] = null
+
+        //  console.log(errStack) //timingStack)
+        // first timing / something wrong.
+
+
+        // old way of timing: keep for now for comparison, reconciliation.
+
+
 ## roadmap
 
 - cli: dlog +
@@ -232,3 +249,18 @@ argCheck:
 parser.
 
 app/index.
+
+
+edge cases:
+from minimatch.js:
+
+function filter (pattern, options) {
+  dlog.log( { 'filter' : {pattern : pattern, options : options} }, { arguments } )
+
+  options = options || {}
+  return function (p, i, list) {
+    dlog.log( { 'returnfunction' : {p : p, i : i, list : list} }, { arguments } )
+
+    return minimatch(p, pattern, options)
+  }
+}

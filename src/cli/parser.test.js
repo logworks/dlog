@@ -22,7 +22,7 @@ const namedFunctions = [
   'functionName({arg1, arg2}) { // inline comment after function',
   'exports.functionName = function(arg1, arg2) {',
   'export const functionName = (communityIds: Array<string>): Promise<?DBCommunitySettings> => {',
-  // unparsable (without proper squash & parse approach - beyond regx)
+  // unparsable (without proper squash & parse lexer approach - beyond regx)
   // prettier-ignore
   //'export const isAuthedResolver = (resolver: Function) => async (obj: any, args: any, context: GraphQLContext, info: any) => {'
   // to simplified: fn => fn => same line:
@@ -131,6 +131,12 @@ describe('paramaterise(string) extract named paramaters.', () => {
     const output = parser.paramaterise(input);
     expect(output).toBe('{p1 : p1, p2 : p2}');
   });
+
+  it('extracts spread ...args', () => {
+    const input = 'function fname (...args) {';
+    const output = parser.paramaterise(input);
+    expect(output).toBe('{args : args}');
+  });
 });
 
 describe('execute ', () => {
@@ -177,5 +183,15 @@ describe('addLogging (content, config, filePath)', () => {
     const filePath = 'src/testing/defaultTester.js'
     const res = parser.addLogging(content, config, filePath)
     expect(res).toEqual(`export default () => { return }`)
+  })
+
+  //edge case dlog + on async library
+  it('inserts log at the very first opening curly bracket of function body', () => {
+    const content = 'function functionName(obj) { return obj && obj.__esModule ? obj : { default: obj }; }'
+    const res = parser.addLogging(content, { "nameAs": "autodlog" }, 'any/path/file.js')
+    expect(res).toEqual(
+      'function functionName(obj) {' + '\n' +
+      "  autodlog.log( { 'functionName' : {obj : obj} }, { arguments } )" + '\n' +
+      ' return obj && obj.__esModule ? obj : { default: obj }; }')
   })
 })

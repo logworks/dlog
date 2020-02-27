@@ -39,7 +39,10 @@ async function installFactoryFile(moduleSpecification) {
     let head, foot;
 
     if (moduleSpecification === 'commonjs') {
-      head = `const dlog = require('@genisense/dlog');\n`
+      head = `
+// webpack bakes supports-color - terminal color detection, so for now using source.
+// const dlog = require('@genisense/dlog');\n
+const dlog = require('./node_modules/@genisense/dlog/src/app');\n`
       foot =
         `
 process.on('exit', () => {

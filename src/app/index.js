@@ -3,7 +3,6 @@ const callDiff = require('./callDiff.js');
 const utils = require('./utils');
 const argChecker = require('./argChecker');
 const ErrorStackParser = require('error-stack-parser');
-const ms = require('ms');
 const reporter = require('./reporter');
 const colors = require('./color').colors;
 const formatters = require('./formatters');
@@ -14,6 +13,11 @@ const dlog = {
   logger: {
     config: {},
 
+    /*
+    @param logObj
+    @param metaObj
+    @return via outputLogger(logObj, metaOut)
+    */
     log: function (logObj, meta) {
       const {
         include,
@@ -21,28 +25,14 @@ const dlog = {
         typeCheck,
         outputLogger,
         argCheck,
-        timing,
-        file
+        file,
+        stack
       } = this.config;
 
-      const { isObject, hasKeys } = utils;
+      const { isObject } = utils;
 
       const metaOut = {};
 
-
-      if (timing) {
-        const current = new Date();
-        if (mostRecentTimeStamp) {
-          metaOut.timing = ms(Math.abs(current - mostRecentTimeStamp));
-        } else {
-          metaOut.timing = '0ms';
-        }
-        mostRecentTimeStamp = current;
-      }
-      let defaultOutputLogger;
-      if (outputLogger === undefined || typeof outputLogger !== 'function') {
-        defaultOutputLogger = console.log;
-      }
       const logRoot = Object.keys(logObj);
 
       if (logRoot.length != 1 || !isObject(logObj[logRoot])) {
@@ -69,22 +59,31 @@ const dlog = {
         const forcedErr = new Error();
         const errStack = ErrorStackParser.parse(forcedErr);
 
-        const fileAndLine = errStack[1].fileName + ':' + errStack[1].lineNumber;
+        const current = new Date();
+
+
+        const fileAndLine = errStack[1].fileName + '_' + errStack[1].lineNumber;
+
+        if (mostRecentTimeStamp) {
+          metaOut.timing = Math.abs(current - mostRecentTimeStamp);
+        } else {
+          metaOut.timing = 1;
+        }
+        mostRecentTimeStamp = current;
+
 
         if (file) {
           metaOut.file = fileAndLine;
         }
-        if (hasKeys(metaOut)) {
-          outputLogger
-            ? outputLogger(logObj, metaOut)
-            : defaultOutputLogger(logObj, metaOut);
-        } else {
-          outputLogger ? outputLogger(logObj) : defaultOutputLogger(logObj);
+        if (stack) {
+          //todo - parse it down to parent function names within app.
+          metaOut.stack = errStack
         }
+
         if (argCheck && meta && meta.arguments) {
           const argCheckMsg = argChecker(logObj, meta.arguments);
           if (argCheckMsg) {
-            console.log(argCheckMsg);
+            metaOut.argCheck = argCheckMsg;
           }
         }
         if (typeCheck) {
@@ -96,13 +95,15 @@ const dlog = {
                 } received: ${diff.rhs}`;
 
               const typeAnomolyMsg = `[dlog][TypeCheck] ${diffLine}`;
-              console.log(typeAnomolyMsg);
+              metaOut.typeCheck = typeAnomolyMsg;
             }
           }
         }
         reporter.setReport(fileAndLine, logObj, metaOut);
-        return logObj;
+        outputLogger(logObj, metaOut)
       }
+      //config include & exclude - does nothing. returns null for testing.
+      return null
     },
     r: () => {
       return reporter.getReport();
@@ -112,12 +113,12 @@ const dlog = {
 
   createLogger: function (config) {
     dlog.logger.config = config;
+    formatters.setConfig(config)
     return dlog.logger;
   }
 };
 
 module.exports = {
-  //logger: dlog.logger,
   createLogger: dlog.createLogger,
   colors: colors,
   formatters: formatters

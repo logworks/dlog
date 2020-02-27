@@ -1,6 +1,5 @@
 
 const basic = function () {
-
   d.log({
     globalLogging: {
       msg:

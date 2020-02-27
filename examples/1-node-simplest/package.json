@@ -11,9 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@genisense/dlog": "^0.1.5"
+    "@genisense/dlog": "^0.4.0"
   },
-  "dependencies": {
-    "chalk": "^3.0.0"
-  }
+  "dependencies": {}
 }
