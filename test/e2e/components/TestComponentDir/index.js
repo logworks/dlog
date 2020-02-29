@@ -6,7 +6,7 @@ export default (p1, p2) => {
 };
 
 module.exports = function () {
-  dlog.log( { 'TestComponentDir' : {} }, { defaultExport : 'TestComponentDir', arguments } )
+  dlog.log( { 'function' : {} }, { arguments } )
 
   //commonjs example
 }

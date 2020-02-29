@@ -7,6 +7,19 @@ Goal is a v 1.0 release:
    - debugging.
    - code exploration.
    - code walk throughs.
+
+
+# V 0.6.0 target
+
+   - Work for monorepos in one pass.
+   - option to dlog into node_modules in one pass.
+   - module system detection as option (detect/es2015/commonjs)
+   - tag member fuctions with className.
+   - factor in multi-line function signatures, /* comments */, `backtick multi-line strings`
+   - Improved dlog + :
+     - log summary info, dir, file, function detail to .log-dlog/
+   - Improved filtering
+     - by param names.
   
 
 ### Rationale ( the unapollageticly opinionated bit -)

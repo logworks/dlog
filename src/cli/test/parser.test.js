@@ -1,6 +1,7 @@
 const parser = require('../parser');
 
 const namedFunctions = [
+  ' functionName (p1) {',  //class member function
   'function functionName(){',
   'function functionName (arg1, arg2) {',
   'functionName (arg1, arg2, arg3) {',
@@ -21,7 +22,7 @@ const namedFunctions = [
   'functionName({arg1, arg2}) {',
   'functionName({arg1, arg2}) { // inline comment after function',
   'exports.functionName = function(arg1, arg2) {',
-  'export const functionName = (communityIds: Array<string>): Promise<?DBCommunitySettings> => {',
+  'export const functionName = (communityIds: Array<string>): Promise<?DBCommunitySettings> => {'
   // unparsable (without proper squash & parse lexer approach - beyond regx)
   // prettier-ignore
   //'export const isAuthedResolver = (resolver: Function) => async (obj: any, args: any, context: GraphQLContext, info: any) => {'
@@ -44,7 +45,7 @@ const namedFunctions = [
 
 
 describe('getFunctionName extracts function name from valid function signatures.', () => {
-  it(`Gets function name from a line of code representing a function declaration'`, function () {
+  it.only(`Gets function name from a line of code representing a function declaration'`, function () {
     namedFunctions.forEach(namedFunction => {
       // console.log('namedFunction', namedFunction)
       const res = parser.getFunctionName(namedFunction);

@@ -1,3 +1,4 @@
+const dlog = require ('./dlog.js');
 // @flow
 import React from 'react';
 import compose from 'recompose/compose';
@@ -19,12 +20,16 @@ class AppViewWrapper extends React.Component<Props> {
     prevScrollOffset: number;
 
     constructor(props: Props) {
+    dlog.log( { 'constructor' : {} }, { arguments } )
+
         super(props);
         this.ref = null;
         this.prevScrollOffset = 0;
     }
 
     getSnapshotBeforeUpdate(prevProps) {
+    dlog.log( { 'getSnapshotBeforeUpdate' : {prevProps : prevProps} }, { arguments } )
+
         const { isModal: currModal } = this.props;
         const { isModal: prevModal } = prevProps;
 
@@ -48,6 +53,8 @@ class AppViewWrapper extends React.Component<Props> {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
+    dlog.log( { 'componentDidUpdate' : {prevProps : prevProps, prevState : prevState, snapshot : snapshot} }, { arguments } )
+
         /*
           If we have a snapshot value, the user has closed a modal and we need
           to return the user to where they were previously scrolled in the primary
@@ -59,6 +66,8 @@ class AppViewWrapper extends React.Component<Props> {
     }
 
     render() {
+    dlog.log( { 'render' : {} }, { arguments } )
+
         const { currentUser, history, location } = this.props;
 
         const isMarketingPage = isViewingMarketingPage(history, currentUser);

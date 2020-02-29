@@ -9,8 +9,8 @@ const fileConcurrency = 5;
   identifyFunction, guards against false positive function identification.
 */
 function identifyFunction(lineCode) {
-  const possibleFunction = /function|=>/;
-  if (!possibleFunction.test(lineCode)) return false
+  // const possibleFunction = /=>|w+\s+\(.*\).*\{/;
+  // if (!possibleFunction.test(lineCode)) return false
   const notAFunctionTests = [
     /^\s*\/\/.*$/,      // singleLineComment i.e.  // function...
     /=>.+\(\{/,         // implicitReturn i.e.  arrow fn destructure of arguments e.g. => ({})
@@ -35,7 +35,7 @@ function identifyFunction(lineCode) {
 function getFunctionName(lineCode) {
   let functionName = '';
 
-  if (/function(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
+  if (/\w+(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
     if (lineCode.split('function ').length > 1) {
       functionName = lineCode
         .split('function ')[1]
@@ -134,7 +134,6 @@ const addLogging = function (content, config, filePath) {
     if (!functionName) {
       functionName = getDefaultFunctionName(match, filePath);
       metaParams.push(`defaultExport : '${functionName}'`)
-
     }
 
     if (!functionName) return match;
@@ -158,7 +157,8 @@ const addLogging = function (content, config, filePath) {
       return match;
     }
   };
-  const functionSignatureX = /(.*function.*\)\s+\{|.*=>\s+\{)/g // /(.*function.*\{|.*=>.*\{)/g;
+
+  const functionSignatureX = /\w+\s*\(.*\)\s*\{|.*=>\s+\{/g
   return content.replace(functionSignatureX, buildLogLine);
 };
 
@@ -228,7 +228,10 @@ async function parseFiles(files, config, add, clear) {
   });
   if (add) {
     console.log(
-      `dlog: adding logging: ${files.length} files inspected, ${addedFileCount} updated.`
+      `dlog: Done adding logging: 
+      ${files.length} files inspected, 
+      ${files.length - addedFileCount} sans named/exported functions,
+      ${addedFileCount} updated with auto logging.`
     );
   }
   if (clear) {

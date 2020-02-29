@@ -1,37 +1,51 @@
 const dlog = require ('./dlog.js');
-module.exports = function (p1) {
-  dlog.log( { 'only' : {p1 : p1} }, { defaultExport : 'only', arguments } )
 
+class ClassName {
+  constructor(p1, p2) {
+  dlog.log( { 'constructor' : {p1 : p1, p2 : p2} }, { arguments } )
+
+    //
+  }
+  memberFunctionName() {
+  dlog.log( { 'memberFunctionName' : {} }, { arguments } )
+
+  }
+
+  memberFunctionNameWithParams(p1) {
+  dlog.log( { 'memberFunctionNameWithParams' : {p1 : p1} }, { arguments } )
+
+  }
+
+  memberArrowFunctionName = () => {
+    dlog.log( { 'memberArrowFunctionName' : {} }, { arguments } )
+
+    //
+  }
 }
 
-module.exports = function () {
-  dlog.log( { 'only' : {} }, { defaultExport : 'only', arguments } )
+module.exports = ClassName
 
-}
+// module.exports = function (p1) {
+  dlog.log( { 'function' : {p1 : p1} }, { arguments } )
 
-module.exports = () => {
-  dlog.log( { 'only' : {} }, { defaultExport : 'only', arguments } )
+// }
 
-}
+// module.exports = function () {
+  dlog.log( { 'function' : {} }, { arguments } )
 
-module.exports = p1 => {
-  dlog.log( { 'only' : {p1} }, { defaultExport : 'only', arguments } )
+// }
 
-}
+// module.exports = () => {
+// }
 
-const notADefault = (p1) => {
-  dlog.log( { 'notADefault' : {p1 : p1} }, { arguments } )
- }
+// module.exports = p1 => {
+// }
 
-export default () => {
-  dlog.log( { 'only' : {} }, { defaultExport : 'only', arguments } )
- }
+// const notADefault = (p1) => {//  }
 
-export default (p1) => {
-  dlog.log( { 'only' : {p1 : p1} }, { defaultExport : 'only', arguments } )
- }
+// export default () => {//  }
 
-export default p1 => {
-  dlog.log( { 'defaultp1' : {} }, { arguments } )
+// export default (p1) => {//  }
 
-}
+// export default p1 => {
+// }

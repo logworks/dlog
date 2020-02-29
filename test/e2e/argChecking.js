@@ -4,17 +4,17 @@ const dlog = require ('./dlog.js');
     notifies if parameters recieved differs to named parameters.
 */
 const argChecking = function () {
-  dlog.log( { 'argChecking' : {} }, { arguments } )
+  dlog.log( { 'function' : {} }, { arguments } )
 
   function fnWithOptions(p1, options) {
-    dlog.log( { 'fnWithOptions' : {p1 : p1, options : options} }, { arguments } )
+  dlog.log( { 'fnWithOptions' : {p1 : p1, options : options} }, { arguments } )
   }
 
   fnWithOptions('single-param-with-options ok', {}); // wont log argCheck warning
   fnWithOptions('single-param-no-options'); //logs
 
   function fnWithMoreArgumentsThanNamedParams(p1) {
-    dlog.log( { 'fnWithMoreArgumentsThanNamedParams' : {p1 : p1} }, { arguments } )
+  dlog.log( { 'fnWithMoreArgumentsThanNamedParams' : {p1 : p1} }, { arguments } )
   }
 
   // fnWithMoreArgumentsThanNamedParams('single-named-param ok'); // wont log argCheck warning

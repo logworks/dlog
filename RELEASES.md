@@ -1,7 +1,9 @@
 ## Release notes
 
 ### v0.5.0
-  - logs for module.exports = () =>  & function ().
+  - logs for default module.exports = () =>  / function (). tags with file name/ parent dir if named index.
+  - class member functions now log (regression fix).
+  - refactoring.
 
 ### v0.4.4
   - unnamed module exports (module.exports = / export default) tag autolog with module filename.

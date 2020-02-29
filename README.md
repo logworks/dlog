@@ -24,13 +24,14 @@ The above shows standard output from dlog's auto-logging named function summary:
 - Colorized ms timing (time of arrival from previous function call).
 - function name.
 - Named parameters :infered param types. 
-- Timing metrics are indicative of time between log calls.
+- Module default exports tagged with file name / parent dir if file named index.
+- filter includeDetails provides clean application scope stack report & deep parameter output.
 - d.r() reports:
   - most frequently called functions.
   - slowest.
 
 
-Pre v1.0.0: [v 0.4.2](./RELEASES.md) early POC so API is frequently changing (re-run $ dlog i when updating)
+Pre v1.0.0: [v 0.5.0](./RELEASES.md) still early POC so API is frequently changing (re-run $ dlog i when updating)
 
 ## install
 

@@ -53,7 +53,7 @@ export const { name1, name2: bar } = o;
 export default expression;
 // export default function p1 { … } // also class, function* VALID?
 export default function name1(…) {
-    dlog.log( { 'defaultfunctionname1' : {} }, { arguments } )
+    dlog.log( { 'name1' : {} }, { arguments } )
  … } // also class, function*
 export { name1 as default, … };
 

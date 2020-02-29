@@ -7,7 +7,7 @@ exports.dotExportedFnArrow = (p1, p2) => {
 }
 
 exports.dotExportedFnA = function (p1, p2) {
-    dlog.log( { 'dotExportedFnA' : {p1 : p1, p2 : p2} }, { arguments } )
+    dlog.log( { 'function' : {p1 : p1, p2 : p2} }, { arguments } )
 }
 
 export default () => {
