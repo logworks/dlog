@@ -1,4 +1,4 @@
-const argChecker = require('./argChecker');
+const argChecker = require('../argChecker');
 
 describe('argChecker checks named parameters against actual arguments', () => {
   it('conforms to arguments array like object', () => {

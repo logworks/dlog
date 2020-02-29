@@ -1,4 +1,4 @@
-const parser = require('./parser');
+const parser = require('../parser');
 
 const namedFunctions = [
   'function functionName(){',
@@ -65,7 +65,7 @@ describe('getFunctionName extracts function name from valid function signatures.
     });
   });
   /*
- export default function declared inline un-named special case.
+ un-named special case for 'export default' and 'module.exports ='.
  the functionName is effectivly the filename.
  further, if the file is named index, its the parent dir name!
  e.g. 'export default (arg1) => {'
@@ -73,6 +73,15 @@ describe('getFunctionName extracts function name from valid function signatures.
  up to the caller to apply file name / parent dir.
  see: defaultFunctionName
 */
+  // module.exports =  cases:
+  it(`returns default for default export unnamed arrow functions`, function () {
+    const namedFunction = 'module.exports = (arg1) => {';
+    expect(parser.getFunctionName(namedFunction)).toBe('default');
+  });
+
+
+  //export default cases:
+
   it(`returns default for default export unnamed arrow functions`, function () {
     const namedFunction = 'export default (arg1) => {';
     expect(parser.getFunctionName(namedFunction)).toBe('default');

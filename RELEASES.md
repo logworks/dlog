@@ -1,5 +1,9 @@
 ## Release notes
 
+### v0.4.4
+  - unnamed module exports (module.exports = / export default) tag autolog with module filename.
+  - if module file name is index, tag autolog with directory name.
+
 ### v0.4.2
   - stack breadcrumbs moved from details. default dlog.js shows on summary line.
   - colorize param types.
