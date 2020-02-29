@@ -41,15 +41,7 @@ const namedFunctions = [
   // ) => {
 ];
 
-const namedFunctionExceptions = [
-  'if (typeof require === "function") {',
-  '// function fname (p1) {',
-  'const mapStateToProps = (state) => ({',
-  'const mapStateToProps = (state): * => ({',
-  'render={({ isLoading }) => primaryAction({',
-  'setActiveChannel = e => this.setState({',
-  "const isSerializedJSON = str => str[0] === '{'"
-];
+
 
 describe('getFunctionName extracts function name from valid function signatures.', () => {
   it(`Gets function name from a line of code representing a function declaration'`, function () {
@@ -60,27 +52,32 @@ describe('getFunctionName extracts function name from valid function signatures.
   });
 
   it(`Does not get function name from a line of code easily mistaken for a false positive function declaration'`, function () {
-    namedFunctionExceptions.forEach(namedFunction => {
-      expect(parser.getFunctionName(namedFunction)).toBe(undefined);
+    const invalidNamedFunctions = [
+      'if (typeof require === "function") {',
+      '// function fname (p1) {',
+      'const mapStateToProps = (state) => ({',
+      'const mapStateToProps = (state): * => ({',
+      'render={({ isLoading }) => primaryAction({',
+      'setActiveChannel = e => this.setState({',
+      "const isSerializedJSON = str => str[0] === '{'"
+    ];
+
+    invalidNamedFunctions.forEach(signature => {
+      expect(parser.maybeAFunction(signature)).toBe(false);
     });
   });
   /*
- un-named special case for 'export default' and 'module.exports ='.
- the functionName is effectivly the filename.
- further, if the file is named index, its the parent dir name!
- e.g. 'export default (arg1) => {'
- getFunctionName returns 'default' in this case, and it is 
- up to the caller to apply file name / parent dir.
- see: defaultFunctionName
+    un-named special case for 'export default' and 'module.exports ='.
+    the functionName is effectivly the filename.
+    further, if the file is named index, its the parent dir name!
+    e.g. 'export default (arg1) => {'
+    getFunctionName returns 'default' in this case, and it is 
+    up to the caller to apply file name / parent dir.
+    see: defaultFunctionName
 */
-  // module.exports =  cases:
-  xit(`returns default for default export unnamed arrow functions`, function () {
-    const namedFunction = 'module.exports = (arg1) => {';
-    expect(parser.getFunctionName(namedFunction)).toBe('default');
-  });
 
 
-  //export default cases:
+  //export default cases: TODO -refactor, should all return undefined.
 
   it(`returns default for default export unnamed arrow functions`, function () {
     const namedFunction = 'export default (arg1) => {';
@@ -112,10 +109,21 @@ describe('getFunctionName extracts function name from valid function signatures.
     expect(parser.getFunctionName(namedFunction)).toBe('default');
   });
 
+
+  // module.exports =  cases:
+  // it(`returns default for default export unnamed arrow functions`, function () {
+  //   const namedFunction = 'module.exports = (arg1) => {';
+  //   expect(parser.getFunctionName(namedFunction)).toBe('default');
+  // });
+
+
+  //defaultFunctionName 
+
   it(`getDefaultFunctionName returns functionName as name of file`, function () {
     const namedFunction = 'default';
     const filePath = 'src/component/TestComponent.js';
-    expect(parser.getDefaultFunctionName(namedFunction, filePath)).toBe(
+    const match = 'module.exports = () => {}'
+    expect(parser.getDefaultFunctionName(namedFunction, match, filePath)).toBe(
       'TestComponent'
     );
   });
@@ -123,7 +131,8 @@ describe('getFunctionName extracts function name from valid function signatures.
   it(`getDefaultFunctionName returns parent dir name if file named index`, function () {
     const namedFunction = 'default';
     const filePath = 'src/component/TestComponent/index.js';
-    expect(parser.getDefaultFunctionName(namedFunction, filePath)).toBe(
+    const match = 'export default () => {}'
+    expect(parser.getDefaultFunctionName(namedFunction, match, filePath)).toBe(
       'TestComponent'
     );
   });

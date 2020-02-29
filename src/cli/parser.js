@@ -2,16 +2,36 @@ const glob = require('glob');
 const ac = require('async');
 const detectIndent = require('detect-indent');
 const utils = require('./utils');
-const fileConcurrency = 10;
+const fileConcurrency = 5;
+
+
+/*
+  maybeAFunction, guards against false positive function identification.
+*/
+function maybeAFunction(lineCode) {
+
+  const notAFunctionTests = [
+    /^\s*\/\/.*$/,      // singleLineComment i.e.  // function...
+    /=>.+\(\{/,         // implicitReturn i.e.  arrow fn destructure of arguments e.g. => ({})
+    /=>.+=.+\{/,        // arrowFunctionAssignment i.e.  fn = arg => res === matcher
+    /(if|.then)/        // logicFork logic fork - too complex, if code style does this with named function, we wont log it.
+  ]
+
+  let result = true
+  notAFunctionTests.forEach(expression => {
+    const isNotAFuction = expression.test(lineCode)
+    if (isNotAFuction === true) result = false
+  })
+  return result
+}
+
+/*
+@param lineCode - single line of code
+
+*/
 
 function getFunctionName(lineCode) {
   let functionName = '';
-  //ignore if in single line comment
-  if (/^\s*\/\/.*$/.test(lineCode)) return;
-  //implicit returns. ignore arrow fn destructure of arguments e.g. => ({})
-  if (/=>.+\(\{/.test(lineCode)) return;
-  // ignore if arrow assignment fn = arg => res === matcher
-  if (/=>.+=.+\{/.test(lineCode)) return;
 
   if (/function(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
     if (lineCode.split('function ').length > 1) {
@@ -44,10 +64,7 @@ function getFunctionName(lineCode) {
   functionName = functionName.split(':')[0];
   const validFunctionNameX = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
   if (validFunctionNameX.test(functionName)) {
-    const exceptionTrap = /(if|.then)/.test(functionName);
-    if (exceptionTrap === false) {
-      return functionName;
-    }
+    return functionName;
   } else {
     return;
   }
@@ -81,9 +98,17 @@ const paramaterise = function (signature) {
     }
   }
 };
-
-const getDefaultFunctionName = (functionName, filePath) => {
-  if (functionName === 'default' || functionName === 'defaultfunction') {
+/*
+  special case for export default / module.export =
+  returns the name of the module(file), or if file is named index,
+  the parent folders name.
+*/
+const getDefaultFunctionName = (functionName, match, filePath) => {
+  console.log('functionName', functionName)
+  if (
+    /default|defaultfunction|^$/.test(functionName) &&
+    /module.exports |export default/.test(match)
+  ) {
     const filePathElements = filePath.split('/');
     const fileName = filePathElements[filePathElements.length - 1].split(
       '.'
@@ -95,7 +120,7 @@ const getDefaultFunctionName = (functionName, filePath) => {
       return fileName;
     }
   } else {
-    return functionName;
+    return functionName; //? should be null
   }
 };
 
@@ -103,8 +128,13 @@ const addLogging = function (content, config, filePath) {
   const indentUnit = detectIndent(content).indent || '  ';
 
   const buildLogLine = function (match) {
+    if (!maybeAFunction(match)) return match
     const simpleFunctionName = getFunctionName(match);
-    const functionName = getDefaultFunctionName(simpleFunctionName, filePath);
+    const functionName = getDefaultFunctionName(simpleFunctionName, match, filePath);
+    if (!functionName) {
+      //check for module.exports (unnamed)
+      console.log(match, simpleFunctionName)
+    }
 
     if (!functionName) return match;
     const params = paramaterise(match);
@@ -234,7 +264,7 @@ function buildFileList(globPattern, excludes, cb) {
 
 function execute(config, add, clear, checkClean) {
   const { globPattern, excludes } = config;
-  console.log('\nUsing configuration: globPattern, ', config);
+  // console.log('\nUsing configuration: globPattern, ', config);
 
   if (globPattern.match(/\.\.\//)) {
     throw new Error(
@@ -257,6 +287,7 @@ module.exports = {
   execute, // single usage entry point fn.
   getFunctionName, // exported for testing only. extracts function name.
   getDefaultFunctionName, // special case name function after file / parent dir if index.
+  maybeAFunction, // guards against false positive function ident.
   hasDlogging, // exported for testing only. checks if dlog in codebase. (CI no no -exit(1))
   clearLogging, // exported for testing only. Removes logging from given content string
   addLogging, //exported for testing only. Adds logging to given content string,

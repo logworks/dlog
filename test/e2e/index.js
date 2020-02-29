@@ -1,4 +1,3 @@
-const dlog = require('./dlog.js');
 // initialise logging early in app bootup
 const basic = require('./basic.js');
 const argChecking = require('./argChecking');
@@ -6,10 +5,9 @@ const timing = require('./timing');
 const timingLongShort = require('./timingLongShort')
 const typeChecking = require('./typeChecking');
 const indentDetect = require('./indentDetect');
+const moduleNaming = require('./moduleNaming')
 
-const vanilla = function (p1) {
-  dlog.log({ 'vanilla': { p1: p1 } }, { arguments })
-  return p1;
+const vanilla = function (p1) {  return p1;
 };
 
 const mint = function () {
@@ -21,8 +19,8 @@ const mint = function () {
 // vanilla();
 // mint('A', 'B');
 // basic();
-timing();
-indentDetect();
+// timing();
+// indentDetect();
 //timingLongShort();
 // argChecking();
 //typeChecking();

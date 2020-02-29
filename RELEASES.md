@@ -1,5 +1,8 @@
 ## Release notes
 
+### v0.5.0
+  - logs for module.exports = () =>  & function ().
+
 ### v0.4.4
   - unnamed module exports (module.exports = / export default) tag autolog with module filename.
   - if module file name is index, tag autolog with directory name.

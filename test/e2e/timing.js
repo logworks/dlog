@@ -1,4 +1,3 @@
-const dlog = require('./dlog.js');
 const STEP = 20
 
 variousTypes = [
@@ -45,16 +44,12 @@ cycleVariousTypes = () => {
 }
 
 const tick = (p1, delay) => {
-  dlog.log({ 'tick': { p1: p1, delay: delay } }, { arguments })
-
   setTimeout(() => {
     tock(cycleVariousTypes(), delay - STEP);
   }, delay - STEP);
 };
 
 const tock = (p1, delay) => {
-  dlog.log({ 'tock': { p1: p1, delay: delay } }, { arguments })
-
   if (delay > 1) {
     setTimeout(() => {
       tick(cycleVariousTypes(), delay - STEP);

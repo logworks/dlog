@@ -1,8 +1,5 @@
-const dlog = require('./dlog.js');
 const typCheckingExample = () => {
   const wantsAStringFn = function (str) {
-    dlog.log({ 'wantsAStringFn': { str: str } }, { arguments })
-
     return str;
   };
 
