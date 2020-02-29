@@ -46,7 +46,7 @@ const namedFunctions = [
 describe('getFunctionName extracts function name from valid function signatures.', () => {
   it(`Gets function name from a line of code representing a function declaration'`, function () {
     namedFunctions.forEach(namedFunction => {
-      console.log('namedFunction', namedFunction)
+      // console.log('namedFunction', namedFunction)
       const res = parser.getFunctionName(namedFunction);
       expect(res).toBe('functionName');
     });

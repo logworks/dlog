@@ -106,7 +106,6 @@ const paramaterise = function (signature) {
   the parent folders name.
 */
 const getDefaultFunctionName = (match, filePath) => {
-  console.log('getDefaultFunctionName', match, filePath)
   if (
     /module.exports =|export default/.test(match)
   ) {
@@ -140,8 +139,7 @@ const addLogging = function (content, config, filePath) {
 
     if (!functionName) return match;
     const params = paramaterise(match);
-    console.log('addLogging-functionName', functionName, params)
-    // if (!params) return match;
+
     if (/\w/.test(functionName)) {
       metaParams.push('arguments')
 
