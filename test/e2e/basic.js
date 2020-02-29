@@ -1,5 +1,8 @@
+const dlog = require ('./dlog.js');
 
 const basic = function () {
+  dlog.log( { 'basic' : {} }, { arguments } )
+
   d.log({
     globalLogging: {
       msg:

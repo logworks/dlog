@@ -1,10 +1,15 @@
+const dlog = require ('./dlog.js');
 
 module.exports = (p1, p2) => {
+    dlog.log( { 'moduleNaming' : {p1 : p1, p2 : p2} }, { defaultExport : 'moduleNaming', arguments } )
+
     // should receive dlog ({moduleNaming: {p1,p2}, { arguments, info: { module default named by file. }}})
 }
 
 
 export default (p1, p2) => {
+    dlog.log( { 'moduleNaming' : {p1 : p1, p2 : p2} }, { defaultExport : 'moduleNaming', arguments } )
+
     // should receive dlog ({moduleNaming: {p1,p2}, { arguments, info: { module default named by file. }}})
 }
 
@@ -30,7 +35,9 @@ const EventEmitter = require('events');
 // Exporting individual features
 export let name1, name2, …, nameN; // also var, const
 export let name1 = …, name2 = …, …, nameN; // also var, const
-export function functionName() { }
+export function functionName() {
+    dlog.log( { 'functionName' : {} }, { arguments } )
+ }
 export class ClassName { }
 
 // Export list
@@ -45,7 +52,9 @@ export const { name1, name2: bar } = o;
 // Default exports
 export default expression;
 // export default function p1 { … } // also class, function* VALID?
-export default function name1(…) { … } // also class, function*
+export default function name1(…) {
+    dlog.log( { 'defaultfunctionname1' : {} }, { arguments } )
+ … } // also class, function*
 export { name1 as default, … };
 
 // Aggregating modules

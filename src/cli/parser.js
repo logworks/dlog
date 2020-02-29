@@ -9,7 +9,8 @@ const fileConcurrency = 5;
   maybeAFunction, guards against false positive function identification.
 */
 function maybeAFunction(lineCode) {
-
+  const possibleFunction = /function|=>/;
+  if (!possibleFunction.test(lineCode)) return false
   const notAFunctionTests = [
     /^\s*\/\/.*$/,      // singleLineComment i.e.  // function...
     /=>.+\(\{/,         // implicitReturn i.e.  arrow fn destructure of arguments e.g. => ({})
@@ -17,6 +18,7 @@ function maybeAFunction(lineCode) {
     /(if|.then)/        // logicFork logic fork - too complex, if code style does this with named function, we wont log it.
   ]
 
+  // inefficient but readable 
   let result = true
   notAFunctionTests.forEach(expression => {
     const isNotAFuction = expression.test(lineCode)
@@ -63,17 +65,17 @@ function getFunctionName(lineCode) {
 
   functionName = functionName.split(':')[0];
   const validFunctionNameX = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
-  if (validFunctionNameX.test(functionName)) {
+  if (functionName !== 'default' && functionName !== 'defaultfunction' && validFunctionNameX.test(functionName)) {
     return functionName;
   } else {
-    return;
+    return null
   }
 }
 
 const paramaterise = function (signature) {
   //replace ... to handle spread ...args
   const paramMatch = signature.replace('...', '').match(/\((.*?)\)/);
-
+  const noParams = '{}'
   if (paramMatch) {
     let params = paramMatch[1];
     params = params.replace(/[{}]/g, '');
@@ -84,17 +86,17 @@ const paramaterise = function (signature) {
 
     for (let param of paramArr) {
       let ptrimmed = param.trim();
-      if (ptrimmed.length === 0 || /\W/.test(ptrimmed)) return null;
+      if (ptrimmed.length === 0 || /\W/.test(ptrimmed)) return noParams;
       res.push(`${ptrimmed} : ${ptrimmed}`);
     }
     return '{' + res.join(', ') + '}';
   } else {
     const param = signature.match(/=\s+(\w*)\s+=>/);
     if (param && param.length >= 1) {
-      if (/\W/.test(param[1])) return null;
+      if (/\W/.test(param[1])) return noParams;
       return '{' + param[1] + '}';
     } else {
-      return null;
+      return noParams;
     }
   }
 };
@@ -103,11 +105,10 @@ const paramaterise = function (signature) {
   returns the name of the module(file), or if file is named index,
   the parent folders name.
 */
-const getDefaultFunctionName = (functionName, match, filePath) => {
-  console.log('functionName', functionName)
+const getDefaultFunctionName = (match, filePath) => {
+  console.log('getDefaultFunctionName', match, filePath)
   if (
-    /default|defaultfunction|^$/.test(functionName) &&
-    /module.exports |export default/.test(match)
+    /module.exports =|export default/.test(match)
   ) {
     const filePathElements = filePath.split('/');
     const fileName = filePathElements[filePathElements.length - 1].split(
@@ -120,28 +121,29 @@ const getDefaultFunctionName = (functionName, match, filePath) => {
       return fileName;
     }
   } else {
-    return functionName; //? should be null
+    return null
   }
-};
+}
 
 const addLogging = function (content, config, filePath) {
   const indentUnit = detectIndent(content).indent || '  ';
 
   const buildLogLine = function (match) {
+    const metaParams = []
     if (!maybeAFunction(match)) return match
-    const simpleFunctionName = getFunctionName(match);
-    const functionName = getDefaultFunctionName(simpleFunctionName, match, filePath);
+    let functionName = getFunctionName(match);
     if (!functionName) {
-      //check for module.exports (unnamed)
-      console.log(match, simpleFunctionName)
+      functionName = getDefaultFunctionName(match, filePath);
+      metaParams.push(`defaultExport : '${functionName}'`)
+
     }
 
     if (!functionName) return match;
     const params = paramaterise(match);
-    if (!params) return match;
+    console.log('addLogging-functionName', functionName, params)
+    // if (!params) return match;
     if (/\w/.test(functionName)) {
-      let meta = '';
-      meta = ', { arguments }';
+      metaParams.push('arguments')
 
       const functionIndentMatch = match.match(/^(\s+)\w/);
       const functionIndent =
@@ -149,9 +151,10 @@ const addLogging = function (content, config, filePath) {
           ? functionIndentMatch[1]
           : '';
       const indentWith = indentUnit + functionIndent;
+
       return (
         match +
-        `\n${indentWith}${config.nameAs}.log( { '${functionName}' : ${params} }${meta} )\n`
+        `\n${indentWith}${config.nameAs}.log( { '${functionName}' : ${params} }, { ${metaParams.join(', ')} } )\n`
       );
     } else {
       return match;
