@@ -1,6 +1,6 @@
 'use strict';
 jest.mock('fs');
-const utils = require('./utils');
+const utils = require('../utils');
 
 describe('util promisified fs.readFile and fs.writeFile', () => {
   it(' readFile should return a promise, which resolves for validFile', done => {

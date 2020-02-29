@@ -1,4 +1,4 @@
-const dlog = require('./index');
+const dlog = require('../index');
 
 const config = {
   include: ['*'],

@@ -1,4 +1,4 @@
-const typeChecker = require('./typeChecker');
+const typeChecker = require('../typeChecker');
 const _ = require('lodash');
 const deepDiff = require('deep-diff');
 
@@ -34,7 +34,7 @@ describe('typeCheker objects ', () => {
         d: new Date(),
         o2: {},
         r: /x/,
-        fn: a => {},
+        fn: a => { },
         o3: {},
         nully: null,
         undefinedly: undefined,

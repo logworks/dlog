@@ -2,18 +2,40 @@ const glob = require('glob');
 const ac = require('async');
 const detectIndent = require('detect-indent');
 const utils = require('./utils');
-const fileConcurrency = 10;
+const fileConcurrency = 5;
+
+
+/*
+  identifyFunction, guards against false positive function identification.
+*/
+function identifyFunction(lineCode) {
+  // const possibleFunction = /=>|w+\s+\(.*\).*\{/;
+  // if (!possibleFunction.test(lineCode)) return false
+  const notAFunctionTests = [
+    /^\s*\/\/.*$/,      // singleLineComment i.e.  // function...
+    /=>.+\(\{/,         // implicitReturn i.e.  arrow fn destructure of arguments e.g. => ({})
+    /=>.+=.+\{/,        // arrowFunctionAssignment i.e.  fn = arg => res === matcher
+    /(if|.then)/        // logicFork logic fork - too complex, if code style does this with named function, we wont log it.
+  ]
+
+  // inefficient but readable 
+  let result = true
+  notAFunctionTests.forEach(expression => {
+    const isNotAFuction = expression.test(lineCode)
+    if (isNotAFuction === true) result = false
+  })
+  return result
+}
+
+/*
+@param lineCode - single line of code
+
+*/
 
 function getFunctionName(lineCode) {
   let functionName = '';
-  //ignore if in single line comment
-  if (/^\s*\/\/.*$/.test(lineCode)) return;
-  //implicit returns. ignore arrow fn destructure of arguments e.g. => ({})
-  if (/=>.+\(\{/.test(lineCode)) return;
-  // ignore if arrow assignment fn = arg => res === matcher
-  if (/=>.+=.+\{/.test(lineCode)) return;
 
-  if (/function(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
+  if (/\w+(\s+)[a-zA-Z]+(\s*)\(.*\)(\s*){/.test(lineCode)) {
     if (lineCode.split('function ').length > 1) {
       functionName = lineCode
         .split('function ')[1]
@@ -43,20 +65,17 @@ function getFunctionName(lineCode) {
 
   functionName = functionName.split(':')[0];
   const validFunctionNameX = /^[_$a-zA-Z\xA0-\uFFFF][_a-zA-Z0-9\xA0-\uFFFF]*$/;
-  if (validFunctionNameX.test(functionName)) {
-    const exceptionTrap = /(if|.then)/.test(functionName);
-    if (exceptionTrap === false) {
-      return functionName;
-    }
+  if (functionName !== 'default' && functionName !== 'defaultfunction' && validFunctionNameX.test(functionName)) {
+    return functionName;
   } else {
-    return;
+    return null
   }
 }
 
 const paramaterise = function (signature) {
   //replace ... to handle spread ...args
   const paramMatch = signature.replace('...', '').match(/\((.*?)\)/);
-
+  const noParams = '{}'
   if (paramMatch) {
     let params = paramMatch[1];
     params = params.replace(/[{}]/g, '');
@@ -67,23 +86,29 @@ const paramaterise = function (signature) {
 
     for (let param of paramArr) {
       let ptrimmed = param.trim();
-      if (ptrimmed.length === 0 || /\W/.test(ptrimmed)) return null;
+      if (ptrimmed.length === 0 || /\W/.test(ptrimmed)) return noParams;
       res.push(`${ptrimmed} : ${ptrimmed}`);
     }
     return '{' + res.join(', ') + '}';
   } else {
     const param = signature.match(/=\s+(\w*)\s+=>/);
     if (param && param.length >= 1) {
-      if (/\W/.test(param[1])) return null;
+      if (/\W/.test(param[1])) return noParams;
       return '{' + param[1] + '}';
     } else {
-      return null;
+      return noParams;
     }
   }
 };
-
-const getDefaultFunctionName = (functionName, filePath) => {
-  if (functionName === 'default' || functionName === 'defaultfunction') {
+/*
+  special case for export default / module.export =
+  returns the name of the module(file), or if file is named index,
+  the parent folders name.
+*/
+const getDefaultFunctionName = (match, filePath) => {
+  if (
+    /module.exports =|export default/.test(match)
+  ) {
     const filePathElements = filePath.split('/');
     const fileName = filePathElements[filePathElements.length - 1].split(
       '.'
@@ -95,23 +120,27 @@ const getDefaultFunctionName = (functionName, filePath) => {
       return fileName;
     }
   } else {
-    return functionName;
+    return null
   }
-};
+}
 
 const addLogging = function (content, config, filePath) {
   const indentUnit = detectIndent(content).indent || '  ';
 
   const buildLogLine = function (match) {
-    const simpleFunctionName = getFunctionName(match);
-    const functionName = getDefaultFunctionName(simpleFunctionName, filePath);
+    const metaParams = []
+    if (!identifyFunction(match)) return match
+    let functionName = getFunctionName(match);
+    if (!functionName) {
+      functionName = getDefaultFunctionName(match, filePath);
+      metaParams.push(`defaultExport : '${functionName}'`)
+    }
 
     if (!functionName) return match;
     const params = paramaterise(match);
-    if (!params) return match;
+
     if (/\w/.test(functionName)) {
-      let meta = '';
-      meta = ', { arguments }';
+      metaParams.push('arguments')
 
       const functionIndentMatch = match.match(/^(\s+)\w/);
       const functionIndent =
@@ -119,15 +148,17 @@ const addLogging = function (content, config, filePath) {
           ? functionIndentMatch[1]
           : '';
       const indentWith = indentUnit + functionIndent;
+
       return (
         match +
-        `\n${indentWith}${config.nameAs}.log( { '${functionName}' : ${params} }${meta} )\n`
+        `\n${indentWith}${config.nameAs}.log( { '${functionName}' : ${params} }, { ${metaParams.join(', ')} } )\n`
       );
     } else {
       return match;
     }
   };
-  const functionSignatureX = /(.*function.*\)\s+\{|.*=>\s+\{)/g // /(.*function.*\{|.*=>.*\{)/g;
+
+  const functionSignatureX = /\w+\s*\(.*\)\s*\{|.*=>\s+\{/g
   return content.replace(functionSignatureX, buildLogLine);
 };
 
@@ -197,7 +228,10 @@ async function parseFiles(files, config, add, clear) {
   });
   if (add) {
     console.log(
-      `dlog: adding logging: ${files.length} files inspected, ${addedFileCount} updated.`
+      `dlog: Done adding logging: 
+      ${files.length} files inspected, 
+      ${files.length - addedFileCount} sans named/exported functions,
+      ${addedFileCount} updated with auto logging.`
     );
   }
   if (clear) {
@@ -234,7 +268,7 @@ function buildFileList(globPattern, excludes, cb) {
 
 function execute(config, add, clear, checkClean) {
   const { globPattern, excludes } = config;
-  console.log('\nUsing configuration: globPattern, ', config);
+  // console.log('\nUsing configuration: globPattern, ', config);
 
   if (globPattern.match(/\.\.\//)) {
     throw new Error(
@@ -257,6 +291,7 @@ module.exports = {
   execute, // single usage entry point fn.
   getFunctionName, // exported for testing only. extracts function name.
   getDefaultFunctionName, // special case name function after file / parent dir if index.
+  identifyFunction, // guards against false positive function ident.
   hasDlogging, // exported for testing only. checks if dlog in codebase. (CI no no -exit(1))
   clearLogging, // exported for testing only. Removes logging from given content string
   addLogging, //exported for testing only. Adds logging to given content string,

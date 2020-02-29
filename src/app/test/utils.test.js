@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('../utils');
 
 describe('util function isObject', () => {
   it('when given an Array returns false', () => {

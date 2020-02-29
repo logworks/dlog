@@ -1,6 +1,6 @@
 {
   "name": "@genisense/dlog",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "Development time automated logging, debuging with dynamic type checking.",
   "main": "dist/dlog.js",
   "repository": "git@github.com:logworks/dlog.git",
@@ -21,7 +21,6 @@
     "example:web": "npm run build && cd examples/2-web-simplest && http-server",
     "bump": "npm version patch"
   },
-  "keywords": [],
   "author": "Henry Kemp",
   "license": "ISC",
   "devDependencies": {
@@ -69,5 +68,26 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "log",
+    "logging",
+    "cli",
+    "test",
+    "debug",
+    "type",
+    "types",
+    "typescript",
+    "color",
+    "colour",
+    "colors",
+    "terminal",
+    "console",
+    "string",
+    "tty",
+    "formatting",
+    "shell",
+    "xterm",
+    "command-line"
+  ]
 }

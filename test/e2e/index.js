@@ -1,4 +1,3 @@
-const dlog = require('./dlog.js');
 // initialise logging early in app bootup
 const basic = require('./basic.js');
 const argChecking = require('./argChecking');
@@ -6,20 +5,13 @@ const timing = require('./timing');
 const timingLongShort = require('./timingLongShort')
 const typeChecking = require('./typeChecking');
 const indentDetect = require('./indentDetect');
+const ClassName = require('./only')
 
-const vanilla = function (p1) {
-  dlog.log({ 'vanilla': { p1: p1 } }, { arguments })
-  return p1;
-};
 
-const mint = function () {
-  return;
-};
+const className = new ClassName()
+className.memberArrowFunctionName()
+className.memberFunctionName()
 
-//vanilla('A');
-// vanilla('A', 'B');
-// vanilla();
-// mint('A', 'B');
 // basic();
 timing();
 indentDetect();
