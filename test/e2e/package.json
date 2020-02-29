@@ -6,13 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dlog": "../../src/cli/dlog.js",
-    "update": "npm i ../../genisense-dlog-0.4.0.tgz"
+    "update": "npm i ../../genisense-dlog-0.4.2.tgz"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@genisense/dlog": "file:../../genisense-dlog-0.4.0.tgz",
+    "@genisense/dlog": "file:../../genisense-dlog-0.4.2.tgz",
     "util": "^0.12.2"
   },
   "dependencies": {

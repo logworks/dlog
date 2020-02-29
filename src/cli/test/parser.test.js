@@ -52,7 +52,15 @@ describe('getFunctionName extracts function name from valid function signatures.
     });
   });
 
-  it(`Does not get function name from a line of code easily mistaken for a false positive function declaration'`, function () {
+  it(`identifyFunction returns true for line of code representing a function declaration`, function () {
+    namedFunctions.forEach(namedFunction => {
+      // console.log('namedFunction', namedFunction)
+      const res = parser.identifyFunction(namedFunction);
+      expect(res).toBe(true);
+    });
+  });
+
+  it(`identifyFunction returns false for code easily mistaken as false positive function declaration`, function () {
     const invalidNamedFunctions = [
       'if (typeof require === "function") {',
       '// function fname (p1) {',
@@ -64,7 +72,7 @@ describe('getFunctionName extracts function name from valid function signatures.
     ];
 
     invalidNamedFunctions.forEach(signature => {
-      expect(parser.maybeAFunction(signature)).toBe(false);
+      expect(parser.identifyFunction(signature)).toBe(false);
     });
   });
   /*

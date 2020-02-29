@@ -6,9 +6,9 @@ const fileConcurrency = 5;
 
 
 /*
-  maybeAFunction, guards against false positive function identification.
+  identifyFunction, guards against false positive function identification.
 */
-function maybeAFunction(lineCode) {
+function identifyFunction(lineCode) {
   const possibleFunction = /function|=>/;
   if (!possibleFunction.test(lineCode)) return false
   const notAFunctionTests = [
@@ -129,7 +129,7 @@ const addLogging = function (content, config, filePath) {
 
   const buildLogLine = function (match) {
     const metaParams = []
-    if (!maybeAFunction(match)) return match
+    if (!identifyFunction(match)) return match
     let functionName = getFunctionName(match);
     if (!functionName) {
       functionName = getDefaultFunctionName(match, filePath);
@@ -288,7 +288,7 @@ module.exports = {
   execute, // single usage entry point fn.
   getFunctionName, // exported for testing only. extracts function name.
   getDefaultFunctionName, // special case name function after file / parent dir if index.
-  maybeAFunction, // guards against false positive function ident.
+  identifyFunction, // guards against false positive function ident.
   hasDlogging, // exported for testing only. checks if dlog in codebase. (CI no no -exit(1))
   clearLogging, // exported for testing only. Removes logging from given content string
   addLogging, //exported for testing only. Adds logging to given content string,
